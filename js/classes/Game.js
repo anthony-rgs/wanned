@@ -1,4 +1,5 @@
 import Sprite from './Sprite.js'
+import Text from './Text.js'
 
 class Game {
   constructor(canvas) {
@@ -7,6 +8,9 @@ class Game {
     this.canvas.height = window.innerHeight
     this.ctx = this.canvas.getContext('2d')
     this.brontis = null
+    this.fps = 0
+    this.startTime = Date.now()
+    this.frame = 0
     this.keys = [
       {
         key: 'w',
@@ -46,23 +50,28 @@ class Game {
         left: '../../assets/sprites/brontis/left.png',
         right: '../../assets/sprites/brontis/right.png',
       },
-      80,
-      80,
+      40,
+      40,
     )
+
+    this.fpsCounter = new Text(this.fps, 'Arial', 16, 'white', 30, 30)
 
     this.brontis.speed = 3
 
     window.addEventListener('keydown', e => {
       this.keys.map(k => {
         if (k.key === e.key) {
-          console.log(this.findKey(e.key, 'key'))
           this.findKey(e.key, 'key').pressed = true
         }
       })
     })
 
     window.addEventListener('keyup', e => {
-      this.findKey(e.key, 'key').pressed = false
+      this.keys.map(k => {
+        if (k.key === e.key) {
+          this.findKey(e.key, 'key').pressed = false
+        }
+      })
     })
   }
 
@@ -82,12 +91,24 @@ class Game {
     }
 
     this.brontis.draw(this.ctx, this.brontis.x, this.brontis.y)
+    this.fpsCounter.draw(this.ctx, this.canvas.width - 40, 30)
   }
 
   render() {
-    window.requestAnimationFrame(() => this.render())
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
     this.draw()
+
+    this.frame++
+    const time = Date.now()
+
+    if (time - this.startTime > 1000) {
+      this.fps = Math.round(this.frame / ((time - this.startTime) / 1000))
+      this.startTime = time
+      this.frame = 0
+      this.fpsCounter.text = this.fps
+    }
+
+    window.requestAnimationFrame(() => this.render())
   }
 }
 
