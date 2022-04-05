@@ -1,8 +1,11 @@
 @import url('https://files.bdph.me/reset.css');
+@import url('../assets/fonts/museo.css');
+@import url('./story.css');
 
 body {
   height: 100vh;
   overscroll-behavior: none;
+  font-family: 'Museo', sans-serif;
 }
 
 #wanned {
