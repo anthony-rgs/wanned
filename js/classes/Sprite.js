@@ -12,7 +12,10 @@ class Sprite {
   }
 
   setVariant(variant) {
-    this.image.src = variant
+    if (this.variant !== variant) {
+      this.image.src = variant
+      this.variant = variant
+    }
   }
 
   draw(ctx, x, y) {
