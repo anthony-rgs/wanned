@@ -1,0 +1,11 @@
+@import url('https://files.bdph.me/reset.css');
+
+body {
+  height: 100vh;
+  overscroll-behavior: none;
+}
+
+#wanned {
+  background: black;
+  display: block;
+}
