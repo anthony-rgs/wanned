@@ -1,10 +1,15 @@
 class Story {
   constructor(texts) {
     this.texts = texts
+    this.disabled = false
     this.currentText = 0
     this.paragraph = document.querySelector('#story p')
     this.progressBar = document.querySelector('#progress-bar')
     this.cb = null
+    this.render()
+  }
+
+  start() {
     this.transition()
   }
 
@@ -33,6 +38,14 @@ class Story {
         this.transition()
       }, 500)
     })
+  }
+
+  render() {
+    if (this.disabled) {
+      this.paragraph.parentElement.remove()
+    } else {
+      requestAnimationFrame(() => this.render())
+    }
   }
 }
 

@@ -8,6 +8,13 @@ class Game {
     this.canvas.height = window.innerHeight
     this.ctx = this.canvas.getContext('2d')
     this.brontis = null
+    this.map = null
+    this.mapCoords = {
+      x: 0,
+      y: 0,
+    }
+    this.mapZoom = 3
+    this.mapSpeed = 5
     this.fps = 0
     this.startTime = Date.now()
     this.frame = 0
@@ -50,13 +57,18 @@ class Game {
         left: '../../assets/sprites/brontis/left.png',
         right: '../../assets/sprites/brontis/right.png',
       },
-      40,
-      40,
+      80,
+      80,
     )
 
-    this.fpsCounter = new Text(this.fps, 'Arial', 16, 'white', 30, 30)
+    this.map = new Image()
+    this.map.src = '../../assets/images/map.png'
 
-    this.brontis.speed = 3
+    this.map.addEventListener('load', () => {
+      this.ctx.drawImage(this.map, 0, 0)
+    })
+
+    this.fpsCounter = new Text(this.fps, 'Museo', 16, 'white', 30, 30)
 
     window.addEventListener('keydown', e => {
       this.keys.map(k => {
@@ -81,16 +93,26 @@ class Game {
 
   draw() {
     if (this.findKey('forward', 'action').pressed) {
+      this.mapCoords.y += this.mapSpeed
       this.brontis.forward()
     } else if (this.findKey('left', 'action').pressed) {
+      this.mapCoords.x += this.mapSpeed
       this.brontis.left()
     } else if (this.findKey('backward', 'action').pressed) {
+      this.mapCoords.y -= this.mapSpeed
       this.brontis.backward()
     } else if (this.findKey('right', 'action').pressed) {
+      this.mapCoords.x -= this.mapSpeed
       this.brontis.right()
     }
-
-    this.brontis.draw(this.ctx, this.brontis.x, this.brontis.y)
+    this.ctx.drawImage(
+      this.map,
+      this.mapCoords.x,
+      this.mapCoords.y,
+      1700 * this.mapZoom,
+      this.canvas.height * this.mapZoom,
+    )
+    this.brontis.draw(this.ctx, this.canvas.width / 2, this.canvas.height / 2)
     this.fpsCounter.draw(this.ctx, this.canvas.width - 40, 30)
   }
 

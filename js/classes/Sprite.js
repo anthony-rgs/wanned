@@ -8,7 +8,7 @@ class Sprite {
     this.speed = 1
     this.image = new Image()
     this.variant = null
-    this.setVariant(this.variants.forward)
+    this.setVariant(this.variants.backward)
   }
 
   setVariant(variant) {
@@ -25,22 +25,18 @@ class Sprite {
   }
 
   forward() {
-    this.y -= this.speed
     this.setVariant(this.variants.forward)
   }
 
   backward() {
-    this.y += this.speed
     this.setVariant(this.variants.backward)
   }
 
   left() {
-    this.x -= this.speed
     this.setVariant(this.variants.left)
   }
 
   right() {
-    this.x += this.speed
     this.setVariant(this.variants.right)
   }
 }

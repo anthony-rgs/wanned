@@ -27,6 +27,10 @@ const story = new Story(
   3000,
 )
 
+story.disabled = true
+
+story.start()
+
 const wanned = new Game(document.querySelector('#wanned'))
 const storySection = document.querySelector('#story')
 
