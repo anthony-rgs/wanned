@@ -33,9 +33,13 @@ story.start()
 
 const wanned = new Game(document.querySelector('#wanned'))
 const storySection = document.querySelector('#story')
+const fog = document.querySelector('#fog')
+const light = document.querySelector('#light')
 
 story.onEnd(() => {
   wanned.draw()
+  fog.classList.remove('hidden')
+  light.classList.remove('hidden')
   storySection.classList.add('hidden')
   setTimeout(() => {
     storySection.remove()

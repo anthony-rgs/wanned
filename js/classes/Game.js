@@ -112,7 +112,11 @@ class Game {
       1700 * this.mapZoom,
       this.canvas.height * this.mapZoom,
     )
-    this.brontis.draw(this.ctx, this.canvas.width / 2, this.canvas.height / 2)
+    this.brontis.draw(
+      this.ctx,
+      this.canvas.width / 2 - this.brontis.width / 2,
+      this.canvas.height / 2 - this.brontis.height / 2,
+    )
     this.fpsCounter.draw(this.ctx, this.canvas.width - 40, 30)
   }
 
