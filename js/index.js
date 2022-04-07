@@ -27,7 +27,7 @@ const story = new Story(
   3000,
 )
 
-story.disabled = true
+story.disabled = false
 
 story.start()
 

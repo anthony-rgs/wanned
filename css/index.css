@@ -29,15 +29,12 @@ body {
     rgba(0, 0, 0, 0) 0%,
     rgba(255, 0, 0, 0.15) 80%
   );
-  transform: scale(1);
   opacity: 1;
   filter: blur(10px);
-  transition-property: transform, opacity;
-  transition: 500ms ease-out;
+  transition: opacity 500ms ease-out;
 }
 
 #fog.hidden {
-  transform: scale(5);
   opacity: 0;
 }
 
