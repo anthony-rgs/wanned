@@ -1,6 +1,7 @@
 class Sprite {
   constructor(variants, w, h) {
     this.variants = variants
+    this.preload()
     this.width = w
     this.height = h
     this.x = 0
@@ -38,6 +39,13 @@ class Sprite {
 
   right() {
     this.setVariant(this.variants.right)
+  }
+
+  preload() {
+    Object.values(this.variants).forEach(variant => {
+      const img = new Image()
+      img.src = variant
+    })
   }
 }
 
