@@ -57,8 +57,8 @@ class Game {
         left: '../../assets/sprites/brontis/left.png',
         right: '../../assets/sprites/brontis/right.png',
       },
-      80,
-      80,
+      60,
+      60,
     )
 
     this.map = new Image()
