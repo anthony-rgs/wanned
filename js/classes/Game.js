@@ -42,17 +42,19 @@ class Game {
     ]
     this.elements = []
     this.init()
-    this.render()
   }
 
   makeCollisions() {
-    // FIXME: remove "realCollisionSize" parameter (61 here) and align correctly the collisions with the map
     this.collisions = Collision.makeCollisions(
       collisions,
       16 * this.mapZoom,
-      61,
       this.map.width,
       this.map.height,
+      (numberOfCollisionsByColumn, numberOfCollisionsByRow) => {
+        const realCollisionXSize = (this.mapWidth / numberOfCollisionsByColumn) * this.mapZoom
+        const realCollisionYSize = (this.mapHeight / numberOfCollisionsByRow) * this.mapZoom
+        return {realCollisionXSize, realCollisionYSize}
+      }
     )
   }
 
@@ -83,9 +85,9 @@ class Game {
 
     this.map.addEventListener('load', () => {
       this.ctx.drawImage(this.map, 0, 0)
+      this.makeCollisions()
+      this.render()
     })
-
-    this.makeCollisions()
 
     this.fpsCounter = new Text(this.fps, 'Museo', 16, 'white', 30, 30)
 

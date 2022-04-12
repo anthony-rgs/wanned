@@ -13,11 +13,16 @@ class Collision {
         elementY <= this.endY)
   }
 
-  static makeCollisions(rawCollisions, builtCollisionSize, realCollisionSize, mapWidth, mapHeight) {
+  static makeCollisions(rawCollisions, builtCollisionSize, mapWidth, mapHeight, calculateRealCollisionSize) {
     const collisions = []
 
     const numberOfCollisionsByColumn = Math.ceil(mapWidth / builtCollisionSize)
     const numberOfCollisionsByRow = Math.ceil(mapHeight / builtCollisionSize)
+
+    const {
+      realCollisionXSize,
+      realCollisionYSize
+    } = calculateRealCollisionSize(numberOfCollisionsByColumn, numberOfCollisionsByRow)
 
     let yErrorCorrections = {}
 
@@ -30,11 +35,11 @@ class Collision {
         y++
       }
 
-      const startX = x * realCollisionSize
-      const startY = y * (realCollisionSize / 2)
+      const startX = x * realCollisionXSize
+      const startY = y * (realCollisionYSize / 2)
 
       if (rawCollision !== 0) {
-        collisions.push(new Collision(startX, startY, startX + realCollisionSize, startY + realCollisionSize))
+        collisions.push(new Collision(startX, startY, startX + realCollisionXSize, startY + realCollisionYSize))
       }
     })
 
