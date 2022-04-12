@@ -1,6 +1,8 @@
 import Game from './classes/Game.js'
 import Story from './classes/Story.js'
 
+window.debug = true
+
 const story = new Story(
     [{
             text: 'Il était une fois dans un Pays lointain, très lointain, une Principauté appelé Quimbroisie.',
@@ -31,6 +33,8 @@ story.disabled = localStorage.getItem('story-finish') != null
 story.start()
 
 const wanned = new Game(document.querySelector('#wanned'))
+window.g = wanned
+console.log(g)
 const storySection = document.querySelector('#story')
 const fog = document.querySelector('#fog')
 const light = document.querySelector('#light')

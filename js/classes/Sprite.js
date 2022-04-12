@@ -1,15 +1,34 @@
 class Sprite {
-  constructor(variants, w, h) {
+  constructor(name, variants, w, h, initialPosition) {
+    this.name = name
     this.variants = variants
     this.preload()
     this.width = w
     this.height = h
-    this.x = 0
-    this.y = 0
+    this.position = initialPosition ?? {
+      x: 0,
+      y: 0
+    }
     this.speed = 1
     this.image = new Image()
     this.variant = null
     this.setVariant(this.variants.backward)
+  }
+
+  get x() {
+    return this.position.x
+  }
+
+  get y() {
+    return this.position.y
+  }
+
+  set x(x) {
+    this.position.x = x
+  }
+
+  set y(y) {
+    this.position.y = y
   }
 
   setVariant(variant) {
@@ -20,9 +39,23 @@ class Sprite {
   }
 
   draw(ctx, x, y) {
-    this.x = x
-    this.y = y
-    ctx.drawImage(this.image, this.x, this.y, this.width, this.height)
+    ctx.drawImage(this.image, x ?? this.x, y ?? this.y, this.width, this.height)
+  }
+
+  animate(movement) {
+    if ('x' in movement) {
+      if (movement.x > 0) {
+        this.left()
+      } else if (movement.x < 0) {
+        this.right()
+      }
+    } else if ('y' in movement) {
+      if (movement.y > 0) {
+        this.forward()
+      } else if (movement.y < 0) {
+        this.backward()
+      }
+    }
   }
 
   forward() {

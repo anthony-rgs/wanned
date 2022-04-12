@@ -1,5 +1,7 @@
 import Sprite from './Sprite.js'
 import Text from './Text.js'
+import Collision from './Collision.js'
+import collisions from '../../assets/resources/collisions.js'
 
 class Game {
   constructor(canvas) {
@@ -7,16 +9,12 @@ class Game {
     this.canvas.width = window.innerWidth
     this.canvas.height = window.innerHeight
     this.ctx = this.canvas.getContext('2d')
-    this.brontis = null
     this.map = null
-    this.mapCoords = {
-      x: 0,
-      y: 0,
-    }
     this.mapZoom = 3
     this.mapSpeed = 5
     this.fps = 0
     this.startTime = Date.now()
+    this.collisions = null
     this.frame = 0
     this.keys = [
       {
@@ -40,17 +38,25 @@ class Game {
         action: 'right',
       },
     ]
+    this.elements = []
     this.init()
     this.render()
+  }
+
+  makeCollisions() {
+    // FIXME: remove "realCollisionSize" parameter (61 here) and align correctly the collisions with the map
+    this.collisions = Collision.makeCollisions(collisions, 16 * this.mapZoom, 61, this.map.width, this.map.height)
   }
 
   updateCanvas() {
     this.canvas.width = window.innerWidth
     this.canvas.height = window.innerHeight
+    this.makeCollisions()
   }
 
   init() {
-    this.brontis = new Sprite(
+    this.elements.push(new Sprite(
+      'brontis',
       {
         forward: '../../assets/sprites/brontis/forward.png',
         backward: '../../assets/sprites/brontis/backward.png',
@@ -59,7 +65,8 @@ class Game {
       },
       60,
       60,
-    )
+      {x: -1580, y: -2000},
+    ))
 
     this.map = new Image()
     this.map.src = '../../assets/images/map.png'
@@ -67,6 +74,8 @@ class Game {
     this.map.addEventListener('load', () => {
       this.ctx.drawImage(this.map, 0, 0)
     })
+
+    this.makeCollisions()
 
     this.fpsCounter = new Text(this.fps, 'Museo', 16, 'white', 30, 30)
 
@@ -87,37 +96,92 @@ class Game {
     })
   }
 
+  findSprite(name) {
+    return this.elements.find((element) => element.name === name)
+  }
+
+  get brontis() {
+    return this.findSprite('brontis')
+  }
+
+  get mainCharacter() {
+    return this.brontis
+  }
+
   findKey(key, type) {
     return this.keys.find(k => k[type] === key)
   }
 
+  checkCollisions(elementX, elementY, elementWidth, elementHeight) {
+    return this.collisions.some(collision => collision.collide(elementX, elementY, elementWidth, elementHeight))
+  }
+
+  move(element, movement) {
+    const {x, y} = element.position
+    const {speed} = element
+
+    if (movement.x) {
+      if (movement.x < 0) {
+        element.position.x -= speed
+      } else {
+        element.position.x += speed
+      }
+    }
+
+    if (movement.y) {
+      if (movement.y < 0) {
+        element.position.y -= speed
+      } else {
+        element.position.y += speed
+      }
+    }
+
+    if (this.checkCollisions(-element.position.x, -element.position.y, element.width, element.height)) {
+
+      element.position.x = x
+      element.position.y = y
+    } else {
+      element.animate(movement)
+    }
+  }
+
   draw() {
     if (this.findKey('forward', 'action').pressed) {
-      this.mapCoords.y += this.mapSpeed
-      this.brontis.forward()
+      this.move(this.mainCharacter, {y: this.mapSpeed})
     } else if (this.findKey('left', 'action').pressed) {
-      this.mapCoords.x += this.mapSpeed
-      this.brontis.left()
+      this.move(this.mainCharacter, {x: this.mapSpeed})
     } else if (this.findKey('backward', 'action').pressed) {
-      this.mapCoords.y -= this.mapSpeed
-      this.brontis.backward()
+      this.move(this.mainCharacter, {y: -this.mapSpeed})
     } else if (this.findKey('right', 'action').pressed) {
-      this.mapCoords.x -= this.mapSpeed
-      this.brontis.right()
+      this.move(this.mainCharacter, {x: -this.mapSpeed})
     }
     this.ctx.drawImage(
       this.map,
-      this.mapCoords.x,
-      this.mapCoords.y,
+      this.mainCharacter.x + this.canvas.width / 2,
+      this.mainCharacter.y + this.canvas.height / 2,
       1700 * this.mapZoom,
       this.canvas.height * this.mapZoom,
     )
-    this.brontis.draw(
-      this.ctx,
-      this.canvas.width / 2 - this.brontis.width / 2,
-      this.canvas.height / 2 - this.brontis.height / 2,
-    )
+    this.elements.forEach((element) => {
+      element.draw(
+        this.ctx,
+        element === this.mainCharacter ? this.canvas.width / 2 : element.x,
+        element === this.mainCharacter ? this.canvas.height / 2 : element.y,
+      )
+    })
     this.fpsCounter.draw(this.ctx, this.canvas.width - 40, 30)
+
+    if (window.debug) {
+      this.ctx.fillStyle = '#33d1d4aa'
+      this.collisions.forEach((collision) => {
+        this.ctx.fillRect(
+          collision.startX + this.mainCharacter.x + this.canvas.width / 2,
+          collision.startY + this.mainCharacter.y + this.canvas.height / 2,
+          collision.endX - collision.startX,
+          collision.endY - collision.startY,
+        )
+      })
+    }
   }
 
   render() {
