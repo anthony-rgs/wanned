@@ -17,7 +17,7 @@
 
 #story p {
   color: var(--white);
-  font-size: 3rem;
+  font-size: 3vw;
   line-height: 1.5em;
   position: absolute;
   bottom: 90px;

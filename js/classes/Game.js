@@ -11,6 +11,8 @@ class Game {
     this.ctx = this.canvas.getContext('2d')
     this.map = null
     this.mapZoom = 3
+    this.mapWidth = 700
+    this.mapHeight = 400
     this.mapSpeed = 5
     this.fps = 0
     this.startTime = Date.now()
@@ -45,7 +47,13 @@ class Game {
 
   makeCollisions() {
     // FIXME: remove "realCollisionSize" parameter (61 here) and align correctly the collisions with the map
-    this.collisions = Collision.makeCollisions(collisions, 16 * this.mapZoom, 61, this.map.width, this.map.height)
+    this.collisions = Collision.makeCollisions(
+      collisions,
+      16 * this.mapZoom,
+      61,
+      this.map.width,
+      this.map.height,
+    )
   }
 
   updateCanvas() {
@@ -55,18 +63,20 @@ class Game {
   }
 
   init() {
-    this.elements.push(new Sprite(
-      'brontis',
-      {
-        forward: '../../assets/sprites/brontis/forward.png',
-        backward: '../../assets/sprites/brontis/backward.png',
-        left: '../../assets/sprites/brontis/left.png',
-        right: '../../assets/sprites/brontis/right.png',
-      },
-      60,
-      60,
-      {x: -1580, y: -2000},
-    ))
+    this.elements.push(
+      new Sprite(
+        'brontis',
+        {
+          forward: '../../assets/sprites/brontis/forward.png',
+          backward: '../../assets/sprites/brontis/backward.png',
+          left: '../../assets/sprites/brontis/left.png',
+          right: '../../assets/sprites/brontis/right.png',
+        },
+        30,
+        30,
+        { x: 0, y: 0 },
+      ),
+    )
 
     this.map = new Image()
     this.map.src = '../../assets/images/map.png'
@@ -97,7 +107,7 @@ class Game {
   }
 
   findSprite(name) {
-    return this.elements.find((element) => element.name === name)
+    return this.elements.find(element => element.name === name)
   }
 
   get brontis() {
@@ -113,12 +123,14 @@ class Game {
   }
 
   checkCollisions(elementX, elementY, elementWidth, elementHeight) {
-    return this.collisions.some(collision => collision.collide(elementX, elementY, elementWidth, elementHeight))
+    return this.collisions.some(collision =>
+      collision.collide(elementX, elementY, elementWidth, elementHeight),
+    )
   }
 
   move(element, movement) {
-    const {x, y} = element.position
-    const {speed} = element
+    const { x, y } = element.position
+    const { speed } = element
 
     if (movement.x) {
       if (movement.x < 0) {
@@ -136,8 +148,14 @@ class Game {
       }
     }
 
-    if (this.checkCollisions(-element.position.x, -element.position.y, element.width, element.height)) {
-
+    if (
+      this.checkCollisions(
+        -element.position.x,
+        -element.position.y,
+        element.width,
+        element.height,
+      )
+    ) {
       element.position.x = x
       element.position.y = y
     } else {
@@ -147,22 +165,22 @@ class Game {
 
   draw() {
     if (this.findKey('forward', 'action').pressed) {
-      this.move(this.mainCharacter, {y: this.mapSpeed})
+      this.move(this.mainCharacter, { y: this.mapSpeed })
     } else if (this.findKey('left', 'action').pressed) {
-      this.move(this.mainCharacter, {x: this.mapSpeed})
+      this.move(this.mainCharacter, { x: this.mapSpeed })
     } else if (this.findKey('backward', 'action').pressed) {
-      this.move(this.mainCharacter, {y: -this.mapSpeed})
+      this.move(this.mainCharacter, { y: -this.mapSpeed })
     } else if (this.findKey('right', 'action').pressed) {
-      this.move(this.mainCharacter, {x: -this.mapSpeed})
+      this.move(this.mainCharacter, { x: -this.mapSpeed })
     }
     this.ctx.drawImage(
       this.map,
       this.mainCharacter.x + this.canvas.width / 2,
       this.mainCharacter.y + this.canvas.height / 2,
-      1700 * this.mapZoom,
-      this.canvas.height * this.mapZoom,
+      this.mapWidth * this.mapZoom,
+      this.mapHeight * this.mapZoom,
     )
-    this.elements.forEach((element) => {
+    this.elements.forEach(element => {
       element.draw(
         this.ctx,
         element === this.mainCharacter ? this.canvas.width / 2 : element.x,
@@ -173,7 +191,7 @@ class Game {
 
     if (window.debug) {
       this.ctx.fillStyle = '#33d1d4aa'
-      this.collisions.forEach((collision) => {
+      this.collisions.forEach(collision => {
         this.ctx.fillRect(
           collision.startX + this.mainCharacter.x + this.canvas.width / 2,
           collision.startY + this.mainCharacter.y + this.canvas.height / 2,

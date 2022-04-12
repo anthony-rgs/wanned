@@ -7,9 +7,9 @@ class Sprite {
     this.height = h
     this.position = initialPosition ?? {
       x: 0,
-      y: 0
+      y: 0,
     }
-    this.speed = 1
+    this.speed = 4
     this.image = new Image()
     this.variant = null
     this.setVariant(this.variants.backward)
