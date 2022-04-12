@@ -1,5 +1,5 @@
 class Sprite {
-  constructor(name, variants, w, h, initialPosition) {
+  constructor(name, variants, w, h, initialPosition, speed) {
     this.name = name
     this.variants = variants
     this.preload()
@@ -9,7 +9,7 @@ class Sprite {
       x: 0,
       y: 0,
     }
-    this.speed = 4
+    this.speed = speed ?? 4
     this.image = new Image()
     this.variant = null
     this.setVariant(this.variants.backward)
