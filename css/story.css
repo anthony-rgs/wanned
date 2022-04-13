@@ -17,12 +17,12 @@
 
 #story p {
   color: var(--white);
-  font-size: 3vw;
+  font-size: max(16px, 2.5vw);
   line-height: 1.5em;
   position: absolute;
   bottom: 90px;
-  left: 90px;
-  width: min(100%, 1000px);
+  left: 5vw;
+  width: 70%;
   transition: opacity 500ms;
 }
 

@@ -20,6 +20,10 @@ class Story {
 
   onEnd(cb) {
     this.cb = cb
+
+    if (this.disabled) {
+      this.cb()
+    }
   }
 
   transition() {

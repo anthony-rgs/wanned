@@ -51,10 +51,12 @@ class Game {
       this.map.width,
       this.map.height,
       (numberOfCollisionsByColumn, numberOfCollisionsByRow) => {
-        const realCollisionXSize = (this.mapWidth / numberOfCollisionsByColumn) * this.mapZoom
-        const realCollisionYSize = (this.mapHeight / numberOfCollisionsByRow) * this.mapZoom
-        return {realCollisionXSize, realCollisionYSize}
-      }
+        const realCollisionXSize =
+          (this.mapWidth / numberOfCollisionsByColumn) * this.mapZoom
+        const realCollisionYSize =
+          (this.mapHeight / numberOfCollisionsByRow) * this.mapZoom
+        return { realCollisionXSize, realCollisionYSize }
+      },
     )
   }
 
@@ -67,17 +69,37 @@ class Game {
   init() {
     this.elements.push(
       new Sprite(
-        'brontis',
+        'baptiste',
         {
-          forward: '../../assets/sprites/brontis/forward.png',
-          backward: '../../assets/sprites/brontis/backward.png',
-          left: '../../assets/sprites/brontis/left.png',
-          right: '../../assets/sprites/brontis/right.png',
+          front: [
+            '../../assets/sprites/baptiste/front/1.png',
+            '../../assets/sprites/baptiste/front/2.png',
+            '../../assets/sprites/baptiste/front/3.png',
+            '../../assets/sprites/baptiste/front/4.png',
+          ],
+          back: [
+            '../../assets/sprites/baptiste/back/1.png',
+            '../../assets/sprites/baptiste/back/2.png',
+            '../../assets/sprites/baptiste/back/3.png',
+            '../../assets/sprites/baptiste/back/4.png',
+          ],
+          left: [
+            '../../assets/sprites/baptiste/left/1.png',
+            '../../assets/sprites/baptiste/left/2.png',
+            '../../assets/sprites/baptiste/left/3.png',
+            '../../assets/sprites/baptiste/left/4.png',
+          ],
+          right: [
+            '../../assets/sprites/baptiste/right/1.png',
+            '../../assets/sprites/baptiste/right/2.png',
+            '../../assets/sprites/baptiste/right/3.png',
+            '../../assets/sprites/baptiste/right/4.png',
+          ],
         },
         30,
         30,
         { x: -640, y: -992 },
-        1
+        2,
       ),
     )
 
@@ -113,12 +135,12 @@ class Game {
     return this.elements.find(element => element.name === name)
   }
 
-  get brontis() {
-    return this.findSprite('brontis')
+  get baptiste() {
+    return this.findSprite('baptiste')
   }
 
   get mainCharacter() {
-    return this.brontis
+    return this.baptiste
   }
 
   findKey(key, type) {
@@ -194,7 +216,7 @@ class Game {
 
     if (window.debug) {
       this.ctx.fillStyle = '#33d1d4aa'
-      this.collisions.forEach(collision => {
+      this.collisions?.forEach(collision => {
         this.ctx.fillRect(
           collision.startX + this.mainCharacter.x + this.canvas.width / 2,
           collision.startY + this.mainCharacter.y + this.canvas.height / 2,
