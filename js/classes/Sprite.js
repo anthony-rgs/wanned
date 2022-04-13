@@ -19,11 +19,10 @@ class Sprite {
     this.height = h
     this.position = initialPosition
     this.speed = speed
-    this.image = new Image()
-    this.variant = null
     this.frame = 0
-    this.currentVariant = 0
-    this.setVariant(this.variants.front[0])
+    this.currentVariantIndex = 0
+    this.currentVariant = this.variants.front[this.currentVariantIndex]
+    this.currentDirection = 'forward'
   }
 
   get x() {
@@ -42,25 +41,26 @@ class Sprite {
     this.position.y = y
   }
 
-  setVariant(variant) {
-    if (this.variant !== variant) {
-      this.image.src = variant
-      this.variant = variant
-    }
-  }
-
   draw(ctx, x, y) {
-    ctx.drawImage(this.image, x ?? this.x, y ?? this.y, this.width, this.height)
+    if (this.currentVariant) {
+      ctx.drawImage(
+        this.currentVariant,
+        x ?? this.x,
+        y ?? this.y,
+        this.width,
+        this.height,
+      )
+    }
   }
 
   animate(movement) {
     this.frame++
 
     if (this.frame % (10 / this.walkAnimationSpeed) === 0) {
-      if (this.currentVariant < this.variantsLength - 1) {
-        this.currentVariant++
+      if (this.currentVariantIndex < this.variantsLength - 1) {
+        this.currentVariantIndex++
       } else {
-        this.currentVariant = 0
+        this.currentVariantIndex = 0
       }
     }
 
@@ -80,25 +80,30 @@ class Sprite {
   }
 
   forward() {
-    this.setVariant(this.variants.front[this.currentVariant])
+    this.currentVariant = this.variants.front[this.currentVariantIndex]
   }
 
   backward() {
-    this.setVariant(this.variants.back[this.currentVariant])
+    this.currentVariant = this.variants.back[this.currentVariantIndex]
   }
 
   left() {
-    this.setVariant(this.variants.left[this.currentVariant])
+    this.currentVariant = this.variants.left[this.currentVariantIndex]
   }
 
   right() {
-    this.setVariant(this.variants.right[this.currentVariant])
+    this.currentVariant = this.variants.right[this.currentVariantIndex]
   }
 
   preload() {
-    Object.values(this.variants).forEach(variant => {
-      const img = new Image()
-      img.src = variant
+    Object.entries(this.variants).forEach(([direction, variants]) => {
+      variants.forEach((variant, i) => {
+        console.log(variant, direction, i)
+        const img = new Image()
+        img.src = variant
+        console.log(img)
+        this.variants[direction][i] = img
+      })
     })
   }
 }
