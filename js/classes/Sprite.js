@@ -19,6 +19,8 @@ class Sprite extends Element {
     this.speed = speed
     this.frame = 0
     this.currentDirection = 'front'
+    this.lives = 3
+    this.baseLives = this.lives
   }
 
   get currentVariant() {
