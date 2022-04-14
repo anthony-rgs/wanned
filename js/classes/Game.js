@@ -228,7 +228,7 @@ class Game {
       element.draw(
         this.ctx,
         element === this.mainCharacter ? this.canvas.width / 2 : this.mainCharacter.x - element.x + this.canvas.width / 2,
-        element === this.mainCharacter ? this.canvas.height / 2 : this.mainCharacter.y - element.y + this.canvas.width / 2,
+        element === this.mainCharacter ? this.canvas.height / 2 : this.mainCharacter.y - element.y + this.canvas.height / 2,
       )
     })
     this.fpsCounter.draw(this.ctx, this.canvas.width - 40, 30)
