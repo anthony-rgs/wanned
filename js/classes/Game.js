@@ -221,14 +221,21 @@ class Game {
   }
 
   draw() {
-    if (this.findKey('front', 'action').pressed) {
+    const frontKey = this.findKey('front', 'action')
+    const backKey = this.findKey('back', 'action')
+    const leftKey = this.findKey('left', 'action')
+    const rightKey = this.findKey('right', 'action')
+
+    if (frontKey.pressed) {
       this.move(this.mainCharacter, {y: this.mapSpeed})
-    } else if (this.findKey('left', 'action').pressed) {
+    } else if (leftKey.pressed) {
       this.move(this.mainCharacter, {x: this.mapSpeed})
-    } else if (this.findKey('back', 'action').pressed) {
+    } else if (backKey.pressed) {
       this.move(this.mainCharacter, {y: -this.mapSpeed})
-    } else if (this.findKey('right', 'action').pressed) {
+    } else if (rightKey.pressed) {
       this.move(this.mainCharacter, {x: -this.mapSpeed})
+    } else if (!frontKey.pressed && !backKey.pressed && !leftKey.pressed && !rightKey.pressed) {
+      this.mainCharacter.currentVariantIndex = 0
     }
 
     this.ctx.drawImage(
