@@ -29,7 +29,7 @@ class Game {
       {
         key: 'ArrowUp',
         pressed: false,
-        action: 'forward',
+        action: 'front',
       },
       {
         key: 'ArrowLeft',
@@ -39,7 +39,7 @@ class Game {
       {
         key: 'ArrowDown',
         pressed: false,
-        action: 'backward',
+        action: 'back',
       },
       {
         key: 'ArrowRight',
@@ -221,11 +221,11 @@ class Game {
   }
 
   draw() {
-    if (this.findKey('forward', 'action').pressed) {
+    if (this.findKey('front', 'action').pressed) {
       this.move(this.mainCharacter, {y: this.mapSpeed})
     } else if (this.findKey('left', 'action').pressed) {
       this.move(this.mainCharacter, {x: this.mapSpeed})
-    } else if (this.findKey('backward', 'action').pressed) {
+    } else if (this.findKey('back', 'action').pressed) {
       this.move(this.mainCharacter, {y: -this.mapSpeed})
     } else if (this.findKey('right', 'action').pressed) {
       this.move(this.mainCharacter, {x: -this.mapSpeed})
