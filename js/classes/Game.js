@@ -219,6 +219,16 @@ class Game {
           collision.endY - collision.startY,
         )
       })
+      this.ctx.fillStyle = 'rgba(212,51,51,0.67)'
+      this.zoneTriggerings?.forEach(zoneTriggering => {
+        const zone = zoneTriggering.zone
+        this.ctx.fillRect(
+          zone.x + this.mainCharacter.x + this.canvas.width / 2,
+          zone.y + this.mainCharacter.y + this.canvas.height / 2,
+          zone.width,
+          zone.height,
+        )
+      })
     }
   }
 
