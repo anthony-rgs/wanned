@@ -10,7 +10,7 @@ class Collision {
     return (this.startX <= elementX + elementWidth &&
         elementX <= this.endX) &&
       (this.startY <= elementY + elementHeight &&
-        elementY <= this.endY)
+        elementY <= this.endY - elementHeight)
   }
 
   static makeCollisions(rawCollisions, builtCollisionSize, mapWidth, mapHeight, calculateRealCollisionSize) {
