@@ -6,7 +6,8 @@ import Fabien from "../elements/sprites/fabien.js"
 import DoorLeftZone1 from "../elements/door-left-zone1.js"
 import DoorRightZone1 from "../elements/door-right-zone1.js"
 import Action from "./Action.js"
-import wait from "../utils/wait.js";
+import wait from "../utils/wait.js"
+import HUD from "./HUD.js"
 
 class Game {
   constructor(canvas) {
@@ -23,11 +24,12 @@ class Game {
     this.startTime = Date.now()
     this.mapCollisions = null
     this.frame = 0
+    this.baptisteHud = new HUD('../../assets/images/hud/baptiste-head.png', 3, document.querySelector('canvas'))
     this.keys = [
       {
         key: 'ArrowUp',
         pressed: false,
-        action: 'forward',
+        action: 'front',
       },
       {
         key: 'ArrowLeft',
@@ -37,7 +39,7 @@ class Game {
       {
         key: 'ArrowDown',
         pressed: false,
-        action: 'backward',
+        action: 'back',
       },
       {
         key: 'ArrowRight',
@@ -219,14 +221,21 @@ class Game {
   }
 
   draw() {
-    if (this.findKey('forward', 'action').pressed) {
+    const frontKey = this.findKey('front', 'action')
+    const backKey = this.findKey('back', 'action')
+    const leftKey = this.findKey('left', 'action')
+    const rightKey = this.findKey('right', 'action')
+
+    if (frontKey.pressed) {
       this.move(this.mainCharacter, {y: this.mapSpeed})
-    } else if (this.findKey('left', 'action').pressed) {
+    } else if (leftKey.pressed) {
       this.move(this.mainCharacter, {x: this.mapSpeed})
-    } else if (this.findKey('backward', 'action').pressed) {
+    } else if (backKey.pressed) {
       this.move(this.mainCharacter, {y: -this.mapSpeed})
-    } else if (this.findKey('right', 'action').pressed) {
+    } else if (rightKey.pressed) {
       this.move(this.mainCharacter, {x: -this.mapSpeed})
+    } else if (!frontKey.pressed && !backKey.pressed && !leftKey.pressed && !rightKey.pressed) {
+      this.mainCharacter.currentVariantIndex = 0
     }
 
     this.ctx.drawImage(
@@ -272,6 +281,9 @@ class Game {
   render() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
     this.draw()
+
+    this.baptisteHud.baseLives = this.baptiste.baseLives
+    this.baptisteHud.lives = this.baptiste.lives
 
     this.frame++
     const time = Date.now()

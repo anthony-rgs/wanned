@@ -19,6 +19,8 @@ class Sprite extends Element {
     this.speed = speed
     this.frame = 0
     this.currentDirection = 'front'
+    this.lives = 3
+    this.baseLives = this.lives
   }
 
   get currentVariant() {
@@ -44,18 +46,18 @@ class Sprite extends Element {
       }
     } else if ('y' in movement) {
       if (movement.y > 0) {
-        this.forward()
+        this.front()
       } else if (movement.y < 0) {
-        this.backward()
+        this.back()
       }
     }
   }
 
-  forward() {
+  front() {
     this.currentDirection = 'front'
   }
 
-  backward() {
+  back() {
     this.currentDirection = 'back'
   }
 
