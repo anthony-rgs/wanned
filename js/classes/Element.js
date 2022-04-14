@@ -45,9 +45,9 @@ class Element {
     return (this.currentVariant.collisions ?? []).map(
       (collision) => new Collision(
         -(this.x - collision.startX),
-        -(this.y - collision.startY - this.height),
+        -(this.y - collision.startY),
         -(this.x - collision.endX),
-        -(this.y - collision.endY - this.height),
+        -(this.y - collision.endY),
       )
     )
   }

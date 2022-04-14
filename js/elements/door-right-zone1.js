@@ -2,9 +2,10 @@ import Element from "../classes/Element.js";
 import Collision from "../classes/Collision.js";
 
 class DoorRightZone1 extends Element {
-  constructor() {
+  constructor(game) {
     super(
       'doorRightZone1',
+      game,
       [
         {
           image: '../../assets/elements/door/door-right.png',
@@ -21,7 +22,7 @@ class DoorRightZone1 extends Element {
       ],
       30,
       30,
-      {x: -134, y: -960},
+      {x: -134, y: -1000},
     )
   }
 
@@ -34,4 +35,4 @@ class DoorRightZone1 extends Element {
   }
 }
 
-export default new DoorRightZone1();
+export default DoorRightZone1;
