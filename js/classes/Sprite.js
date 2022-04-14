@@ -1,4 +1,6 @@
-class Sprite {
+import Element from "./Element.js";
+
+class Sprite extends Element {
   constructor(
     name,
     variants,
@@ -10,47 +12,16 @@ class Sprite {
     },
     speed = 4,
   ) {
-    this.name = name
-    this.variants = variants
+    super(name, variants, w, h, initialPosition);
     this.variantsLength = 4
     this.walkAnimationSpeed = 1
-    this.preload()
-    this.width = w
-    this.height = h
-    this.position = initialPosition
     this.speed = speed
     this.frame = 0
-    this.currentVariantIndex = 0
-    this.currentVariant = this.variants.front[this.currentVariantIndex]
-    this.currentDirection = 'forward'
+    this.currentDirection = 'front'
   }
 
-  get x() {
-    return this.position.x
-  }
-
-  get y() {
-    return this.position.y
-  }
-
-  set x(x) {
-    this.position.x = x
-  }
-
-  set y(y) {
-    this.position.y = y
-  }
-
-  draw(ctx, x, y) {
-    if (this.currentVariant) {
-      ctx.drawImage(
-        this.currentVariant,
-        x ?? this.x,
-        y ?? this.y,
-        this.width,
-        this.height,
-      )
-    }
+  get currentVariant() {
+    return this.variants[this.currentDirection][this.currentVariantIndex]
   }
 
   animate(movement) {
@@ -80,28 +51,26 @@ class Sprite {
   }
 
   forward() {
-    this.currentVariant = this.variants.front[this.currentVariantIndex]
+    this.currentDirection = 'front'
   }
 
   backward() {
-    this.currentVariant = this.variants.back[this.currentVariantIndex]
+    this.currentDirection = 'back'
   }
 
   left() {
-    this.currentVariant = this.variants.left[this.currentVariantIndex]
+    this.currentDirection = 'left'
   }
 
   right() {
-    this.currentVariant = this.variants.right[this.currentVariantIndex]
+    this.currentDirection = 'right'
   }
 
   preload() {
     Object.entries(this.variants).forEach(([direction, variants]) => {
       variants.forEach((variant, i) => {
-        console.log(variant, direction, i)
         const img = new Image()
         img.src = variant
-        console.log(img)
         this.variants[direction][i] = img
       })
     })
