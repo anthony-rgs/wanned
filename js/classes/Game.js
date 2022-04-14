@@ -1,7 +1,7 @@
 import Text from './Text.js'
 import Collision from './Collision.js'
-import collisions from '../../assets/resources/collisions.js'
-import baptiste from "../sprites/baptiste.js";
+import mapCollisions from '../../assets/resources/mapCollisions.js'
+import baptiste from "../elements/sprites/baptiste.js";
 
 class Game {
   constructor(canvas) {
@@ -16,7 +16,7 @@ class Game {
     this.mapSpeed = 5
     this.fps = 0
     this.startTime = Date.now()
-    this.collisions = null
+    this.mapCollisions = null
     this.frame = 0
     this.keys = [
       {
@@ -57,9 +57,17 @@ class Game {
     })
   }
 
+  get collisions() {
+    if (this.mapCollisions) {
+      return [...this.mapCollisions, ...this.elements.map(element => element.collisions).flat()].filter(collision => collision)
+    } else {
+      return []
+    }
+  }
+
   makeCollisions() {
-    this.collisions = Collision.makeCollisions(
-      collisions,
+    this.mapCollisions = Collision.makeCollisions(
+      mapCollisions,
       16 * this.mapZoom,
       this.map.width,
       this.map.height,
@@ -129,9 +137,7 @@ class Game {
   }
 
   checkCollisions(elementX, elementY, elementWidth, elementHeight) {
-    return this.collisions.some(collision =>
-      collision.collide(elementX, elementY, elementWidth, elementHeight),
-    )
+    return this.collisions.some(collision => collision.collide(elementX, elementY, elementWidth, elementHeight))
   }
 
   checkInZone(elementX, elementY, elementWidth, elementHeight, zoneCoordinates) {
@@ -193,6 +199,7 @@ class Game {
     } else if (this.findKey('right', 'action').pressed) {
       this.move(this.mainCharacter, { x: -this.mapSpeed })
     }
+
     this.ctx.drawImage(
       this.map,
       this.mainCharacter.x + this.canvas.width / 2,
@@ -200,6 +207,7 @@ class Game {
       this.mapWidth * this.mapZoom,
       this.mapHeight * this.mapZoom,
     )
+
     this.elements.forEach(element => {
       element.draw(
         this.ctx,

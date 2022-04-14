@@ -69,9 +69,9 @@ class Sprite extends Element {
   preload() {
     Object.entries(this.variants).forEach(([direction, variants]) => {
       variants.forEach((variant, i) => {
-        const img = new Image()
-        img.src = variant
-        this.variants[direction][i] = img
+        const image = new Image()
+        image.src = variant.image
+        this.variants[direction][i] = { image }
       })
     })
   }

@@ -1,3 +1,5 @@
+import Collision from "./Collision.js";
+
 class Element {
   constructor(
     name,
@@ -39,10 +41,21 @@ class Element {
     this.position.y = y
   }
 
+  get collisions() {
+    return (this.currentVariant.collisions ?? []).map(
+      (collision) => new Collision(
+        -(this.x - collision.startX),
+        -(this.y - collision.startY - this.height),
+        -(this.x - collision.endX),
+        -(this.y - collision.endY - this.height),
+      )
+    )
+  }
+
   draw(ctx, x, y) {
     if (this.currentVariant) {
       ctx.drawImage(
-        this.currentVariant,
+        this.currentVariant.image,
         x ?? this.x,
         y ?? this.y,
         this.width,
@@ -52,12 +65,11 @@ class Element {
   }
 
   preload() {
-    Object.entries(this.variants).forEach(([direction, variants]) => {
-      variants.forEach((variant, i) => {
-        const img = new Image()
-        img.src = variant
-        this.variants[direction][i] = img
-      })
+    Object.entries(this.variants).forEach(([direction, variant]) => {
+      const image = new Image()
+      image.src = variant.image
+
+      this.variants[direction] = {image, collisions: variant.collisions}
     })
   }
 }
