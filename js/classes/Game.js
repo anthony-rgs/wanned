@@ -42,7 +42,7 @@ class Game {
         action: 'right',
       },
     ]
-    this.elements = []
+    this.elements = [doorLeftZone1, doorRightZone1, baptiste]
     this.zoneTriggerings = [
       {
         zone: {x: 96, y: 1024, width: 64, height: 64},
@@ -55,6 +55,35 @@ class Game {
       }
     ]
     this.init()
+  }
+
+  init() {
+    this.map = new Image()
+    this.map.src = '../../assets/images/map.png'
+
+    this.map.addEventListener('load', () => {
+      this.ctx.drawImage(this.map, 0, 0)
+      this.makeCollisions()
+      this.render()
+    })
+
+    this.fpsCounter = new Text(this.fps, 'Museo', 16, 'white', 30, 30)
+
+    window.addEventListener('keydown', e => {
+      this.keys.map(k => {
+        if (k.key === e.key) {
+          this.findKey(e.key, 'key').pressed = true
+        }
+      })
+    })
+
+    window.addEventListener('keyup', e => {
+      this.keys.map(k => {
+        if (k.key === e.key) {
+          this.findKey(e.key, 'key').pressed = false
+        }
+      })
+    })
   }
 
   currentZone(element) {
@@ -97,41 +126,6 @@ class Game {
     this.canvas.width = window.innerWidth
     this.canvas.height = window.innerHeight
     this.makeCollisions()
-  }
-
-  init() {
-    this.elements.push(
-      doorLeftZone1,
-      doorRightZone1,
-      baptiste,
-    )
-
-    this.map = new Image()
-    this.map.src = '../../assets/images/map.png'
-
-    this.map.addEventListener('load', () => {
-      this.ctx.drawImage(this.map, 0, 0)
-      this.makeCollisions()
-      this.render()
-    })
-
-    this.fpsCounter = new Text(this.fps, 'Museo', 16, 'white', 30, 30)
-
-    window.addEventListener('keydown', e => {
-      this.keys.map(k => {
-        if (k.key === e.key) {
-          this.findKey(e.key, 'key').pressed = true
-        }
-      })
-    })
-
-    window.addEventListener('keyup', e => {
-      this.keys.map(k => {
-        if (k.key === e.key) {
-          this.findKey(e.key, 'key').pressed = false
-        }
-      })
-    })
   }
 
   findSprite(name) {
@@ -203,7 +197,7 @@ class Game {
     ) {
       element.position.x = x
       element.position.y = y
-    } 
+    }
 
     const currentZone = this.currentZone(element)
     if (currentZone) {
