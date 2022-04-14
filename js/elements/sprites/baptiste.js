@@ -6,10 +6,10 @@ export default new Sprite(
     return [
       direction,
       [
-        { image: '../../assets/sprites/baptiste/' + direction + '/1.png' },
-        { image: '../../assets/sprites/baptiste/' + direction + '/2.png' },
-        { image: '../../assets/sprites/baptiste/' + direction + '/3.png' },
-        { image: '../../assets/sprites/baptiste/' + direction + '/4.png' },
+        { image: '../../assets/elements/sprites/baptiste/' + direction + '/1.png' },
+        { image: '../../assets/elements/sprites/baptiste/' + direction + '/2.png' },
+        { image: '../../assets/elements/sprites/baptiste/' + direction + '/3.png' },
+        { image: '../../assets/elements/sprites/baptiste/' + direction + '/4.png' },
       ],
     ];
   })),

@@ -5,13 +5,13 @@ export default new Element(
   'doorRightZone1',
   [
     {
-      image: '../../assets/sprites/door/door-right.png',
+      image: '../../assets/elements/door/door-right.png',
       collisions: [
         new Collision(0, 0, 32, 32),
       ]
     },
     {
-      image: '../../assets/sprites/door/door-right-opened.png',
+      image: '../../assets/elements/door/door-right-opened.png',
       collisions: [
         // new Collision(20, 0, 32, 32),
       ]
