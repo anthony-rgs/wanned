@@ -191,6 +191,8 @@ class Game {
       }
     }
 
+    element.animate(movement)
+
     if (
       this.checkCollisions(
         -element.position.x,
@@ -201,8 +203,6 @@ class Game {
     ) {
       element.position.x = x
       element.position.y = y
-    } else {
-      element.animate(movement)
     }
 
     const currentZone = this.currentZone(element)
