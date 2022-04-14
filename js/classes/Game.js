@@ -41,7 +41,20 @@ class Game {
       },
     ]
     this.elements = []
+    this.zoneTriggerings = []
     this.init()
+  }
+
+  currentZone(element) {
+    return this.zoneTriggerings.find(zoneTriggering => {
+      return this.checkInZone(
+        -element.position.x,
+        -element.position.y,
+        element.width,
+        element.height,
+        zoneTriggering.zone,
+      )
+    })
   }
 
   makeCollisions() {
@@ -153,6 +166,15 @@ class Game {
     )
   }
 
+  checkInZone(elementX, elementY, elementWidth, elementHeight, zoneCoordinates) {
+    return (
+      elementX >= zoneCoordinates.x &&
+      elementX + elementWidth <= zoneCoordinates.x + zoneCoordinates.width &&
+      elementY >= zoneCoordinates.y &&
+      elementY + elementHeight <= zoneCoordinates.y + zoneCoordinates.height
+    )
+  }
+
   move(element, movement) {
     const { x, y } = element.position
     const { speed } = element
@@ -185,6 +207,11 @@ class Game {
       element.position.y = y
     } else {
       element.animate(movement)
+    }
+
+    const currentZone = this.currentZone(element)
+    if (currentZone) {
+      currentZone.action()
     }
   }
 
