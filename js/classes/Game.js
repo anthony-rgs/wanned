@@ -22,22 +22,22 @@ class Game {
     this.frame = 0
     this.keys = [
       {
-        key: 'w',
+        key: 'ArrowUp',
         pressed: false,
         action: 'forward',
       },
       {
-        key: 'a',
+        key: 'ArrowLeft',
         pressed: false,
         action: 'left',
       },
       {
-        key: 's',
+        key: 'ArrowDown',
         pressed: false,
         action: 'backward',
       },
       {
-        key: 'd',
+        key: 'ArrowRight',
         pressed: false,
         action: 'right',
       },
@@ -203,7 +203,7 @@ class Game {
     ) {
       element.position.x = x
       element.position.y = y
-    }
+    } 
 
     const currentZone = this.currentZone(element)
     if (currentZone) {
