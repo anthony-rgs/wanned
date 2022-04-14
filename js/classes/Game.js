@@ -2,6 +2,8 @@ import Text from './Text.js'
 import Collision from './Collision.js'
 import mapCollisions from '../../assets/resources/mapCollisions.js'
 import baptiste from "../elements/sprites/baptiste.js";
+import doorLeftZone1 from "../elements/door-left-zone1.js";
+import doorRightZone1 from "../elements/door-right-zone1.js";
 
 class Game {
   constructor(canvas) {
@@ -41,7 +43,17 @@ class Game {
       },
     ]
     this.elements = []
-    this.zoneTriggerings = []
+    this.zoneTriggerings = [
+      {
+        zone: {x: 96, y: 1024, width: 64, height: 64},
+        action: () => {
+          setTimeout(() => {
+            doorLeftZone1.currentVariantIndex = 1
+            doorRightZone1.currentVariantIndex = 1
+          }, 5000)
+        },
+      }
+    ]
     this.init()
   }
 
@@ -89,7 +101,9 @@ class Game {
 
   init() {
     this.elements.push(
-      baptiste
+      doorLeftZone1,
+      doorRightZone1,
+      baptiste,
     )
 
     this.map = new Image()
@@ -126,6 +140,14 @@ class Game {
 
   get baptiste() {
     return this.findSprite('baptiste')
+  }
+
+  get doorLeftZone1() {
+    return this.findSprite('doorLeftZone1')
+  }
+
+  get doorRightZone1() {
+    return this.findSprite('doorRightZone1')
   }
 
   get mainCharacter() {
@@ -211,8 +233,8 @@ class Game {
     this.elements.forEach(element => {
       element.draw(
         this.ctx,
-        element === this.mainCharacter ? this.canvas.width / 2 : element.x,
-        element === this.mainCharacter ? this.canvas.height / 2 : element.y,
+        element === this.mainCharacter ? this.canvas.width / 2 : this.mainCharacter.x - element.x + this.canvas.width / 2,
+        element === this.mainCharacter ? this.canvas.height / 2 : this.mainCharacter.y - element.y + this.canvas.width / 2,
       )
     })
     this.fpsCounter.draw(this.ctx, this.canvas.width - 40, 30)
