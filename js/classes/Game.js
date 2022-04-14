@@ -48,8 +48,8 @@ class Game {
         zone: {x: 96, y: 1024, width: 64, height: 64},
         action: () => {
           setTimeout(() => {
-            doorLeftZone1.currentVariantIndex = 1
-            doorRightZone1.currentVariantIndex = 1
+            doorLeftZone1.open()
+            doorRightZone1.open()
           }, 5000)
         },
       }

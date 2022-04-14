@@ -22,6 +22,14 @@ class DoorLeftZone1 extends Element {
       {x: -112, y: -960},
     )
   }
+
+  open() {
+    this.currentVariantIndex = 1
+  }
+
+  close() {
+    this.currentVariantIndex = 0
+  }
 }
 
 export default new DoorLeftZone1();
