@@ -1,5 +1,5 @@
-import Element from "../classes/Element.js";
-import Collision from "../classes/Collision.js";
+import Element from "../classes/Element.js"
+import Collision from "../classes/Collision.js"
 
 class DoorRightZone1 extends Element {
   constructor(game) {
@@ -35,4 +35,4 @@ class DoorRightZone1 extends Element {
   }
 }
 
-export default DoorRightZone1;
+export default DoorRightZone1

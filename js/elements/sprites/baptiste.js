@@ -1,9 +1,10 @@
-import Sprite from "../../classes/Sprite.js";
+import Sprite from "../../classes/Sprite.js"
 
 class Baptiste extends Sprite {
-  constructor() {
+  constructor(game) {
     super(
       'baptiste',
+      game,
       Object.fromEntries(['front', 'back', 'left', 'right'].map(direction => {
         return [
           direction,
@@ -13,7 +14,7 @@ class Baptiste extends Sprite {
             { image: '../../assets/elements/sprites/baptiste/' + direction + '/3.png' },
             { image: '../../assets/elements/sprites/baptiste/' + direction + '/4.png' },
           ],
-        ];
+        ]
       })),
       30,
       30,
@@ -23,4 +24,4 @@ class Baptiste extends Sprite {
   }
 }
 
-export default new Baptiste();
+export default Baptiste

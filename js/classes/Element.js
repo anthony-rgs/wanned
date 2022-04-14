@@ -1,8 +1,9 @@
-import Collision from "./Collision.js";
+import Collision from "./Collision.js"
 
 class Element {
   constructor(
     name,
+    game,
     variants,
     w,
     h,
@@ -12,6 +13,7 @@ class Element {
     },
   ) {
     this.name = name
+    this.game = game
     this.variants = variants
     this.width = w
     this.height = h

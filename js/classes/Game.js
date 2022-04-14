@@ -1,9 +1,12 @@
 import Text from './Text.js'
 import Collision from './Collision.js'
 import mapCollisions from '../../assets/resources/mapCollisions.js'
-import baptiste from "../elements/sprites/baptiste.js";
-import doorLeftZone1 from "../elements/door-left-zone1.js";
-import doorRightZone1 from "../elements/door-right-zone1.js";
+import Baptiste from "../elements/sprites/baptiste.js"
+import Fabien from "../elements/sprites/fabien.js"
+import DoorLeftZone1 from "../elements/door-left-zone1.js"
+import DoorRightZone1 from "../elements/door-right-zone1.js"
+import Action from "./Action.js"
+import wait from "../utils/wait.js";
 
 class Game {
   constructor(canvas) {
@@ -42,16 +45,22 @@ class Game {
         action: 'right',
       },
     ]
-    this.elements = [doorLeftZone1, doorRightZone1, baptiste]
+    this.elements = [
+      new DoorLeftZone1(this),
+      new DoorRightZone1(this),
+      new Fabien(this),
+      new Baptiste(this)
+    ]
     this.zoneTriggerings = [
       {
         zone: {x: 96, y: 1024, width: 64, height: 64},
-        action: () => {
-          setTimeout(() => {
-            doorLeftZone1.open()
-            doorRightZone1.open()
-          }, 5000)
-        },
+        action: new Action(async () => {
+          this.fabien.stopWalk()
+          await wait(1000)
+          await this.fabien.pullOver()
+          this.doorLeftZone1.open()
+          this.doorRightZone1.open()
+        }, true)
       }
     ]
     this.init()
@@ -117,7 +126,7 @@ class Game {
           (this.mapWidth / numberOfCollisionsByColumn) * this.mapZoom
         const realCollisionYSize =
           (this.mapHeight / numberOfCollisionsByRow) * this.mapZoom
-        return { realCollisionXSize, realCollisionYSize }
+        return {realCollisionXSize, realCollisionYSize}
       },
     )
   }
@@ -134,6 +143,10 @@ class Game {
 
   get baptiste() {
     return this.findSprite('baptiste')
+  }
+
+  get fabien() {
+    return this.findSprite('fabien')
   }
 
   get doorLeftZone1() {
@@ -166,8 +179,8 @@ class Game {
   }
 
   move(element, movement) {
-    const { x, y } = element.position
-    const { speed } = element
+    const {x, y} = element.position
+    const {speed} = element
 
     if (movement.x) {
       if (movement.x < 0) {
@@ -201,19 +214,19 @@ class Game {
 
     const currentZone = this.currentZone(element)
     if (currentZone) {
-      currentZone.action()
+      currentZone.action.trigger()
     }
   }
 
   draw() {
     if (this.findKey('forward', 'action').pressed) {
-      this.move(this.mainCharacter, { y: this.mapSpeed })
+      this.move(this.mainCharacter, {y: this.mapSpeed})
     } else if (this.findKey('left', 'action').pressed) {
-      this.move(this.mainCharacter, { x: this.mapSpeed })
+      this.move(this.mainCharacter, {x: this.mapSpeed})
     } else if (this.findKey('backward', 'action').pressed) {
-      this.move(this.mainCharacter, { y: -this.mapSpeed })
+      this.move(this.mainCharacter, {y: -this.mapSpeed})
     } else if (this.findKey('right', 'action').pressed) {
-      this.move(this.mainCharacter, { x: -this.mapSpeed })
+      this.move(this.mainCharacter, {x: -this.mapSpeed})
     }
 
     this.ctx.drawImage(

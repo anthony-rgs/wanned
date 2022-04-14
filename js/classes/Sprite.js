@@ -1,8 +1,9 @@
-import Element from "./Element.js";
+import Element from "./Element.js"
 
 class Sprite extends Element {
   constructor(
     name,
+    game,
     variants,
     w,
     h,
@@ -12,7 +13,7 @@ class Sprite extends Element {
     },
     speed = 4,
   ) {
-    super(name, variants, w, h, initialPosition);
+    super(name, game, variants, w, h, initialPosition)
     this.variantsLength = 4
     this.walkAnimationSpeed = 1
     this.speed = speed
