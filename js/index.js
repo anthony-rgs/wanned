@@ -59,3 +59,9 @@ story.onEnd(() => {
 window.addEventListener('resize', () => {
   wanned.updateCanvas()
 })
+
+const keyInfo = document.querySelector('#key-info')
+
+keyInfo.addEventListener('set', e => {
+  keyInfo.innerText = e.detail.action || 'No action bound.'
+})

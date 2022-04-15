@@ -1,0 +1,92 @@
+:root {
+  --triangle-size: 10px;
+  --control-size: 60px;
+  --control-gap: 8px;
+  --control-border-color: #cccccc33;
+  --control-border-color-hover: #ccccccaa;
+}
+
+#key-info {
+  color: white;
+  font-size: 1rem;
+  z-index: 99;
+  position: absolute;
+  bottom: 180px;
+  left: 1rem;
+}
+
+#keys-container {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  display: flex;
+  gap: calc(var(--control-gap) * 8);
+  z-index: 99;
+}
+
+#controls-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--control-gap);
+}
+
+#other-keys-container {
+  display: grid;
+  grid-template-rows: repeat(2, --control-size);
+  gap: var(--control-gap);
+}
+
+#other-keys-container .key:nth-child(2n + 1) {
+  grid-row: 1;
+}
+
+.key {
+  width: var(--control-size);
+  height: var(--control-size);
+  border: solid 3px var(--control-border-color);
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition-property: border-color, background-color;
+  transition-duration: 300ms;
+  cursor: pointer;
+}
+
+.key:hover {
+  border-color: var(--control-border-color-hover);
+  background-color: var(--control-border-color);
+}
+
+.arrow {
+  width: 0;
+  height: 0;
+  border: solid var(--triangle-size) transparent;
+  border-bottom-width: calc(var(--triangle-size) * 1.5);
+  border-bottom-color: white;
+  border-top: 0;
+}
+
+.control-right {
+  transform: rotate(90deg);
+}
+
+.control-down {
+  transform: rotate(180deg);
+}
+
+.control-left {
+  transform: rotate(-90deg);
+}
+
+.letter {
+  color: white;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+#controls-container div:last-child {
+  display: flex;
+  gap: var(--control-gap);
+}

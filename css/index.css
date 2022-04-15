@@ -2,6 +2,7 @@
 @import url('../assets/fonts/museo.css');
 @import url('./story.css');
 @import url('./hud.css');
+@import url('./keys.css');
 
 :root {
   --background-color: #251319;
@@ -16,7 +17,6 @@ body {
 #wanned {
   background-color: var(--background-color);
   display: block;
-
 }
 
 #fog {

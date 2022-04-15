@@ -1,13 +1,14 @@
 import Text from './Text.js'
 import Collision from './Collision.js'
 import mapCollisions from '../../assets/resources/mapCollisions.js'
-import Baptiste from "../elements/sprites/baptiste.js"
-import Fabien from "../elements/sprites/fabien.js"
-import DoorLeftZone1 from "../elements/door-left-zone1.js"
-import DoorRightZone1 from "../elements/door-right-zone1.js"
-import Action from "./Action.js"
-import wait from "../utils/wait.js"
-import HUD from "./HUD.js"
+import Baptiste from '../elements/sprites/baptiste.js'
+import Fabien from '../elements/sprites/fabien.js'
+import DoorLeftZone1 from '../elements/door-left-zone1.js'
+import DoorRightZone1 from '../elements/door-right-zone1.js'
+import Action from './Action.js'
+import wait from '../utils/wait.js'
+import HUD from './HUD.js'
+import Key from './Key.js'
 
 class Game {
   constructor(canvas) {
@@ -24,7 +25,11 @@ class Game {
     this.startTime = Date.now()
     this.mapCollisions = null
     this.frame = 0
-    this.baptisteHud = new HUD('../../assets/images/hud/baptiste-head.png', 3, document.querySelector('canvas'))
+    this.baptisteHud = new HUD(
+      '../../assets/images/hud/baptiste-head.png',
+      3,
+      document.querySelector('canvas'),
+    )
     this.keys = [
       {
         key: 'ArrowUp',
@@ -46,26 +51,62 @@ class Game {
         pressed: false,
         action: 'right',
       },
+      {
+        key: 'e',
+        pressed: false,
+        action: '',
+      },
+      {
+        key: 'f',
+        pressed: false,
+        action: '',
+      },
+      {
+        key: 'g',
+        pressed: false,
+        action: 'test',
+      },
+      {
+        key: 'h',
+        pressed: false,
+        action: '',
+      },
+      {
+        key: '8',
+        pressed: false,
+        action: '',
+      },
+      {
+        key: '9',
+        pressed: false,
+        action: '',
+      },
+      {
+        key: 'a',
+        pressed: false,
+        action: '',
+      },
     ]
     this.elements = [
       new DoorLeftZone1(this),
       new DoorRightZone1(this),
       new Fabien(this),
-      new Baptiste(this)
+      new Baptiste(this),
     ]
     this.zoneTriggerings = [
       {
-        zone: {x: 96, y: 1024, width: 64, height: 64},
+        zone: { x: 96, y: 1024, width: 64, height: 64 },
         action: new Action(async () => {
           this.fabien.stopWalk()
           await wait(1000)
           await this.fabien.pullOver()
           this.doorLeftZone1.open()
           this.doorRightZone1.open()
-        }, true)
-      }
+        }, true),
+      },
     ]
     this.init()
+    this.displayKeys()
   }
 
   init() {
@@ -111,7 +152,10 @@ class Game {
 
   get collisions() {
     if (this.mapCollisions) {
-      return [...this.mapCollisions, ...this.elements.map(element => element.collisions).flat()].filter(collision => collision)
+      return [
+        ...this.mapCollisions,
+        ...this.elements.map(element => element.collisions).flat(),
+      ].filter(collision => collision)
     } else {
       return []
     }
@@ -128,7 +172,7 @@ class Game {
           (this.mapWidth / numberOfCollisionsByColumn) * this.mapZoom
         const realCollisionYSize =
           (this.mapHeight / numberOfCollisionsByRow) * this.mapZoom
-        return {realCollisionXSize, realCollisionYSize}
+        return { realCollisionXSize, realCollisionYSize }
       },
     )
   }
@@ -168,10 +212,18 @@ class Game {
   }
 
   checkCollisions(elementX, elementY, elementWidth, elementHeight) {
-    return this.collisions.some(collision => collision.collide(elementX, elementY, elementWidth, elementHeight))
+    return this.collisions.some(collision =>
+      collision.collide(elementX, elementY, elementWidth, elementHeight),
+    )
   }
 
-  checkInZone(elementX, elementY, elementWidth, elementHeight, zoneCoordinates) {
+  checkInZone(
+    elementX,
+    elementY,
+    elementWidth,
+    elementHeight,
+    zoneCoordinates,
+  ) {
     return (
       elementX >= zoneCoordinates.x &&
       elementX + elementWidth <= zoneCoordinates.x + zoneCoordinates.width &&
@@ -181,8 +233,8 @@ class Game {
   }
 
   move(element, movement) {
-    const {x, y} = element.position
-    const {speed} = element
+    const { x, y } = element.position
+    const { speed } = element
 
     if (movement.x) {
       if (movement.x < 0) {
@@ -220,15 +272,33 @@ class Game {
     }
   }
 
+  displayKeys() {
+    const arrowKeysBottomWrapper = document.createElement('div')
+    const controlsContainer = document.querySelector('#controls-container')
+    controlsContainer.appendChild(arrowKeysBottomWrapper)
+
+    this.keys.forEach(key => {
+      if (key.key.includes('Arrow')) {
+        if (key.key !== 'ArrowUp') {
+          new Key(key, arrowKeysBottomWrapper)
+        } else {
+          new Key(key)
+        }
+      } else {
+        new Key(key)
+      }
+    })
+  }
+
   draw() {
     if (this.findKey('forward', 'action').pressed) {
-      this.move(this.mainCharacter, {y: this.mapSpeed})
+      this.move(this.mainCharacter, { y: this.mapSpeed })
     } else if (this.findKey('left', 'action').pressed) {
-      this.move(this.mainCharacter, {x: this.mapSpeed})
+      this.move(this.mainCharacter, { x: this.mapSpeed })
     } else if (this.findKey('backward', 'action').pressed) {
-      this.move(this.mainCharacter, {y: -this.mapSpeed})
+      this.move(this.mainCharacter, { y: -this.mapSpeed })
     } else if (this.findKey('right', 'action').pressed) {
-      this.move(this.mainCharacter, {x: -this.mapSpeed})
+      this.move(this.mainCharacter, { x: -this.mapSpeed })
     }
 
     this.ctx.drawImage(
@@ -242,8 +312,12 @@ class Game {
     this.elements.forEach(element => {
       element.draw(
         this.ctx,
-        element === this.mainCharacter ? this.canvas.width / 2 : this.mainCharacter.x - element.x + this.canvas.width / 2,
-        element === this.mainCharacter ? this.canvas.height / 2 : this.mainCharacter.y - element.y + this.canvas.height / 2,
+        element === this.mainCharacter
+          ? this.canvas.width / 2
+          : this.mainCharacter.x - element.x + this.canvas.width / 2,
+        element === this.mainCharacter
+          ? this.canvas.height / 2
+          : this.mainCharacter.y - element.y + this.canvas.height / 2,
       )
     })
     this.fpsCounter.draw(this.ctx, this.canvas.width - 40, 30)
