@@ -14,10 +14,11 @@ class TilesUtils {
     }
   }
 
-  static mapTilesToPositions(tiles, numberOfTilesByColumn, numberOfTilesByRow, realTileWidth, realTileHeight) {
+  static mapTilesToPositions(tiles, numberOfTilesByColumn, numberOfTilesByRow, realTileWidth, realTileHeight, elementTypeId) {
     const positions = []
 
     let yErrorCorrections = {}
+    const tilesBrowsed = []
 
     tiles.forEach((tile, i) => {
       const x = i % numberOfTilesByColumn
@@ -28,10 +29,15 @@ class TilesUtils {
         y++
       }
 
-      const startX = x * realTileWidth
-      const startY = y * (realTileHeight / 2)
+      if ((elementTypeId && tile.toString()[0] === elementTypeId.toString() && !tilesBrowsed.includes(tile)) ||
+        (!elementTypeId && tile !== 0)) {
+        if (elementTypeId) {
+          tilesBrowsed.push(tile)
+        }
 
-      if (tile !== 0) {
+        const startX = x * realTileWidth
+        const startY = y * (realTileHeight / 2)
+
         positions.push({
           startX,
           startY,

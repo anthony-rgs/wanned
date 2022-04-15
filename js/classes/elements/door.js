@@ -40,9 +40,8 @@ class Door extends Element {
       numberOfTilesByColumn,
       numberOfTilesByRow
     } = TilesUtils.calculateTileSize(rawDoors, builtDoorSize, mapWidth, mapHeight, realMapWidth, realMapHeight, mapZoom)
-
-    return TilesUtils.mapTilesToPositions(rawDoors, numberOfTilesByColumn, numberOfTilesByRow, realTileWidth, realTileHeight)
-      .filter((position, i) => i % 2 === 0)
+    
+    return TilesUtils.mapTilesToPositions(rawDoors, numberOfTilesByColumn, numberOfTilesByRow, realTileWidth, realTileHeight, 2)
       .map((position, i) => new Door(
         game,
         -position.startX,
