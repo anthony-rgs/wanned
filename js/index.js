@@ -52,7 +52,7 @@ story.start()
 
 const wanned = new Game(document.querySelector('#wanned'))
 window.g = wanned
-console.log(g)
+
 
 story.onEnd(() => {
     wanned.draw()
