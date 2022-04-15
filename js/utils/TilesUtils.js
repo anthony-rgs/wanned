@@ -14,7 +14,7 @@ class TilesUtils {
     }
   }
 
-  static mapTilesToPositions(tiles, numberOfTilesByColumn, numberOfTilesByRow, realTileWidth, realTileHeight, elementTypeId) {
+  static mapTilesToPositions(tiles, numberOfTilesByColumn, numberOfTilesByRow, realTileWidth, realTileHeight, elementTypeId, allowElementDuplicate = false) {
     const positions = []
 
     let yErrorCorrections = {}
@@ -31,7 +31,7 @@ class TilesUtils {
 
       if ((elementTypeId && tile.toString()[0] === elementTypeId.toString() && !tilesBrowsed.includes(tile)) ||
         (!elementTypeId && tile !== 0)) {
-        if (elementTypeId) {
+        if (elementTypeId && !allowElementDuplicate) {
           tilesBrowsed.push(tile)
         }
 
@@ -44,7 +44,8 @@ class TilesUtils {
           endX: startX + realTileWidth,
           endY: startY + realTileHeight,
           width: realTileWidth,
-          height: realTileHeight
+          height: realTileHeight,
+          tileId: tile.toString().substring(1)
         })
       }
     })

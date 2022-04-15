@@ -3,7 +3,7 @@ import Collision from "./../Collision.js";
 import Element from "./../Element.js";
 
 class Door extends Element {
-  constructor(game, startX, startY, width, height, id='door') {
+  constructor(game, startX, startY, width, height, id = 'door') {
     super(
       id,
       game,
@@ -40,15 +40,15 @@ class Door extends Element {
       numberOfTilesByColumn,
       numberOfTilesByRow
     } = TilesUtils.calculateTileSize(rawDoors, builtDoorSize, mapWidth, mapHeight, realMapWidth, realMapHeight, mapZoom)
-    
+
     return TilesUtils.mapTilesToPositions(rawDoors, numberOfTilesByColumn, numberOfTilesByRow, realTileWidth, realTileHeight, 2)
-      .map((position, i) => new Door(
+      .map((position) => new Door(
         game,
         -position.startX,
         -position.startY,
         position.width * 2,
         position.height,
-        idMaker(i)
+        idMaker(position.tileId)
       ))
   }
 }

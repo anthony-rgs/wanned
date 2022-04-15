@@ -156,7 +156,7 @@ class Game {
       this.mapWidth,
       this.mapHeight,
       this.mapZoom,
-      (i) => `doorZone${i + 1}`
+      (i) => `door${i}`
     )
   }
 
@@ -178,8 +178,8 @@ class Game {
     return this.findSprite("fabien");
   }
 
-  get doorZone1() {
-    return this.findSprite("doorZone1");
+  get door1() {
+    return this.findSprite("door01");
   }
 
   get mainCharacter() {

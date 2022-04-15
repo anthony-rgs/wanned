@@ -19,7 +19,7 @@ export default (game) => new Action(async (trigger) => {
             await game.fabien.pullOver();
 
             await wait(1000);
-            game.doorZone1.open();
+            game.door1.open();
 
             game.dialogBox.next()
 
