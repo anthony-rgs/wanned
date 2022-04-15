@@ -1,4 +1,4 @@
-import Sprite from "../../classes/Sprite.js"
+import Sprite from "../../Sprite.js"
 
 class Baptiste extends Sprite {
   constructor(game) {

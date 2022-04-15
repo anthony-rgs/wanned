@@ -1,13 +1,13 @@
 import Text from "./Text.js";
 import Collision from "./Collision.js";
 import mapCollisions from "../../assets/resources/mapCollisions.js";
-import Baptiste from "../elements/sprites/baptiste.js";
-import Fabien from "../elements/sprites/fabien.js";
-import DoorLeftZone1 from "../elements/door-left-zone1.js";
-import DoorRightZone1 from "../elements/door-right-zone1.js";
+import Baptiste from "./elements/sprites/baptiste.js";
+import Fabien from "./elements/sprites/fabien.js";
 import HUD from "./HUD.js";
 import TextDialog from "./TextDialog.js";
 import action1 from "../actions/zone-1/action-1.js";
+import Door from "./elements/door.js";
+import mapDoors from "../../assets/resources/mapDoors.js";
 
 class Game {
   constructor(canvas) {
@@ -22,7 +22,8 @@ class Game {
     this.mapSpeed = 5;
     this.fps = 0;
     this.startTime = Date.now();
-    this.mapCollisions = null;
+    this.mapCollisions = [];
+    this.mapDoors = [];
     this.frame = 0;
     this.baptisteHud = new HUD(
       "../../assets/images/hud/baptiste-head.png",
@@ -51,9 +52,7 @@ class Game {
         action: "right",
       },
     ];
-    this.elements = [
-      new DoorLeftZone1(this),
-      new DoorRightZone1(this),
+    this._elements = [
       new Fabien(this),
       new Baptiste(this),
     ];
@@ -68,12 +67,17 @@ class Game {
     this.init();
   }
 
+  get elements() {
+    return [...this.mapDoors, ...this._elements];
+  }
+
   init() {
     this.map = new Image();
     this.map.src = "../../assets/images/map.png";
 
     this.map.addEventListener("load", () => {
       this.ctx.drawImage(this.map, 0, 0);
+      this.makeDoors();
       this.makeCollisions();
       this.render();
     });
@@ -142,6 +146,20 @@ class Game {
     );
   }
 
+  makeDoors() {
+    this.mapDoors = Door.makeDoors(
+      this,
+      mapDoors,
+      16 * this.mapZoom,
+      this.map.width,
+      this.map.height,
+      this.mapWidth,
+      this.mapHeight,
+      this.mapZoom,
+      (i) => `doorZone${i + 1}`
+    )
+  }
+
   updateCanvas() {
     this.canvas.width = window.innerWidth;
     this.canvas.height = window.innerHeight;
@@ -160,12 +178,8 @@ class Game {
     return this.findSprite("fabien");
   }
 
-  get doorLeftZone1() {
-    return this.findSprite("doorLeftZone1");
-  }
-
-  get doorRightZone1() {
-    return this.findSprite("doorRightZone1");
+  get doorZone1() {
+    return this.findSprite("doorZone1");
   }
 
   get mainCharacter() {

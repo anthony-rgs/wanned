@@ -1,5 +1,5 @@
-import Sprite from "../../classes/Sprite.js"
-import wait from "../../utils/wait.js";
+import Sprite from "../../Sprite.js"
+import wait from "../../../utils/wait.js";
 
 class Fabien extends Sprite {
   constructor(game) {
