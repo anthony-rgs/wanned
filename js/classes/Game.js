@@ -136,13 +136,9 @@ class Game {
       16 * this.mapZoom,
       this.map.width,
       this.map.height,
-      (numberOfCollisionsByColumn, numberOfCollisionsByRow) => {
-        const realCollisionXSize =
-          (this.mapWidth / numberOfCollisionsByColumn) * this.mapZoom;
-        const realCollisionYSize =
-          (this.mapHeight / numberOfCollisionsByRow) * this.mapZoom;
-        return {realCollisionXSize, realCollisionYSize};
-      }
+      this.mapWidth,
+      this.mapHeight,
+      this.mapZoom
     );
   }
 
