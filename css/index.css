@@ -62,3 +62,65 @@ body {
 #light.hidden {
   opacity: 0;
 }
+
+.TextDialogue{
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: stretch;
+  justify-content: center;
+  gap: 10px;
+  transform: translateX(-50%);
+  position: absolute;
+  width: 50%;
+  max-width: 70ch;
+  left: 50%;
+  bottom: 0;
+  padding: 4px;
+  z-index: 2;
+  margin: auto 0;
+  user-select: none;
+}
+
+.TextContent{
+  box-sizing: border-box;
+  background-color: white;
+  color: #251319;
+  
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: inset 0px 0px 0px 5px #fff, inset 0px 0px 0px 7px #000;
+
+}
+
+.TextDialogue p {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.choicesElement{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-self: flex-end;
+  align-items: flex-start;
+  padding: 20px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: inset 0px 0px 0px 5px #fff,
+  inset 0px 0px 0px 7px #000;
+}
+
+.choicesElement li:hover{
+  text-decoration: underline;
+}
+
+
+
+.choicesElement li{
+  cursor: pointer;
+}
+
+.TextDialogue.hide{
+  display: none;
+}
+
