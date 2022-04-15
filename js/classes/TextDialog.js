@@ -1,4 +1,4 @@
-class TextDialogue {
+class TextDialog {
   constructor(messages = [], hide = true) {
     this._messages = messages;
     this._messageIndex = 0;
@@ -10,7 +10,7 @@ class TextDialogue {
     this.choicesElement = document.createElement("ul");
 
     this.choicesElement.classList.add("choicesElement");
-    this.messageContainer.classList.add("textDialogue");
+    this.messageContainer.classList.add("textDialog");
 
     if (hide) {
       this.hide();
@@ -83,4 +83,4 @@ class TextDialogue {
   }
 }
 
-export default TextDialogue;
+export default TextDialog;

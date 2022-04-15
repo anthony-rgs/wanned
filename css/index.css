@@ -63,7 +63,7 @@ body {
     opacity: 0;
 }
 
-.textDialogue {
+.textDialog {
     display: flex;
     flex-direction: column-reverse;
     align-items: stretch;
@@ -97,7 +97,7 @@ body {
 
 }
 
-.textDialogue p {
+.textDialog p {
     margin: 0;
     font-size: 1.5rem;
 }
@@ -124,7 +124,7 @@ body {
     cursor: pointer;
 }
 
-.textDialogue.hide {
+.textDialog.hide {
     display: none;
 }
 

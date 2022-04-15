@@ -5,10 +5,9 @@ import Baptiste from "../elements/sprites/baptiste.js";
 import Fabien from "../elements/sprites/fabien.js";
 import DoorLeftZone1 from "../elements/door-left-zone1.js";
 import DoorRightZone1 from "../elements/door-right-zone1.js";
-import Action from "./Action.js";
-import wait from "../utils/wait.js";
 import HUD from "./HUD.js";
-import TextDialogue from "./TextDialogue.js";
+import TextDialog from "./TextDialog.js";
+import action1 from "../actions/zone-1/action-1.js";
 
 class Game {
   constructor(canvas) {
@@ -58,19 +57,14 @@ class Game {
       new Fabien(this),
       new Baptiste(this),
     ];
+    this.dialogBox = new TextDialog();
+    this._lastZone = null;
     this.zoneTriggerings = [
       {
-        zone: { x: 96, y: 1024, width: 64, height: 64 },
-        action: new Action(async () => {
-          this.fabien.stopWalk();
-          await wait(1000);
-          await this.fabien.pullOver();
-          this.doorLeftZone1.open();
-          this.doorRightZone1.open();
-        }, true),
+        zone: {x: 96, y: 1024, width: 64, height: 64},
+        action: action1(this),
       },
     ];
-    this.dialogBox = new TextDialogue();
     this.init();
   }
 
@@ -101,6 +95,16 @@ class Game {
         }
       });
     });
+
+    setInterval(() => {
+      const lastZone = this._lastZone;
+      const currentZone = this.currentZone(this.mainCharacter);
+      this._lastZone = currentZone;
+
+      if (currentZone && currentZone !== lastZone) {
+        currentZone.action.trigger();
+      }
+    }, 100)
   }
 
   currentZone(element) {
@@ -137,7 +141,7 @@ class Game {
           (this.mapWidth / numberOfCollisionsByColumn) * this.mapZoom;
         const realCollisionYSize =
           (this.mapHeight / numberOfCollisionsByRow) * this.mapZoom;
-        return { realCollisionXSize, realCollisionYSize };
+        return {realCollisionXSize, realCollisionYSize};
       }
     );
   }
@@ -198,8 +202,8 @@ class Game {
   }
 
   move(element, movement) {
-    const { x, y } = element.position;
-    const { speed } = element;
+    const {x, y} = element.position;
+    const {speed} = element;
 
     if (movement.x) {
       if (movement.x < 0) {
@@ -230,11 +234,6 @@ class Game {
       element.position.x = x;
       element.position.y = y;
     }
-
-    const currentZone = this.currentZone(element);
-    if (currentZone) {
-      currentZone.action.trigger();
-    }
   }
 
   draw() {
@@ -244,13 +243,13 @@ class Game {
     const rightKey = this.findKey("right", "action");
 
     if (frontKey.pressed) {
-      this.move(this.mainCharacter, { y: this.mapSpeed });
+      this.move(this.mainCharacter, {y: this.mapSpeed});
     } else if (leftKey.pressed) {
-      this.move(this.mainCharacter, { x: this.mapSpeed });
+      this.move(this.mainCharacter, {x: this.mapSpeed});
     } else if (backKey.pressed) {
-      this.move(this.mainCharacter, { y: -this.mapSpeed });
+      this.move(this.mainCharacter, {y: -this.mapSpeed});
     } else if (rightKey.pressed) {
-      this.move(this.mainCharacter, { x: -this.mapSpeed });
+      this.move(this.mainCharacter, {x: -this.mapSpeed});
     } else if (
       !frontKey.pressed &&
       !backKey.pressed &&
