@@ -135,7 +135,7 @@ class Game {
   makeCollisions() {
     this.mapCollisions = Collision.makeCollisions(
       mapCollisions,
-      16 * this.mapZoom,
+      16,
       this.map.width,
       this.map.height,
       this.mapWidth,
@@ -148,7 +148,7 @@ class Game {
     this.mapDoors = Door.makeDoors(
       this,
       mapDoors,
-      16 * this.mapZoom,
+      16,
       this.map.width,
       this.map.height,
       this.mapWidth,
@@ -161,7 +161,7 @@ class Game {
   makeZoneTriggerings() {
     const zones = Zone.makeZones(
       mapZones,
-      16 * this.mapZoom,
+      16,
       this.map.width,
       this.map.height,
       this.mapWidth,

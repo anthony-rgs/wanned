@@ -29,6 +29,10 @@ class TilesUtils {
         y++
       }
 
+      if (x >= numberOfTilesByRow ? 1 : 0) {
+        y -= 2;
+      }
+
       if ((elementTypeId && tile.toString()[0] === elementTypeId.toString() && !tilesBrowsed.includes(tile)) ||
         (!elementTypeId && tile !== 0)) {
         if (elementTypeId && !allowElementDuplicate) {
@@ -49,6 +53,8 @@ class TilesUtils {
         })
       }
     })
+
+    console.log(yErrorCorrections)
 
     return positions
   }
