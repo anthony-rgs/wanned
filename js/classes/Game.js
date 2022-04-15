@@ -8,6 +8,7 @@ import DoorRightZone1 from "../elements/door-right-zone1.js"
 import Action from "./Action.js"
 import wait from "../utils/wait.js"
 import HUD from "./HUD.js"
+import TextDialogue from "./TextDialogue.js"
 
 class Game {
   constructor(canvas) {
@@ -67,6 +68,11 @@ class Game {
     ]
     this.init()
   }
+
+  // textMessage(){
+  //   const message = new TextDialogue(["Antho est t'il gay ?"], ["oui","non"])
+  //   message.init()
+  // }
 
   init() {
     this.map = new Image()
