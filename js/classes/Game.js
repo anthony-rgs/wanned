@@ -8,6 +8,7 @@ import DoorRightZone1 from "../elements/door-right-zone1.js";
 import Action from "./Action.js";
 import wait from "../utils/wait.js";
 import HUD from "./HUD.js";
+import TextDialogue from "./TextDialogue.js";
 
 class Game {
   constructor(canvas) {
@@ -69,6 +70,7 @@ class Game {
         }, true),
       },
     ];
+    this.dialogBox = new TextDialogue();
     this.init();
   }
 

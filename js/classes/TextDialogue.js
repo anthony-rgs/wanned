@@ -1,7 +1,7 @@
 class TextDialogue {
   constructor(messages = [], hide = true) {
-    this.messages = messages;
-    this.messageIndex = 0;
+    this._messages = messages;
+    this._messageIndex = 0;
 
     this.parent = document.querySelector("body");
     this.child = document.querySelector("#light");
@@ -10,7 +10,7 @@ class TextDialogue {
     this.choicesElement = document.createElement("ul");
 
     this.choicesElement.classList.add("choicesElement");
-    this.messageContainer.classList.add("TextDialogue");
+    this.messageContainer.classList.add("textDialogue");
 
     if (hide) {
       this.hide();
@@ -19,24 +19,45 @@ class TextDialogue {
     this.init();
   }
 
+  get messages() {
+    return this._messages;
+  }
+
+  set messages(value) {
+    this._messages = value;
+    this.updateMessageContainer();
+  }
+
+  get messageIndex() {
+    return this._messageIndex;
+  }
+
+  set messageIndex(value) {
+    this._messageIndex = value;
+    this.updateMessageContainer();
+  }
+
   get currentMessage() {
     return this.messages[this.messageIndex];
   }
 
-  updateMessage() {
+  updateMessageContainer() {
     this.choicesElement.innerHTML = "";
+
     if (this.currentMessage) {
-      console.log(this.currentMessage);
-      this.currentMessage.choices.forEach((choice) => {
-        const li = document.createElement("li");
-        li.innerText = choice.text;
-        li.addEventListener("click", choice.callback);
-        this.choicesElement.appendChild(li);
-      });
+      this.messageContainer.innerHTML = `<div class="textContent"><p>${this.currentMessage.text}</p></div>`;
 
-      this.messageContainer.innerHTML = `<div class="TextContent"><p>${this.currentMessage.text}</p></div>`;
+      if (this.currentMessage.choices && this.currentMessage.choices.length > 0) {
 
-      this.messageContainer.appendChild(this.choicesElement);
+        this.currentMessage.choices.forEach((choice) => {
+          const li = document.createElement("li");
+          li.innerText = choice.text;
+          li.addEventListener("click", choice.callback);
+          this.choicesElement.appendChild(li);
+        });
+
+        this.messageContainer.appendChild(this.choicesElement);
+      }
     } else {
       this.hide();
     }
@@ -52,11 +73,11 @@ class TextDialogue {
 
   next() {
     this.messages.shift();
-    this.updateMessage();
+    this.updateMessageContainer();
   }
 
   init() {
-    this.updateMessage();
+    this.updateMessageContainer();
 
     this.parent.insertBefore(this.messageContainer, this.child);
   }
