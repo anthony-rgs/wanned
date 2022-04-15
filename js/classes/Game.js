@@ -8,6 +8,8 @@ import TextDialog from "./TextDialog.js";
 import action1 from "../actions/zone-1/action-1.js";
 import Door from "./elements/door.js";
 import mapDoors from "../../assets/resources/mapDoors.js";
+import Zone from "./Zone.js";
+import mapZones from "../../assets/resources/mapZones.js";
 
 class Game {
   constructor(canvas) {
@@ -58,12 +60,7 @@ class Game {
     ];
     this.dialogBox = new TextDialog();
     this._lastZone = null;
-    this.zoneTriggerings = [
-      {
-        zone: {x: 96, y: 1024, width: 64, height: 64},
-        action: action1(this),
-      },
-    ];
+    this.zoneTriggerings = [];
     this.init();
   }
 
@@ -79,6 +76,7 @@ class Game {
       this.ctx.drawImage(this.map, 0, 0);
       this.makeDoors();
       this.makeCollisions();
+      this.makeZoneTriggerings();
       this.render();
     });
 
@@ -118,7 +116,7 @@ class Game {
         -element.position.y,
         element.width,
         element.height,
-        zoneTriggering.zone
+        zoneTriggering.zones
       );
     });
   }
@@ -158,6 +156,25 @@ class Game {
       this.mapZoom,
       (i) => `door${i}`
     )
+  }
+
+  makeZoneTriggerings() {
+    const zones = Zone.makeZones(
+      mapZones,
+      16 * this.mapZoom,
+      this.map.width,
+      this.map.height,
+      this.mapWidth,
+      this.mapHeight,
+      this.mapZoom
+    )
+
+    this.zoneTriggerings = [
+      {
+        zones: zones.filter(zone => zone.id === '01'),
+        action: action1(this),
+      },
+    ];
   }
 
   updateCanvas() {
@@ -201,14 +218,26 @@ class Game {
     elementY,
     elementWidth,
     elementHeight,
-    zoneCoordinates
+    zones
   ) {
-    return (
-      elementX >= zoneCoordinates.x &&
-      elementX + elementWidth <= zoneCoordinates.x + zoneCoordinates.width &&
-      elementY >= zoneCoordinates.y &&
-      elementY + elementHeight <= zoneCoordinates.y + zoneCoordinates.height
-    );
+    for (let i = 0; i < zones.length; i++) {
+      const zone = zones[i];
+      if (
+        elementX + elementWidth > zone.x &&
+        elementX < zone.x + zone.width &&
+        elementY + elementHeight > zone.y &&
+        elementY < zone.y + zone.height
+      ) {
+        return true;
+      }
+    }
+    return false;
+    // return (
+    //   elementX >= zoneCoordinates.x &&
+    //   elementX + elementWidth <= zoneCoordinates.x + zoneCoordinates.width &&
+    //   elementY >= zoneCoordinates.y &&
+    //   elementY + elementHeight <= zoneCoordinates.y + zoneCoordinates.height
+    // );
   }
 
   move(element, movement) {
@@ -301,8 +330,7 @@ class Game {
         );
       });
       this.ctx.fillStyle = "rgba(212,51,51,0.67)";
-      this.zoneTriggerings?.forEach((zoneTriggering) => {
-        const zone = zoneTriggering.zone;
+      this.zoneTriggerings?.map(zoneTriggering => zoneTriggering.zones).flat().forEach((zone) => {
         this.ctx.fillRect(
           zone.x + this.mainCharacter.x + this.canvas.width / 2,
           zone.y + this.mainCharacter.y + this.canvas.height / 2,
