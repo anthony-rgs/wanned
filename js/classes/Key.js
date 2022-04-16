@@ -2,16 +2,24 @@ class Key {
   constructor(key, parent) {
     this.key = key
     this.parent = parent
+    this.timeout = null
     this.init()
   }
 
-  dispatchEvent() {
-    console.log(this.key)
+  dispatchEvent(action) {
+    const keyInfo = document.querySelector('#key-info')
 
-    document.querySelector('#key-info').dispatchEvent(
+    if (action) {
+      keyInfo.classList.add('show')
+    } else {
+      keyInfo.classList.remove('show')
+      return
+    }
+
+    keyInfo.dispatchEvent(
       new CustomEvent('set', {
         detail: {
-          action: this.key.action,
+          action,
         },
       }),
     )
@@ -21,7 +29,10 @@ class Key {
     const key = document.createElement('div')
     key.classList.add('key')
 
-    key.addEventListener('mouseenter', () => this.dispatchEvent())
+    key.addEventListener('mouseenter', () => {
+      this.dispatchEvent(this.key.action)
+    })
+    key.addEventListener('mouseleave', () => this.dispatchEvent(null))
 
     if (this.parent) {
       this.parent.appendChild(key)

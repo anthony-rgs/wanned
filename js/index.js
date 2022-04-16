@@ -63,5 +63,5 @@ window.addEventListener('resize', () => {
 const keyInfo = document.querySelector('#key-info')
 
 keyInfo.addEventListener('set', e => {
-  keyInfo.innerText = e.detail.action || 'No action bound.'
+  keyInfo.innerText = e.detail.action || ''
 })

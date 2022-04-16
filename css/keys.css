@@ -13,6 +13,15 @@
   position: absolute;
   bottom: 180px;
   left: 1rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 300ms 0ms, visibility 0ms 300ms;
+}
+
+#key-info.show {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 300ms 0ms, visiblity 0ms 0ms;
 }
 
 #keys-container {
