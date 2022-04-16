@@ -74,7 +74,7 @@ class Game {
   }
 
   get elements() {
-    return [...this.mapDoors, ...this.movableRocks, ...this._elements];
+    return [...this.mapDoors, ...this.movableRocks, ...this._elements.sort((a, b) => a.y - b.y)]
   }
 
   init() {
