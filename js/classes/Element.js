@@ -1,4 +1,5 @@
 import Collision from "./Collision.js"
+import generateElementId from "../utils/generateElementId.js";
 
 class Element {
   constructor(
@@ -13,6 +14,7 @@ class Element {
     },
   ) {
     this.name = name
+    this.id = generateElementId()
     this.game = game
     this.variants = variants
     this.width = w
@@ -50,6 +52,8 @@ class Element {
         (this.y + collision.startY),
         (this.x + collision.endX),
         (this.y + collision.endY),
+        this,
+        collision.box
       )
     )
   }
