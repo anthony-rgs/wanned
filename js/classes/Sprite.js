@@ -1,4 +1,4 @@
-import Element from "./Element.js"
+import Element from './Element.js'
 
 class Sprite extends Element {
   constructor(
@@ -14,24 +14,54 @@ class Sprite extends Element {
     speed = 4,
   ) {
     super(name, game, variants, w, h, initialPosition)
-    this.variantsLength = 4
+    this.moveVariantsLength = 4
+    this.fightVariantsLength = 4
     this.walkAnimationSpeed = 1
     this.speed = speed
     this.frame = 0
     this.currentDirection = 'front'
     this.lives = 3
     this.baseLives = this.lives
+    this.fighting = false
+  }
+
+  get moveVariants() {
+    const moveVariants = {}
+
+    Object.entries(this.variants).forEach(([direction, variants]) => {
+      moveVariants[direction] = variants.filter(variant => {
+        return variant.type === 'move'
+      })
+    })
+
+    return moveVariants
+  }
+
+  get fightVariants() {
+    const moveVariants = {}
+
+    Object.entries(this.variants).forEach(([direction, variants]) => {
+      moveVariants[direction] = variants.filter(variant => {
+        return variant.type === 'fight'
+      })
+    })
+
+    return moveVariants
   }
 
   get currentVariant() {
-    return this.variants[this.currentDirection][this.currentVariantIndex]
+    if (this.fighting) {
+      return this.fightVariants[this.currentDirection][this.currentVariantIndex]
+    } else {
+      return this.moveVariants[this.currentDirection][this.currentVariantIndex]
+    }
   }
 
   animate(movement) {
     this.frame++
 
     if (this.frame % (10 / this.walkAnimationSpeed) === 0) {
-      if (this.currentVariantIndex < this.variantsLength - 1) {
+      if (this.currentVariantIndex < this.moveVariantsLength - 1) {
         this.currentVariantIndex++
       } else {
         this.currentVariantIndex = 0
@@ -69,12 +99,39 @@ class Sprite extends Element {
     this.currentDirection = 'right'
   }
 
+  fight() {
+    this.fighting = true
+
+    const interval = setInterval(() => {
+      if (this.currentVariantIndex < this.fightVariantsLength - 1) {
+        this.currentVariantIndex++
+      } else {
+        clearInterval(interval)
+        this.currentVariantIndex = 0
+        this.fighting = false
+      }
+    }, 100)
+
+    switch (this.currentDirection) {
+      case 'front':
+        break
+      case 'back':
+        break
+      case 'left':
+        break
+      case 'right':
+        break
+      default:
+        break
+    }
+  }
+
   preload() {
     Object.entries(this.variants).forEach(([direction, variants]) => {
       variants.forEach((variant, i) => {
         const image = new Image()
         image.src = variant.image
-        this.variants[direction][i] = { image }
+        this.variants[direction][i] = { type: variant.type, image }
       })
     })
   }

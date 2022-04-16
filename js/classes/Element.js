@@ -1,5 +1,5 @@
-import Collision from "./Collision.js"
-import generateElementId from "../utils/generateElementId.js";
+import Collision from './Collision.js'
+import generateElementId from '../utils/generateElementId.js'
 
 class Element {
   constructor(
@@ -21,12 +21,37 @@ class Element {
     this.height = h
     this.position = initialPosition
     this.currentVariantIndex = 0
+    this.fighting = false
 
     this.preload()
   }
 
   get currentVariant() {
     return this.variants[this.currentVariantIndex]
+  }
+
+  get moveVariants() {
+    const moveVariants = {}
+
+    Object.entries(this.variants).forEach(([direction, variants]) => {
+      moveVariants[direction] = variants.filter(variant => {
+        return variant.type === 'move'
+      })
+    })
+
+    return moveVariants
+  }
+
+  get fightVariants() {
+    const moveVariants = {}
+
+    Object.entries(this.variants).forEach(([direction, variants]) => {
+      moveVariants[direction] = variants.filter(variant => {
+        return variant.type === 'fight'
+      })
+    })
+
+    return moveVariants
   }
 
   get x() {
@@ -46,15 +71,16 @@ class Element {
   }
 
   get collisions() {
-    return (this.currentVariant.collisions ?? []).map(
-      (collision) => new Collision(
-        (this.x + collision.startX),
-        (this.y + collision.startY),
-        (this.x + collision.endX),
-        (this.y + collision.endY),
-        this,
-        collision.box
-      )
+    return (this.currentVariant?.collisions ?? []).map(
+      collision =>
+        new Collision(
+          this.x + collision.startX,
+          this.y + collision.startY,
+          this.x + collision.endX,
+          this.y + collision.endY,
+          this,
+          collision.box,
+        ),
     )
   }
 
@@ -62,9 +88,9 @@ class Element {
     if (this.currentVariant) {
       ctx.drawImage(
         this.currentVariant.image,
-        (x ?? this.x),
-        (y ?? this.y),
-        this.width,
+        x ?? this.x,
+        y ?? this.y,
+        this.fighting ? this.width * 1.5 : this.width,
         this.height,
       )
     }
@@ -75,7 +101,7 @@ class Element {
       const image = new Image()
       image.src = variant.image
 
-      this.variants[direction] = {image, collisions: variant.collisions}
+      this.variants[direction] = { image, collisions: variant.collisions }
     })
   }
 }

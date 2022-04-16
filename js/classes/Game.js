@@ -1,38 +1,38 @@
-import Text from "./Text.js";
-import Collision from "./Collision.js";
-import mapCollisions from "../../assets/resources/mapCollisions.js";
-import Baptiste from "./elements/sprites/baptiste.js";
-import Fabien from "./elements/sprites/fabien.js";
-import HUD from "./HUD.js";
-import TextDialog from "./TextDialog.js";
-import action1 from "../actions/zone-1/action-1.js";
-import Door from "./elements/door.js";
-import mapDoors from "../../assets/resources/mapDoors.js";
-import Zone from "./Zone.js";
-import mapZones from "../../assets/resources/mapZones.js";
-import MovableRock from "./elements/movableRock.js";
-import mapMovableRocks from "../../assets/resources/mapMovableRocks.js";
-import Action from "./Action.js";
-import Sprite from "./Sprite.js";
-import Key from './Key.js';
+import Text from './Text.js'
+import Collision from './Collision.js'
+import mapCollisions from '../../assets/resources/mapCollisions.js'
+import Baptiste from './elements/sprites/baptiste.js'
+import Fabien from './elements/sprites/fabien.js'
+import HUD from './HUD.js'
+import TextDialog from './TextDialog.js'
+import action1 from '../actions/zone-1/action-1.js'
+import Door from './elements/door.js'
+import mapDoors from '../../assets/resources/mapDoors.js'
+import Zone from './Zone.js'
+import mapZones from '../../assets/resources/mapZones.js'
+import MovableRock from './elements/movableRock.js'
+import mapMovableRocks from '../../assets/resources/mapMovableRocks.js'
+import Action from './Action.js'
+import Sprite from './Sprite.js'
+import Key from './Key.js'
 
 class Game {
   constructor(canvas) {
-    this.canvas = canvas;
-    this.canvas.width = window.innerWidth;
-    this.canvas.height = window.innerHeight;
-    this.ctx = this.canvas.getContext("2d");
-    this.map = null;
-    this.mapZoom = 3;
-    this.mapWidth = 700;
-    this.mapHeight = 400;
-    this.mapSpeed = 5;
-    this.fps = 0;
-    this.startTime = Date.now();
-    this.mapCollisions = [];
-    this.mapDoors = [];
-    this.movableRocks = [];
-    this.frame = 0;
+    this.canvas = canvas
+    this.canvas.width = window.innerWidth
+    this.canvas.height = window.innerHeight
+    this.ctx = this.canvas.getContext('2d')
+    this.map = null
+    this.mapZoom = 3
+    this.mapWidth = 700
+    this.mapHeight = 400
+    this.mapSpeed = 5
+    this.fps = 0
+    this.startTime = Date.now()
+    this.mapCollisions = []
+    this.mapDoors = []
+    this.movableRocks = []
+    this.frame = 0
     this.baptisteHud = new HUD(
       '../../assets/images/hud/baptiste-head.png',
       3,
@@ -60,9 +60,9 @@ class Game {
         action: 'Aller à droite',
       },
       {
-        key: 'e',
+        key: 'f',
         pressed: false,
-        action: '',
+        action: 'Hit',
       },
     ]
     this._elements = [new Fabien(this), new Baptiste(this)]
@@ -74,7 +74,11 @@ class Game {
   }
 
   get elements() {
-    return [...this.mapDoors, ...this.movableRocks, ...this._elements.sort((a, b) => a.y - b.y)]
+    return [
+      ...this.mapDoors,
+      ...this.movableRocks,
+      ...this._elements.sort((a, b) => a.y - b.y),
+    ]
   }
 
   init() {
@@ -91,14 +95,14 @@ class Game {
 
     this.fpsCounter = new Text(this.fps, 'Museo', 16, 'white', 30, 30)
 
-    this.map.addEventListener("load", () => {
-      this.ctx.drawImage(this.map, 0, 0);
-      this.makeDoors();
-      this.makeCollisions();
-      this.makeZoneTriggerings();
-      this.makeMovableRocks();
-      this.render();
-    });
+    this.map.addEventListener('load', () => {
+      this.ctx.drawImage(this.map, 0, 0)
+      this.makeDoors()
+      this.makeCollisions()
+      this.makeZoneTriggerings()
+      this.makeMovableRocks()
+      this.render()
+    })
 
     window.addEventListener('keydown', e => {
       const key = document.querySelector(`#${e.key}`)
@@ -110,6 +114,10 @@ class Game {
           this.findKey(e.key, 'key').pressed = true
         }
       })
+
+      if (e.key === 'f' && !this.mainCharacter.fighting) {
+        this.mainCharacter.fight()
+      }
     })
 
     window.addEventListener('keyup', e => {
@@ -213,7 +221,7 @@ class Game {
       this.mapWidth,
       this.mapHeight,
       this.mapZoom,
-      (i) => `movableRock${i}`
+      i => `movableRock${i}`,
     )
   }
 
@@ -245,41 +253,60 @@ class Game {
 
   get zoneTriggerings() {
     const activeMovableRocksZones = this.movableRocks
-      .map(rock => rock.movableZones
-        .filter(zone => {
-          const zonePosition = zone.id.split('-')[1];
+      .map(rock =>
+        rock.movableZones
+          .filter(zone => {
+            const zonePosition = zone.id.split('-')[1]
 
-
-          return (
-            (this.findKey("Avancer", "action").pressed && zonePosition === 'bottom') ||
-            (this.findKey("Reculer", "action").pressed && zonePosition === 'top') ||
-            (this.findKey("Aller à droite", "action").pressed && zonePosition === 'left') ||
-            (this.findKey("Aller à gauche", "action").pressed && zonePosition === 'right')
-          )
-        })
-        .map(zone => ({zone, rock}))
-      ).flat();
+            return (
+              (this.findKey('Avancer', 'action').pressed &&
+                zonePosition === 'bottom') ||
+              (this.findKey('Reculer', 'action').pressed &&
+                zonePosition === 'top') ||
+              (this.findKey('Aller à droite', 'action').pressed &&
+                zonePosition === 'left') ||
+              (this.findKey('Aller à gauche', 'action').pressed &&
+                zonePosition === 'right')
+            )
+          })
+          .map(zone => ({ zone, rock })),
+      )
+      .flat()
 
     return [
       ...this._zoneTriggerings,
-      ...activeMovableRocksZones.map(({zone, rock}) => ({
-        zones: [zone],
-        action: new Action(() => {
-          const zonePosition = zone.id.split('-')[1];
-          const speed = this.mainCharacter.speed / 2
+      ...activeMovableRocksZones
+        .map(({ zone, rock }) => ({
+          zones: [zone],
+          action: new Action(() => {
+            const zonePosition = zone.id.split('-')[1]
+            const speed = this.mainCharacter.speed / 2
 
-          if (zonePosition === 'bottom' && this.findKey("Avancer", "action").pressed) {
-            this.move(rock, {y: -speed}, speed);
-          } else if (zonePosition === 'top' && this.findKey("Reculer", "action").pressed) {
-            this.move(rock, {y: speed}, speed);
-          } else if (zonePosition === 'left' && this.findKey("Aller à droite", "action").pressed) {
-            this.move(rock, {x: speed}, speed);
-          } else if (zonePosition === 'right' && this.findKey("Aller à gauche", "action").pressed) {
-            this.move(rock, {x: -speed}, speed);
-          }
-        }),
-      })).flat()
-    ];
+            if (
+              zonePosition === 'bottom' &&
+              this.findKey('Avancer', 'action').pressed
+            ) {
+              this.move(rock, { y: -speed }, speed)
+            } else if (
+              zonePosition === 'top' &&
+              this.findKey('Reculer', 'action').pressed
+            ) {
+              this.move(rock, { y: speed }, speed)
+            } else if (
+              zonePosition === 'left' &&
+              this.findKey('Aller à droite', 'action').pressed
+            ) {
+              this.move(rock, { x: speed }, speed)
+            } else if (
+              zonePosition === 'right' &&
+              this.findKey('Aller à gauche', 'action').pressed
+            ) {
+              this.move(rock, { x: -speed }, speed)
+            }
+          }),
+        }))
+        .flat(),
+    ]
   }
 
   findKey(key, type) {
@@ -288,8 +315,19 @@ class Game {
 
   checkCollisions(element) {
     return this.collisions
-      .filter(collision => collision.parent === null || element.id !== collision.parent?.id)
-      .some((collision) => collision.collide(element.position.x, element.position.y, element.width, element.height, element instanceof Sprite));
+      .filter(
+        collision =>
+          collision.parent === null || element.id !== collision.parent?.id,
+      )
+      .some(collision =>
+        collision.collide(
+          element.position.x,
+          element.position.y,
+          element.width,
+          element.height,
+          element instanceof Sprite,
+        ),
+      )
   }
 
   checkInZone(elementX, elementY, elementWidth, elementHeight, zones) {
@@ -309,7 +347,7 @@ class Game {
   }
 
   move(element, movement, speed = element.speed) {
-    const {x, y} = element.position;
+    const { x, y } = element.position
 
     if (movement.x) {
       if (movement.x < 0) {
@@ -328,12 +366,12 @@ class Game {
     }
 
     if (element.animate) {
-      element.animate(movement);
+      element.animate(movement)
     }
 
     if (this.checkCollisions(element)) {
-      element.position.x = x;
-      element.position.y = y;
+      element.position.x = x
+      element.position.y = y
     }
   }
 
@@ -360,22 +398,25 @@ class Game {
     const backKey = this.findKey('Reculer', 'action')
     const leftKey = this.findKey('Aller à gauche', 'action')
     const rightKey = this.findKey('Aller à droite', 'action')
+    const hitKey = this.findKey('Hit', 'action')
 
-    if (frontKey.pressed) {
-      this.move(this.mainCharacter, { y: -this.mapSpeed })
-    } else if (leftKey.pressed) {
-      this.move(this.mainCharacter, { x: -this.mapSpeed })
-    } else if (backKey.pressed) {
-      this.move(this.mainCharacter, { y: this.mapSpeed })
-    } else if (rightKey.pressed) {
-      this.move(this.mainCharacter, { x: this.mapSpeed })
-    } else if (
-      !frontKey.pressed &&
-      !backKey.pressed &&
-      !leftKey.pressed &&
-      !rightKey.pressed
-    ) {
-      this.mainCharacter.currentVariantIndex = 0
+    if (!this.mainCharacter.fighting && !hitKey.pressed) {
+      if (frontKey.pressed) {
+        this.move(this.mainCharacter, { y: -this.mapSpeed })
+      } else if (leftKey.pressed) {
+        this.move(this.mainCharacter, { x: -this.mapSpeed })
+      } else if (backKey.pressed) {
+        this.move(this.mainCharacter, { y: this.mapSpeed })
+      } else if (rightKey.pressed) {
+        this.move(this.mainCharacter, { x: this.mapSpeed })
+      } else if (
+        !frontKey.pressed &&
+        !backKey.pressed &&
+        !leftKey.pressed &&
+        !rightKey.pressed
+      ) {
+        this.mainCharacter.currentVariantIndex = 0
+      }
     }
 
     this.ctx.drawImage(
