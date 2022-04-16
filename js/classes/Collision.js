@@ -1,3 +1,5 @@
+import TilesUtils from "../utils/TilesUtils.js";
+
 class Collision {
   constructor(startX, startY, endX, endY) {
     this.startX = startX
@@ -13,37 +15,21 @@ class Collision {
         elementY <= this.endY - elementHeight)
   }
 
-  static makeCollisions(rawCollisions, builtCollisionSize, mapWidth, mapHeight, calculateRealCollisionSize) {
-    const collisions = []
-
-    const numberOfCollisionsByColumn = Math.ceil(mapWidth / builtCollisionSize)
-    const numberOfCollisionsByRow = Math.ceil(mapHeight / builtCollisionSize)
-
+  static makeCollisions(rawCollisions, builtCollisionSize, mapWidth, mapHeight, realMapWidth, realMapHeight, mapZoom) {
     const {
-      realCollisionXSize,
-      realCollisionYSize
-    } = calculateRealCollisionSize(numberOfCollisionsByColumn, numberOfCollisionsByRow)
+      realTileWidth,
+      realTileHeight,
+      numberOfTilesByColumn,
+      numberOfTilesByRow
+    } = TilesUtils.calculateTileSize(rawCollisions, builtCollisionSize, mapWidth, mapHeight, realMapWidth, realMapHeight, mapZoom)
 
-    let yErrorCorrections = {}
-
-    rawCollisions.forEach((rawCollision, i) => {
-      const x = i % numberOfCollisionsByColumn
-      let y = Math.floor(i / numberOfCollisionsByRow) + (yErrorCorrections[x] || 0)
-
-      if (y % 2 === 1) {
-        yErrorCorrections[x] = (yErrorCorrections[x] ?? 0) + 1
-        y++
-      }
-
-      const startX = x * realCollisionXSize
-      const startY = y * (realCollisionYSize / 2)
-
-      if (rawCollision !== 0) {
-        collisions.push(new Collision(startX, startY, startX + realCollisionXSize, startY + realCollisionYSize))
-      }
-    })
-
-    return collisions
+    return TilesUtils.mapTilesToPositions(rawCollisions, numberOfTilesByColumn, numberOfTilesByRow, realTileWidth, realTileHeight)
+      .map(position => new Collision(
+        position.startX,
+        position.startY,
+        position.endX,
+        position.endY
+      ))
   }
 }
 

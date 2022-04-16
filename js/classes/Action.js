@@ -1,16 +1,23 @@
 class Action {
-  constructor(callback, triggerOnce = false) {
+  constructor(callback, autoTrigger = true) {
     this.callback = callback
-    this.triggerOnce = triggerOnce
+    this.autoTrigger = autoTrigger
     this.triggered = false
   }
 
   trigger() {
-    if (this.triggerOnce && this.triggered) {
+    if (this.triggered) {
       return
     }
-    this.triggered = true
-    this.callback()
+
+    if (this.autoTrigger) {
+      this.callback()
+      this.triggered = true
+    } else {
+      this.callback(() => {
+        this.triggered = true
+      })
+    }
   }
 }
 

@@ -1,13 +1,15 @@
 import Text from './Text.js'
 import Collision from './Collision.js'
 import mapCollisions from '../../assets/resources/mapCollisions.js'
-import Baptiste from '../elements/sprites/baptiste.js'
-import Fabien from '../elements/sprites/fabien.js'
-import DoorLeftZone1 from '../elements/door-left-zone1.js'
-import DoorRightZone1 from '../elements/door-right-zone1.js'
-import Action from './Action.js'
-import wait from '../utils/wait.js'
+import Baptiste from './elements/sprites/baptiste.js'
+import Fabien from './elements/sprites/fabien.js'
 import HUD from './HUD.js'
+import TextDialog from './TextDialog.js'
+import action1 from '../actions/zone-1/action-1.js'
+import Door from './elements/door.js'
+import mapDoors from '../../assets/resources/mapDoors.js'
+import Zone from './Zone.js'
+import mapZones from '../../assets/resources/mapZones.js'
 import Key from './Key.js'
 
 class Game {
@@ -23,7 +25,8 @@ class Game {
     this.mapSpeed = 5
     this.fps = 0
     this.startTime = Date.now()
-    this.mapCollisions = null
+    this.mapCollisions = []
+    this.mapDoors = []
     this.frame = 0
     this.baptisteHud = new HUD(
       '../../assets/images/hud/baptiste-head.png',
@@ -34,79 +37,39 @@ class Game {
       {
         key: 'ArrowUp',
         pressed: false,
-        action: 'forward',
+        action: 'Avancer',
       },
       {
         key: 'ArrowLeft',
         pressed: false,
-        action: 'left',
+        action: 'Aller à gauche',
       },
       {
         key: 'ArrowDown',
         pressed: false,
-        action: 'backward',
+        action: 'Reculer',
       },
       {
         key: 'ArrowRight',
         pressed: false,
-        action: 'right',
+        action: 'Aller à droite',
       },
       {
         key: 'e',
         pressed: false,
         action: '',
       },
-      {
-        key: 'f',
-        pressed: false,
-        action: '',
-      },
-      {
-        key: 'g',
-        pressed: false,
-        action: 'test',
-      },
-      {
-        key: 'h',
-        pressed: false,
-        action: '',
-      },
-      {
-        key: '8',
-        pressed: false,
-        action: '',
-      },
-      {
-        key: '9',
-        pressed: false,
-        action: '',
-      },
-      {
-        key: 'a',
-        pressed: false,
-        action: '',
-      },
     ]
-    this.elements = [
-      new DoorLeftZone1(this),
-      new DoorRightZone1(this),
-      new Fabien(this),
-      new Baptiste(this),
-    ]
-    this.zoneTriggerings = [
-      {
-        zone: { x: 96, y: 1024, width: 64, height: 64 },
-        action: new Action(async () => {
-          this.fabien.stopWalk()
-          await wait(1000)
-          await this.fabien.pullOver()
-          this.doorLeftZone1.open()
-          this.doorRightZone1.open()
-        }, true),
-      },
-    ]
+    this._elements = [new Fabien(this), new Baptiste(this)]
+    this.dialogBox = new TextDialog()
+    this._lastZone = null
+    this._zoneTriggerings = []
     this.init()
     this.displayKeys()
+  }
+
+  get elements() {
+    return [...this.mapDoors, ...this._elements]
   }
 
   init() {
@@ -115,13 +78,19 @@ class Game {
 
     this.map.addEventListener('load', () => {
       this.ctx.drawImage(this.map, 0, 0)
+      this.makeDoors()
       this.makeCollisions()
+      this.makeZoneTriggerings()
       this.render()
     })
 
     this.fpsCounter = new Text(this.fps, 'Museo', 16, 'white', 30, 30)
 
     window.addEventListener('keydown', e => {
+      const key = document.querySelector(`#${e.key}`)
+
+      key?.classList.add('active')
+
       this.keys.map(k => {
         if (k.key === e.key) {
           this.findKey(e.key, 'key').pressed = true
@@ -130,22 +99,36 @@ class Game {
     })
 
     window.addEventListener('keyup', e => {
+      const key = document.querySelector(`#${e.key}`)
+
+      key?.classList.remove('active')
+
       this.keys.map(k => {
         if (k.key === e.key) {
           this.findKey(e.key, 'key').pressed = false
         }
       })
     })
+
+    setInterval(() => {
+      const lastZone = this._lastZone
+      const currentZone = this.currentZone(this.mainCharacter)
+      this._lastZone = currentZone
+
+      if (currentZone && currentZone !== lastZone) {
+        currentZone.action.trigger()
+      }
+    }, 100)
   }
 
   currentZone(element) {
-    return this.zoneTriggerings.find(zoneTriggering => {
+    return this._zoneTriggerings.find(zoneTriggering => {
       return this.checkInZone(
-        -element.position.x,
-        -element.position.y,
+        element.position.x,
+        element.position.y,
         element.width,
         element.height,
-        zoneTriggering.zone,
+        zoneTriggering.zones,
       )
     })
   }
@@ -164,17 +147,46 @@ class Game {
   makeCollisions() {
     this.mapCollisions = Collision.makeCollisions(
       mapCollisions,
-      16 * this.mapZoom,
+      16,
       this.map.width,
       this.map.height,
-      (numberOfCollisionsByColumn, numberOfCollisionsByRow) => {
-        const realCollisionXSize =
-          (this.mapWidth / numberOfCollisionsByColumn) * this.mapZoom
-        const realCollisionYSize =
-          (this.mapHeight / numberOfCollisionsByRow) * this.mapZoom
-        return { realCollisionXSize, realCollisionYSize }
-      },
+      this.mapWidth,
+      this.mapHeight,
+      this.mapZoom,
     )
+  }
+
+  makeDoors() {
+    this.mapDoors = Door.makeDoors(
+      this,
+      mapDoors,
+      16,
+      this.map.width,
+      this.map.height,
+      this.mapWidth,
+      this.mapHeight,
+      this.mapZoom,
+      i => `door${i}`,
+    )
+  }
+
+  makeZoneTriggerings() {
+    const zones = Zone.makeZones(
+      mapZones,
+      16,
+      this.map.width,
+      this.map.height,
+      this.mapWidth,
+      this.mapHeight,
+      this.mapZoom,
+    )
+
+    this._zoneTriggerings = [
+      {
+        zones: zones.filter(zone => zone.id === '01'),
+        action: action1(this),
+      },
+    ]
   }
 
   updateCanvas() {
@@ -195,12 +207,8 @@ class Game {
     return this.findSprite('fabien')
   }
 
-  get doorLeftZone1() {
-    return this.findSprite('doorLeftZone1')
-  }
-
-  get doorRightZone1() {
-    return this.findSprite('doorRightZone1')
+  get door1() {
+    return this.findSprite('door01')
   }
 
   get mainCharacter() {
@@ -217,19 +225,19 @@ class Game {
     )
   }
 
-  checkInZone(
-    elementX,
-    elementY,
-    elementWidth,
-    elementHeight,
-    zoneCoordinates,
-  ) {
-    return (
-      elementX >= zoneCoordinates.x &&
-      elementX + elementWidth <= zoneCoordinates.x + zoneCoordinates.width &&
-      elementY >= zoneCoordinates.y &&
-      elementY + elementHeight <= zoneCoordinates.y + zoneCoordinates.height
-    )
+  checkInZone(elementX, elementY, elementWidth, elementHeight, zones) {
+    for (let i = 0; i < zones.length; i++) {
+      const zone = zones[i]
+      if (
+        elementX + elementWidth > zone.x &&
+        elementX < zone.x + zone.width &&
+        elementY + elementHeight > zone.y &&
+        elementY < zone.y + zone.height
+      ) {
+        return true
+      }
+    }
+    return false
   }
 
   move(element, movement) {
@@ -256,19 +264,14 @@ class Game {
 
     if (
       this.checkCollisions(
-        -element.position.x,
-        -element.position.y,
+        element.position.x,
+        element.position.y,
         element.width,
         element.height,
       )
     ) {
       element.position.x = x
       element.position.y = y
-    }
-
-    const currentZone = this.currentZone(element)
-    if (currentZone) {
-      currentZone.action.trigger()
     }
   }
 
@@ -291,20 +294,32 @@ class Game {
   }
 
   draw() {
-    if (this.findKey('forward', 'action').pressed) {
-      this.move(this.mainCharacter, { y: this.mapSpeed })
-    } else if (this.findKey('left', 'action').pressed) {
-      this.move(this.mainCharacter, { x: this.mapSpeed })
-    } else if (this.findKey('backward', 'action').pressed) {
+    const frontKey = this.findKey('Avancer', 'action')
+    const backKey = this.findKey('Reculer', 'action')
+    const leftKey = this.findKey('Aller à gauche', 'action')
+    const rightKey = this.findKey('Aller à droite', 'action')
+
+    if (frontKey.pressed) {
       this.move(this.mainCharacter, { y: -this.mapSpeed })
-    } else if (this.findKey('right', 'action').pressed) {
+    } else if (leftKey.pressed) {
       this.move(this.mainCharacter, { x: -this.mapSpeed })
+    } else if (backKey.pressed) {
+      this.move(this.mainCharacter, { y: this.mapSpeed })
+    } else if (rightKey.pressed) {
+      this.move(this.mainCharacter, { x: this.mapSpeed })
+    } else if (
+      !frontKey.pressed &&
+      !backKey.pressed &&
+      !leftKey.pressed &&
+      !rightKey.pressed
+    ) {
+      this.mainCharacter.currentVariantIndex = 0
     }
 
     this.ctx.drawImage(
       this.map,
-      this.mainCharacter.x + this.canvas.width / 2,
-      this.mainCharacter.y + this.canvas.height / 2,
+      -this.mainCharacter.x + this.canvas.width / 2,
+      -this.mainCharacter.y + this.canvas.height / 2,
       this.mapWidth * this.mapZoom,
       this.mapHeight * this.mapZoom,
     )
@@ -314,10 +329,10 @@ class Game {
         this.ctx,
         element === this.mainCharacter
           ? this.canvas.width / 2
-          : this.mainCharacter.x - element.x + this.canvas.width / 2,
+          : element.x - this.mainCharacter.x + this.canvas.width / 2,
         element === this.mainCharacter
           ? this.canvas.height / 2
-          : this.mainCharacter.y - element.y + this.canvas.height / 2,
+          : element.y - this.mainCharacter.y + this.canvas.height / 2,
       )
     })
     this.fpsCounter.draw(this.ctx, this.canvas.width - 40, 30)
@@ -326,22 +341,24 @@ class Game {
       this.ctx.fillStyle = '#33d1d4aa'
       this.collisions?.forEach(collision => {
         this.ctx.fillRect(
-          collision.startX + this.mainCharacter.x + this.canvas.width / 2,
-          collision.startY + this.mainCharacter.y + this.canvas.height / 2,
+          collision.startX - this.mainCharacter.x + this.canvas.width / 2,
+          collision.startY - this.mainCharacter.y + this.canvas.height / 2,
           collision.endX - collision.startX,
           collision.endY - collision.startY,
         )
       })
       this.ctx.fillStyle = 'rgba(212,51,51,0.67)'
-      this.zoneTriggerings?.forEach(zoneTriggering => {
-        const zone = zoneTriggering.zone
-        this.ctx.fillRect(
-          zone.x + this.mainCharacter.x + this.canvas.width / 2,
-          zone.y + this.mainCharacter.y + this.canvas.height / 2,
-          zone.width,
-          zone.height,
-        )
-      })
+      this.zoneTriggerings
+        ?.map(zoneTriggering => zoneTriggering.zones)
+        .flat()
+        .forEach(zone => {
+          this.ctx.fillRect(
+            zone.x - this.mainCharacter.x + this.canvas.width / 2,
+            zone.y - this.mainCharacter.y + this.canvas.height / 2,
+            zone.width,
+            zone.height,
+          )
+        })
     }
   }
 

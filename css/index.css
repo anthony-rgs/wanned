@@ -29,10 +29,9 @@ body {
   background: radial-gradient(
     circle,
     rgba(0, 0, 0, 0) 0%,
-    rgba(255, 0, 0, 0.15) 80%
+    rgba(0, 0, 0, 0.9) 70%
   );
   opacity: 1;
-  filter: blur(10px);
   transition: opacity 500ms ease-out;
 }
 
@@ -62,4 +61,68 @@ body {
 
 #light.hidden {
   opacity: 0;
+}
+
+.textDialog {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: stretch;
+  justify-content: center;
+  gap: 10px;
+
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  z-index: 2;
+
+  transform: translateX(-50%);
+
+  width: 50%;
+  max-width: 70ch;
+
+  padding: 4px;
+  margin: auto 0 1rem;
+
+  user-select: none;
+}
+
+.textContent {
+  box-sizing: border-box;
+  background-color: white;
+  color: #251319;
+
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: inset 0 0 0 5px #fff, inset 0 0 0 7px #000;
+}
+
+.textDialog p {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.choicesElement {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-self: flex-end;
+  align-items: flex-start;
+
+  padding: 20px;
+  border-radius: 10px;
+
+  background-color: white;
+  box-shadow: inset 0 0 0 5px #fff, inset 0 0 0 7px #000;
+}
+
+.choicesElement li:hover {
+  text-decoration: underline;
+}
+
+.choicesElement li {
+  cursor: pointer;
+}
+
+.textDialog.hide {
+  display: none;
 }

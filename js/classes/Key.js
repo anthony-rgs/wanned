@@ -28,11 +28,14 @@ class Key {
   init() {
     const key = document.createElement('div')
     key.classList.add('key')
+    key.id = this.key.key
 
-    key.addEventListener('mouseenter', () => {
-      this.dispatchEvent(this.key.action)
-    })
+    key.addEventListener('mouseenter', () =>
+      this.dispatchEvent(this.key.action),
+    )
     key.addEventListener('mouseleave', () => this.dispatchEvent(null))
+    key.addEventListener('mousedown', () => (this.key.pressed = true))
+    window.addEventListener('mouseup', () => (this.key.pressed = false))
 
     if (this.parent) {
       this.parent.appendChild(key)

@@ -39,11 +39,20 @@ if (story.disabled) {
   storySection.remove()
 }
 
+document.addEventListener('click', event => {
+  story.skip()
+})
+
+document.addEventListener('keypress', event => {
+  if (event.key == ' ' || event.onclick) {
+    story.skip()
+  }
+})
+
 story.start()
 
 const wanned = new Game(document.querySelector('#wanned'))
 window.g = wanned
-console.log(g)
 
 story.onEnd(() => {
   wanned.draw()

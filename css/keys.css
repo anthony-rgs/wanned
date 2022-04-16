@@ -63,7 +63,8 @@
   cursor: pointer;
 }
 
-.key:hover {
+.key:hover,
+.key.active {
   border-color: var(--control-border-color-hover);
   background-color: var(--control-border-color);
 }
