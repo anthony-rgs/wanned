@@ -14,6 +14,7 @@ import MovableRock from "./elements/movableRock.js";
 import mapMovableRocks from "../../assets/resources/mapMovableRocks.js";
 import Action from "./Action.js";
 import Sprite from "./Sprite.js";
+import Key from './Key.js';
 
 class Game {
   constructor(canvas) {
@@ -33,40 +34,43 @@ class Game {
     this.movableRocks = [];
     this.frame = 0;
     this.baptisteHud = new HUD(
-      "../../assets/images/hud/baptiste-head.png",
+      '../../assets/images/hud/baptiste-head.png',
       3,
-      document.querySelector("canvas")
-    );
+      document.querySelector('canvas'),
+    )
     this.keys = [
       {
-        key: "ArrowUp",
+        key: 'ArrowUp',
         pressed: false,
-        action: "front",
+        action: 'Avancer',
       },
       {
-        key: "ArrowLeft",
+        key: 'ArrowLeft',
         pressed: false,
-        action: "left",
+        action: 'Aller à gauche',
       },
       {
-        key: "ArrowDown",
+        key: 'ArrowDown',
         pressed: false,
-        action: "back",
+        action: 'Reculer',
       },
       {
-        key: "ArrowRight",
+        key: 'ArrowRight',
         pressed: false,
-        action: "right",
+        action: 'Aller à droite',
       },
-    ];
-    this._elements = [
-      new Fabien(this),
-      new Baptiste(this),
-    ];
-    this.dialogBox = new TextDialog();
-    this._lastZone = null;
-    this._zoneTriggerings = [];
-    this.init();
+      {
+        key: 'e',
+        pressed: false,
+        action: '',
+      },
+    ]
+    this._elements = [new Fabien(this), new Baptiste(this)]
+    this.dialogBox = new TextDialog()
+    this._lastZone = null
+    this._zoneTriggerings = []
+    this.init()
+    this.displayKeys()
   }
 
   get elements() {
@@ -74,8 +78,18 @@ class Game {
   }
 
   init() {
-    this.map = new Image();
-    this.map.src = "../../assets/images/map.png";
+    this.map = new Image()
+    this.map.src = '../../assets/images/map.png'
+
+    this.map.addEventListener('load', () => {
+      this.ctx.drawImage(this.map, 0, 0)
+      this.makeDoors()
+      this.makeCollisions()
+      this.makeZoneTriggerings()
+      this.render()
+    })
+
+    this.fpsCounter = new Text(this.fps, 'Museo', 16, 'white', 30, 30)
 
     this.map.addEventListener("load", () => {
       this.ctx.drawImage(this.map, 0, 0);
@@ -86,55 +100,61 @@ class Game {
       this.render();
     });
 
-    this.fpsCounter = new Text(this.fps, "Museo", 16, "white", 30, 30);
+    window.addEventListener('keydown', e => {
+      const key = document.querySelector(`#${e.key}`)
 
-    window.addEventListener("keydown", (e) => {
-      this.keys.map((k) => {
-        if (k.key === e.key) {
-          this.findKey(e.key, "key").pressed = true;
-        }
-      });
-    });
+      key?.classList.add('active')
 
-    window.addEventListener("keyup", (e) => {
-      this.keys.map((k) => {
+      this.keys.map(k => {
         if (k.key === e.key) {
-          this.findKey(e.key, "key").pressed = false;
+          this.findKey(e.key, 'key').pressed = true
         }
-      });
-    });
+      })
+    })
+
+    window.addEventListener('keyup', e => {
+      const key = document.querySelector(`#${e.key}`)
+
+      key?.classList.remove('active')
+
+      this.keys.map(k => {
+        if (k.key === e.key) {
+          this.findKey(e.key, 'key').pressed = false
+        }
+      })
+    })
 
     setInterval(() => {
-      const lastZone = this._lastZone;
-      const currentZone = this.currentZone(this.mainCharacter);
-      this._lastZone = currentZone;
+      const lastZone = this._lastZone
+      const currentZone = this.currentZone(this.mainCharacter)
+      this._lastZone = currentZone
 
       if (currentZone && currentZone !== lastZone) {
-        currentZone.action.trigger();
+        currentZone.action.trigger()
       }
     }, 100)
   }
 
   currentZone(element) {
-    return this.zoneTriggerings.find((zoneTriggering) => {
+    return this._zoneTriggerings.find(zoneTriggering => {
       return this.checkInZone(
         element.position.x,
         element.position.y,
         element.width,
         element.height,
-        zoneTriggering.zones
-      );
-    });
+        zoneTriggering.zones,
+      )
+    })
   }
 
   get collisions() {
     if (this.mapCollisions) {
       return [
         ...this.mapCollisions,
-        ...this.elements.map((element) => element.collisions).flat(),
-      ].filter((collision) => collision);
+        ...this.elements.map(element => element.collisions).flat(),
+      ].filter(collision => collision)
     } else {
-      return [];
+      return []
     }
   }
 
@@ -146,8 +166,8 @@ class Game {
       this.map.height,
       this.mapWidth,
       this.mapHeight,
-      this.mapZoom
-    );
+      this.mapZoom,
+    )
   }
 
   makeDoors() {
@@ -160,7 +180,7 @@ class Game {
       this.mapWidth,
       this.mapHeight,
       this.mapZoom,
-      (i) => `door${i}`
+      i => `door${i}`,
     )
   }
 
@@ -172,7 +192,7 @@ class Game {
       this.map.height,
       this.mapWidth,
       this.mapHeight,
-      this.mapZoom
+      this.mapZoom,
     )
 
     this._zoneTriggerings = [
@@ -180,7 +200,7 @@ class Game {
         zones: zones.filter(zone => zone.id === '01'),
         action: action1(this),
       },
-    ];
+    ]
   }
 
   makeMovableRocks() {
@@ -198,29 +218,29 @@ class Game {
   }
 
   updateCanvas() {
-    this.canvas.width = window.innerWidth;
-    this.canvas.height = window.innerHeight;
-    this.makeCollisions();
+    this.canvas.width = window.innerWidth
+    this.canvas.height = window.innerHeight
+    this.makeCollisions()
   }
 
   findSprite(name) {
-    return this.elements.find((element) => element.name === name);
+    return this.elements.find(element => element.name === name)
   }
 
   get baptiste() {
-    return this.findSprite("baptiste");
+    return this.findSprite('baptiste')
   }
 
   get fabien() {
-    return this.findSprite("fabien");
+    return this.findSprite('fabien')
   }
 
   get door1() {
-    return this.findSprite("door01");
+    return this.findSprite('door01')
   }
 
   get mainCharacter() {
-    return this.baptiste;
+    return this.baptiste
   }
 
   get zoneTriggerings() {
@@ -262,7 +282,7 @@ class Game {
   }
 
   findKey(key, type) {
-    return this.keys.find((k) => k[type] === key);
+    return this.keys.find(k => k[type] === key)
   }
 
   checkCollisions(element) {
@@ -271,25 +291,19 @@ class Game {
       .some((collision) => collision.collide(element.position.x, element.position.y, element.width, element.height, element instanceof Sprite));
   }
 
-  checkInZone(
-    elementX,
-    elementY,
-    elementWidth,
-    elementHeight,
-    zones
-  ) {
+  checkInZone(elementX, elementY, elementWidth, elementHeight, zones) {
     for (let i = 0; i < zones.length; i++) {
-      const zone = zones[i];
+      const zone = zones[i]
       if (
         elementX + elementWidth >= zone.x &&
         elementX <= zone.x + zone.width &&
         elementY + elementHeight >= zone.y &&
         elementY <= zone.y + zone.height
       ) {
-        return true;
+        return true
       }
     }
-    return false;
+    return false
   }
 
   move(element, movement, speed = element.speed) {
@@ -297,17 +311,17 @@ class Game {
 
     if (movement.x) {
       if (movement.x < 0) {
-        element.position.x -= speed;
+        element.position.x -= speed
       } else {
-        element.position.x += speed;
+        element.position.x += speed
       }
     }
 
     if (movement.y) {
       if (movement.y < 0) {
-        element.position.y -= speed;
+        element.position.y -= speed
       } else {
-        element.position.y += speed;
+        element.position.y += speed
       }
     }
 
@@ -321,27 +335,45 @@ class Game {
     }
   }
 
+  displayKeys() {
+    const arrowKeysBottomWrapper = document.createElement('div')
+    const controlsContainer = document.querySelector('#controls-container')
+    controlsContainer.appendChild(arrowKeysBottomWrapper)
+
+    this.keys.forEach(key => {
+      if (key.key.includes('Arrow')) {
+        if (key.key !== 'ArrowUp') {
+          new Key(key, arrowKeysBottomWrapper)
+        } else {
+          new Key(key)
+        }
+      } else {
+        new Key(key)
+      }
+    })
+  }
+
   draw() {
-    const frontKey = this.findKey("front", "action");
-    const backKey = this.findKey("back", "action");
-    const leftKey = this.findKey("left", "action");
-    const rightKey = this.findKey("right", "action");
+    const frontKey = this.findKey('Avancer', 'action')
+    const backKey = this.findKey('Reculer', 'action')
+    const leftKey = this.findKey('Aller à gauche', 'action')
+    const rightKey = this.findKey('Aller à droite', 'action')
 
     if (frontKey.pressed) {
-      this.move(this.mainCharacter, {y: -this.mapSpeed});
+      this.move(this.mainCharacter, { y: -this.mapSpeed })
     } else if (leftKey.pressed) {
-      this.move(this.mainCharacter, {x: -this.mapSpeed});
+      this.move(this.mainCharacter, { x: -this.mapSpeed })
     } else if (backKey.pressed) {
-      this.move(this.mainCharacter, {y: this.mapSpeed});
+      this.move(this.mainCharacter, { y: this.mapSpeed })
     } else if (rightKey.pressed) {
-      this.move(this.mainCharacter, {x: this.mapSpeed});
+      this.move(this.mainCharacter, { x: this.mapSpeed })
     } else if (
       !frontKey.pressed &&
       !backKey.pressed &&
       !leftKey.pressed &&
       !rightKey.pressed
     ) {
-      this.mainCharacter.currentVariantIndex = 0;
+      this.mainCharacter.currentVariantIndex = 0
     }
 
     this.ctx.drawImage(
@@ -349,10 +381,10 @@ class Game {
       -this.mainCharacter.x + this.canvas.width / 2,
       -this.mainCharacter.y + this.canvas.height / 2,
       this.mapWidth * this.mapZoom,
-      this.mapHeight * this.mapZoom
-    );
+      this.mapHeight * this.mapZoom,
+    )
 
-    this.elements.forEach((element) => {
+    this.elements.forEach(element => {
       element.draw(
         this.ctx,
         element === this.mainCharacter
@@ -360,52 +392,55 @@ class Game {
           : element.x - this.mainCharacter.x + this.canvas.width / 2,
         element === this.mainCharacter
           ? this.canvas.height / 2
-          : element.y - this.mainCharacter.y + this.canvas.height / 2
-      );
-    });
-    this.fpsCounter.draw(this.ctx, this.canvas.width - 40, 30);
+          : element.y - this.mainCharacter.y + this.canvas.height / 2,
+      )
+    })
+    this.fpsCounter.draw(this.ctx, this.canvas.width - 40, 30)
 
     if (window.debug) {
-      this.ctx.fillStyle = "#33d1d4aa";
-      this.collisions?.forEach((collision) => {
+      this.ctx.fillStyle = '#33d1d4aa'
+      this.collisions?.forEach(collision => {
         this.ctx.fillRect(
           collision.startX - this.mainCharacter.x + this.canvas.width / 2,
           collision.startY - this.mainCharacter.y + this.canvas.height / 2,
           collision.endX - collision.startX,
-          collision.endY - collision.startY
-        );
-      });
-      this.ctx.fillStyle = "rgba(212,51,51,0.67)";
-      this.zoneTriggerings?.map(zoneTriggering => zoneTriggering.zones).flat().forEach((zone) => {
-        this.ctx.fillRect(
-          zone.x - this.mainCharacter.x + this.canvas.width / 2,
-          zone.y - this.mainCharacter.y + this.canvas.height / 2,
-          zone.width,
-          zone.height
-        );
-      });
+          collision.endY - collision.startY,
+        )
+      })
+      this.ctx.fillStyle = 'rgba(212,51,51,0.67)'
+      this.zoneTriggerings
+        ?.map(zoneTriggering => zoneTriggering.zones)
+        .flat()
+        .forEach(zone => {
+          this.ctx.fillRect(
+            zone.x - this.mainCharacter.x + this.canvas.width / 2,
+            zone.y - this.mainCharacter.y + this.canvas.height / 2,
+            zone.width,
+            zone.height,
+          )
+        })
     }
   }
 
   render() {
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.draw();
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+    this.draw()
 
-    this.baptisteHud.baseLives = this.baptiste.baseLives;
-    this.baptisteHud.lives = this.baptiste.lives;
+    this.baptisteHud.baseLives = this.baptiste.baseLives
+    this.baptisteHud.lives = this.baptiste.lives
 
-    this.frame++;
-    const time = Date.now();
+    this.frame++
+    const time = Date.now()
 
     if (time - this.startTime > 1000) {
-      this.fps = Math.round(this.frame / ((time - this.startTime) / 1000));
-      this.startTime = time;
-      this.frame = 0;
-      this.fpsCounter.text = this.fps;
+      this.fps = Math.round(this.frame / ((time - this.startTime) / 1000))
+      this.startTime = time
+      this.frame = 0
+      this.fpsCounter.text = this.fps
     }
 
-    window.requestAnimationFrame(() => this.render());
+    window.requestAnimationFrame(() => this.render())
   }
 }
 
-export default Game;
+export default Game
