@@ -1,33 +1,38 @@
-import Text from './Text.js'
-import Collision from './Collision.js'
-import mapCollisions from '../../assets/resources/mapCollisions.js'
-import Baptiste from './elements/sprites/baptiste.js'
-import Fabien from './elements/sprites/fabien.js'
-import HUD from './HUD.js'
-import TextDialog from './TextDialog.js'
-import action1 from '../actions/zone-1/action-1.js'
-import Door from './elements/door.js'
-import mapDoors from '../../assets/resources/mapDoors.js'
-import Zone from './Zone.js'
-import mapZones from '../../assets/resources/mapZones.js'
-import Key from './Key.js'
+import Text from "./Text.js";
+import Collision from "./Collision.js";
+import mapCollisions from "../../assets/resources/mapCollisions.js";
+import Baptiste from "./elements/sprites/baptiste.js";
+import Fabien from "./elements/sprites/fabien.js";
+import HUD from "./HUD.js";
+import TextDialog from "./TextDialog.js";
+import action1 from "../actions/zone-1/action-1.js";
+import Door from "./elements/door.js";
+import mapDoors from "../../assets/resources/mapDoors.js";
+import Zone from "./Zone.js";
+import mapZones from "../../assets/resources/mapZones.js";
+import MovableRock from "./elements/movableRock.js";
+import mapMovableRocks from "../../assets/resources/mapMovableRocks.js";
+import Action from "./Action.js";
+import Sprite from "./Sprite.js";
+import Key from './Key.js';
 
 class Game {
   constructor(canvas) {
-    this.canvas = canvas
-    this.canvas.width = window.innerWidth
-    this.canvas.height = window.innerHeight
-    this.ctx = this.canvas.getContext('2d')
-    this.map = null
-    this.mapZoom = 3
-    this.mapWidth = 700
-    this.mapHeight = 400
-    this.mapSpeed = 5
-    this.fps = 0
-    this.startTime = Date.now()
-    this.mapCollisions = []
-    this.mapDoors = []
-    this.frame = 0
+    this.canvas = canvas;
+    this.canvas.width = window.innerWidth;
+    this.canvas.height = window.innerHeight;
+    this.ctx = this.canvas.getContext("2d");
+    this.map = null;
+    this.mapZoom = 3;
+    this.mapWidth = 700;
+    this.mapHeight = 400;
+    this.mapSpeed = 5;
+    this.fps = 0;
+    this.startTime = Date.now();
+    this.mapCollisions = [];
+    this.mapDoors = [];
+    this.movableRocks = [];
+    this.frame = 0;
     this.baptisteHud = new HUD(
       '../../assets/images/hud/baptiste-head.png',
       3,
@@ -69,7 +74,7 @@ class Game {
   }
 
   get elements() {
-    return [...this.mapDoors, ...this._elements]
+    return [...this.mapDoors, ...this.movableRocks, ...this._elements];
   }
 
   init() {
@@ -85,6 +90,15 @@ class Game {
     })
 
     this.fpsCounter = new Text(this.fps, 'Museo', 16, 'white', 30, 30)
+
+    this.map.addEventListener("load", () => {
+      this.ctx.drawImage(this.map, 0, 0);
+      this.makeDoors();
+      this.makeCollisions();
+      this.makeZoneTriggerings();
+      this.makeMovableRocks();
+      this.render();
+    });
 
     window.addEventListener('keydown', e => {
       const key = document.querySelector(`#${e.key}`)
@@ -189,6 +203,20 @@ class Game {
     ]
   }
 
+  makeMovableRocks() {
+    this.movableRocks = MovableRock.makeMovableRocks(
+      this,
+      mapMovableRocks,
+      16,
+      this.map.width,
+      this.map.height,
+      this.mapWidth,
+      this.mapHeight,
+      this.mapZoom,
+      (i) => `movableRock${i}`
+    )
+  }
+
   updateCanvas() {
     this.canvas.width = window.innerWidth
     this.canvas.height = window.innerHeight
@@ -215,24 +243,62 @@ class Game {
     return this.baptiste
   }
 
+  get zoneTriggerings() {
+    const activeMovableRocksZones = this.movableRocks
+      .map(rock => rock.movableZones
+        .filter(zone => {
+          const zonePosition = zone.id.split('-')[1];
+
+          return (
+            (this.findKey("front", "action").pressed && zonePosition === 'bottom') ||
+            (this.findKey("back", "action").pressed && zonePosition === 'top') ||
+            (this.findKey("right", "action").pressed && zonePosition === 'left') ||
+            (this.findKey("left", "action").pressed && zonePosition === 'right')
+          )
+        })
+        .map(zone => ({zone, rock}))
+      ).flat();
+
+    return [
+      ...this._zoneTriggerings,
+      ...activeMovableRocksZones.map(({zone, rock}) => ({
+        zones: [zone],
+        action: new Action(() => {
+          const zonePosition = zone.id.split('-')[1];
+          const speed = this.mainCharacter.speed / 2
+
+          if (zonePosition === 'bottom' && this.findKey("front", "action").pressed) {
+            this.move(rock, {y: -speed}, speed);
+          } else if (zonePosition === 'top' && this.findKey("back", "action").pressed) {
+            this.move(rock, {y: speed}, speed);
+          } else if (zonePosition === 'left' && this.findKey("right", "action").pressed) {
+            this.move(rock, {x: speed}, speed);
+          } else if (zonePosition === 'right' && this.findKey("left", "action").pressed) {
+            this.move(rock, {x: -speed}, speed);
+          }
+        }),
+      })).flat()
+    ];
+  }
+
   findKey(key, type) {
     return this.keys.find(k => k[type] === key)
   }
 
-  checkCollisions(elementX, elementY, elementWidth, elementHeight) {
-    return this.collisions.some(collision =>
-      collision.collide(elementX, elementY, elementWidth, elementHeight),
-    )
+  checkCollisions(element) {
+    return this.collisions
+      .filter(collision => collision.parent === null || element.id !== collision.parent?.id)
+      .some((collision) => collision.collide(element.position.x, element.position.y, element.width, element.height, element instanceof Sprite));
   }
 
   checkInZone(elementX, elementY, elementWidth, elementHeight, zones) {
     for (let i = 0; i < zones.length; i++) {
       const zone = zones[i]
       if (
-        elementX + elementWidth > zone.x &&
-        elementX < zone.x + zone.width &&
-        elementY + elementHeight > zone.y &&
-        elementY < zone.y + zone.height
+        elementX + elementWidth >= zone.x &&
+        elementX <= zone.x + zone.width &&
+        elementY + elementHeight >= zone.y &&
+        elementY <= zone.y + zone.height
       ) {
         return true
       }
@@ -240,9 +306,8 @@ class Game {
     return false
   }
 
-  move(element, movement) {
-    const { x, y } = element.position
-    const { speed } = element
+  move(element, movement, speed = element.speed) {
+    const {x, y} = element.position;
 
     if (movement.x) {
       if (movement.x < 0) {
@@ -260,18 +325,13 @@ class Game {
       }
     }
 
-    element.animate(movement)
+    if (element.animate) {
+      element.animate(movement);
+    }
 
-    if (
-      this.checkCollisions(
-        element.position.x,
-        element.position.y,
-        element.width,
-        element.height,
-      )
-    ) {
-      element.position.x = x
-      element.position.y = y
+    if (this.checkCollisions(element)) {
+      element.position.x = x;
+      element.position.y = y;
     }
   }
 
