@@ -60,7 +60,7 @@ class Game {
     ];
     this.dialogBox = new TextDialog();
     this._lastZone = null;
-    this.zoneTriggerings = [];
+    this._zoneTriggerings = [];
     this.init();
   }
 
@@ -112,8 +112,8 @@ class Game {
   currentZone(element) {
     return this.zoneTriggerings.find((zoneTriggering) => {
       return this.checkInZone(
-        -element.position.x,
-        -element.position.y,
+        element.position.x,
+        element.position.y,
         element.width,
         element.height,
         zoneTriggering.zones
@@ -169,7 +169,7 @@ class Game {
       this.mapZoom
     )
 
-    this.zoneTriggerings = [
+    this._zoneTriggerings = [
       {
         zones: zones.filter(zone => zone.id === '01'),
         action: action1(this),
@@ -232,12 +232,6 @@ class Game {
       }
     }
     return false;
-    // return (
-    //   elementX >= zoneCoordinates.x &&
-    //   elementX + elementWidth <= zoneCoordinates.x + zoneCoordinates.width &&
-    //   elementY >= zoneCoordinates.y &&
-    //   elementY + elementHeight <= zoneCoordinates.y + zoneCoordinates.height
-    // );
   }
 
   move(element, movement) {
@@ -264,8 +258,8 @@ class Game {
 
     if (
       this.checkCollisions(
-        -element.position.x,
-        -element.position.y,
+        element.position.x,
+        element.position.y,
         element.width,
         element.height
       )
@@ -282,13 +276,13 @@ class Game {
     const rightKey = this.findKey("right", "action");
 
     if (frontKey.pressed) {
-      this.move(this.mainCharacter, {y: this.mapSpeed});
-    } else if (leftKey.pressed) {
-      this.move(this.mainCharacter, {x: this.mapSpeed});
-    } else if (backKey.pressed) {
       this.move(this.mainCharacter, {y: -this.mapSpeed});
-    } else if (rightKey.pressed) {
+    } else if (leftKey.pressed) {
       this.move(this.mainCharacter, {x: -this.mapSpeed});
+    } else if (backKey.pressed) {
+      this.move(this.mainCharacter, {y: this.mapSpeed});
+    } else if (rightKey.pressed) {
+      this.move(this.mainCharacter, {x: this.mapSpeed});
     } else if (
       !frontKey.pressed &&
       !backKey.pressed &&
@@ -300,8 +294,8 @@ class Game {
 
     this.ctx.drawImage(
       this.map,
-      this.mainCharacter.x + this.canvas.width / 2,
-      this.mainCharacter.y + this.canvas.height / 2,
+      -this.mainCharacter.x + this.canvas.width / 2,
+      -this.mainCharacter.y + this.canvas.height / 2,
       this.mapWidth * this.mapZoom,
       this.mapHeight * this.mapZoom
     );
@@ -311,10 +305,10 @@ class Game {
         this.ctx,
         element === this.mainCharacter
           ? this.canvas.width / 2
-          : this.mainCharacter.x - element.x + this.canvas.width / 2,
+          : element.x - this.mainCharacter.x + this.canvas.width / 2,
         element === this.mainCharacter
           ? this.canvas.height / 2
-          : this.mainCharacter.y - element.y + this.canvas.height / 2
+          : element.y - this.mainCharacter.y  + this.canvas.height / 2
       );
     });
     this.fpsCounter.draw(this.ctx, this.canvas.width - 40, 30);
@@ -323,8 +317,8 @@ class Game {
       this.ctx.fillStyle = "#33d1d4aa";
       this.collisions?.forEach((collision) => {
         this.ctx.fillRect(
-          collision.startX + this.mainCharacter.x + this.canvas.width / 2,
-          collision.startY + this.mainCharacter.y + this.canvas.height / 2,
+          collision.startX - this.mainCharacter.x + this.canvas.width / 2,
+          collision.startY - this.mainCharacter.y + this.canvas.height / 2,
           collision.endX - collision.startX,
           collision.endY - collision.startY
         );
@@ -332,8 +326,8 @@ class Game {
       this.ctx.fillStyle = "rgba(212,51,51,0.67)";
       this.zoneTriggerings?.map(zoneTriggering => zoneTriggering.zones).flat().forEach((zone) => {
         this.ctx.fillRect(
-          zone.x + this.mainCharacter.x + this.canvas.width / 2,
-          zone.y + this.mainCharacter.y + this.canvas.height / 2,
+          zone.x - this.mainCharacter.x + this.canvas.width / 2,
+          zone.y - this.mainCharacter.y + this.canvas.height / 2,
           zone.width,
           zone.height
         );

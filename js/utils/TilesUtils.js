@@ -54,8 +54,6 @@ class TilesUtils {
       }
     })
 
-    console.log(yErrorCorrections)
-
     return positions
   }
 }

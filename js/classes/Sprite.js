@@ -39,15 +39,15 @@ class Sprite extends Element {
     }
 
     if ('x' in movement) {
-      if (movement.x > 0) {
+      if (movement.x < 0) {
         this.left()
-      } else if (movement.x < 0) {
+      } else if (movement.x > 0) {
         this.right()
       }
     } else if ('y' in movement) {
-      if (movement.y > 0) {
+      if (movement.y < 0) {
         this.front()
-      } else if (movement.y < 0) {
+      } else if (movement.y > 0) {
         this.back()
       }
     }

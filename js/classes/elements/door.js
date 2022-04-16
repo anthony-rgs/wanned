@@ -44,8 +44,8 @@ class Door extends Element {
     return TilesUtils.mapTilesToPositions(rawDoors, numberOfTilesByColumn, numberOfTilesByRow, realTileWidth, realTileHeight, 2)
       .map((position) => new Door(
         game,
-        -position.startX,
-        -position.startY,
+        position.startX,
+        position.startY,
         position.width * 2,
         position.height,
         idMaker(position.tileId)

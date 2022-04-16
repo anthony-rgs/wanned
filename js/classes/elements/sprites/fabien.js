@@ -3,7 +3,7 @@ import wait from "../../../utils/wait.js";
 
 class Fabien extends Sprite {
   constructor(game) {
-    const initialPosition = {x: -148, y: -1008}
+    const initialPosition = {x: 100, y: 1008}
 
     super(
       'fabien',
@@ -44,8 +44,8 @@ class Fabien extends Sprite {
   }
 
   async _pullOverMovement() {
-    if (!(-86 - this.speed / 2 < this.x && this.x < -86 + this.speed / 2)) {
-      this.game.move(this, {x: this.speed})
+    if (!(86 - this.speed / 2 < this.x && this.x < 86 + this.speed / 2)) {
+      this.game.move(this, {x: -this.speed})
       await wait(100)
       await this._pullOverMovement();
     } else {

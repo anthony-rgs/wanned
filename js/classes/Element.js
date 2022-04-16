@@ -46,10 +46,10 @@ class Element {
   get collisions() {
     return (this.currentVariant.collisions ?? []).map(
       (collision) => new Collision(
-        -(this.x - collision.startX),
-        -(this.y - collision.startY),
-        -(this.x - collision.endX),
-        -(this.y - collision.endY),
+        (this.x + collision.startX),
+        (this.y + collision.startY),
+        (this.x + collision.endX),
+        (this.y + collision.endY),
       )
     )
   }
@@ -58,8 +58,8 @@ class Element {
     if (this.currentVariant) {
       ctx.drawImage(
         this.currentVariant.image,
-        x ?? this.x,
-        y ?? this.y,
+        (x ?? this.x),
+        (y ?? this.y),
         this.width,
         this.height,
       )
