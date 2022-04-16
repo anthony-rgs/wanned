@@ -136,7 +136,7 @@ class Game {
   }
 
   currentZone(element) {
-    return this._zoneTriggerings.find(zoneTriggering => {
+    return this.zoneTriggerings.find(zoneTriggering => {
       return this.checkInZone(
         element.position.x,
         element.position.y,
@@ -249,11 +249,12 @@ class Game {
         .filter(zone => {
           const zonePosition = zone.id.split('-')[1];
 
+
           return (
-            (this.findKey("front", "action").pressed && zonePosition === 'bottom') ||
-            (this.findKey("back", "action").pressed && zonePosition === 'top') ||
-            (this.findKey("right", "action").pressed && zonePosition === 'left') ||
-            (this.findKey("left", "action").pressed && zonePosition === 'right')
+            (this.findKey("Avancer", "action").pressed && zonePosition === 'bottom') ||
+            (this.findKey("Reculer", "action").pressed && zonePosition === 'top') ||
+            (this.findKey("Aller à droite", "action").pressed && zonePosition === 'left') ||
+            (this.findKey("Aller à gauche", "action").pressed && zonePosition === 'right')
           )
         })
         .map(zone => ({zone, rock}))
@@ -267,13 +268,13 @@ class Game {
           const zonePosition = zone.id.split('-')[1];
           const speed = this.mainCharacter.speed / 2
 
-          if (zonePosition === 'bottom' && this.findKey("front", "action").pressed) {
+          if (zonePosition === 'bottom' && this.findKey("Avancer", "action").pressed) {
             this.move(rock, {y: -speed}, speed);
-          } else if (zonePosition === 'top' && this.findKey("back", "action").pressed) {
+          } else if (zonePosition === 'top' && this.findKey("Reculer", "action").pressed) {
             this.move(rock, {y: speed}, speed);
-          } else if (zonePosition === 'left' && this.findKey("right", "action").pressed) {
+          } else if (zonePosition === 'left' && this.findKey("Aller à droite", "action").pressed) {
             this.move(rock, {x: speed}, speed);
-          } else if (zonePosition === 'right' && this.findKey("left", "action").pressed) {
+          } else if (zonePosition === 'right' && this.findKey("Aller à gauche", "action").pressed) {
             this.move(rock, {x: -speed}, speed);
           }
         }),
@@ -294,6 +295,7 @@ class Game {
   checkInZone(elementX, elementY, elementWidth, elementHeight, zones) {
     for (let i = 0; i < zones.length; i++) {
       const zone = zones[i]
+
       if (
         elementX + elementWidth >= zone.x &&
         elementX <= zone.x + zone.width &&
