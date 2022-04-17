@@ -115,10 +115,6 @@ class Game {
           this.findKey(e.key, 'key').pressed = true
         }
       })
-
-      if (e.key === 'f' && !this.mainCharacter.hitting) {
-        this.mainCharacter.hit()
-      }
     })
 
     window.addEventListener('keyup', e => {
@@ -458,6 +454,10 @@ class Game {
       ) {
         this.mainCharacter.currentVariantIndex = 0
       }
+    }
+
+    if (hitKey.pressed && this.mainCharacter.canHit) {
+      this.mainCharacter.hit()
     }
 
     this.monster.lead()

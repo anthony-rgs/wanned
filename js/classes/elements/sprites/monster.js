@@ -93,7 +93,7 @@ class Monster extends Sprite {
 
   handleAttack() {
     this.interval = setInterval(() => {
-      if (Math.random() < 0.5) {
+      if (Math.random() < 0.5 && this.canHit) {
         this.hit()
       }
     }, 500)

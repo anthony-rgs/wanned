@@ -23,6 +23,8 @@ class Sprite extends Element {
     this._lives = 3
     this.baseLives = this.lives
     this.hitting = false
+    this.hitDelay = 500
+    this.canHit = true
     this.stop = false
   }
 
@@ -123,7 +125,11 @@ class Sprite extends Element {
   }
 
   hit() {
+    this.canHit = false
     this.hitting = true
+    setTimeout(() => {
+      this.canHit = true
+    }, this.hitDelay)
 
     new Audio('../../assets/audios/sword.mp3').play()
 
@@ -136,19 +142,6 @@ class Sprite extends Element {
         this.hitting = false
       }
     }, 100)
-
-    switch (this.currentDirection) {
-      case 'front':
-        break
-      case 'back':
-        break
-      case 'left':
-        break
-      case 'right':
-        break
-      default:
-        break
-    }
   }
 
   preload() {
