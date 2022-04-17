@@ -1,7 +1,7 @@
 import Game from './classes/Game.js'
 import Story from './classes/Story.js'
 
-window.debug = false
+window.debug = true
 
 const story = new Story(
   [

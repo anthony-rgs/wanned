@@ -30,6 +30,9 @@ export default game =>
               game.dialogBox.hide()
 
               game.mainCharacter.stop = false
+
+              game.monster.handleAttack()
+              game.monster.stop = false
             },
           },
         ],

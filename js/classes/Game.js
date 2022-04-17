@@ -31,7 +31,7 @@ class Game {
     this.mapHeight = 400
     this.mapSpeed = 5
     this.fps = 0
-    this.hasCollisions = true
+    this.hasCollisions = false
     this.startTime = Date.now()
     this.mapCollisions = []
     this.mapDoors = []

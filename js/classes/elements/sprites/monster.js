@@ -77,7 +77,7 @@ class Monster extends Sprite {
       0.4,
     )
 
-    this.handleAttack()
+    this.stop = true
   }
 
   get zone() {
@@ -93,10 +93,12 @@ class Monster extends Sprite {
   }
 
   lead() {
-    this.game.move(this, {
-      x: this.game.mainCharacter.x - this.x,
-      y: this.game.mainCharacter.y - this.y,
-    })
+    if (!this.stop) {
+      this.game.move(this, {
+        x: this.game.mainCharacter.x - this.x,
+        y: this.game.mainCharacter.y - this.y,
+      })
+    }
   }
 }
 
