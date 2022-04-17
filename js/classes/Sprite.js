@@ -20,9 +20,31 @@ class Sprite extends Element {
     this.speed = speed
     this.frame = 0
     this.currentDirection = 'front'
-    this.lives = 3
+    this._lives = 3
     this.baseLives = this.lives
     this.fighting = false
+  }
+
+  get lives() {
+    return this._lives
+  }
+
+  set lives(value) {
+    if (value - this._lives < 0) {
+      if (this.game.mainCharacter === this) {
+        document.querySelector('#fog').classList.add('damages')
+
+        setTimeout(() => {
+          document.querySelector('#fog').classList.remove('damages')
+        }, 2000)
+      }
+    }
+
+    if (value < 0) {
+      this._lives = 0
+    } else {
+      this._lives = value
+    }
   }
 
   get moveVariants() {
