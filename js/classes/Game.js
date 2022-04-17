@@ -120,12 +120,8 @@ class Game {
         if (k.key === e.key) {
           this.findKey(e.key, "key").pressed = true;
         }
-      });
-
-      if (e.key === "f" && !this.mainCharacter.hitting) {
-        this.mainCharacter.hit();
-      }
-    });
+      })
+    })
 
     window.addEventListener("keyup", (e) => {
       const key = document.querySelector(`#${e.key}`);
@@ -466,7 +462,11 @@ class Game {
       }
     }
 
-    this.monster.lead();
+    if (hitKey.pressed && this.mainCharacter.canHit) {
+      this.mainCharacter.hit()
+    }
+
+    this.monster.lead()
 
     this.ctx.drawImage(
       this.map,
