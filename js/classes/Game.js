@@ -15,6 +15,8 @@ import mapMovableRocks from '../../assets/resources/mapMovableRocks.js'
 import Action from './Action.js'
 import Sprite from './Sprite.js'
 import Key from './Key.js'
+import mapSpikes from "../../assets/resources/mapSpikes.js";
+import Spikes from "./elements/spikes.js";
 
 class Game {
   constructor(canvas) {
@@ -28,11 +30,12 @@ class Game {
     this.mapHeight = 400
     this.mapSpeed = 5
     this.fps = 0
-    this.hasCollisions = false
+    this.hasCollisions = true
     this.startTime = Date.now()
     this.mapCollisions = []
     this.mapDoors = []
     this.movableRocks = []
+    this.spikes = []
     this.frame = 0
     this.baptisteHud = new HUD(
       '../../assets/images/hud/baptiste-head.png',
@@ -78,6 +81,7 @@ class Game {
     return [
       ...this.mapDoors,
       ...this.movableRocks,
+      ...this.spikes,
       ...this._elements.sort((a, b) => a.y - b.y),
     ]
   }
@@ -85,14 +89,6 @@ class Game {
   init() {
     this.map = new Image()
     this.map.src = '../../assets/images/map.png'
-
-    this.map.addEventListener('load', () => {
-      this.ctx.drawImage(this.map, 0, 0)
-      this.makeDoors()
-      this.makeCollisions()
-      this.makeZoneTriggerings()
-      this.render()
-    })
 
     this.fpsCounter = new Text(this.fps, 'Museo', 16, 'white', 30, 30)
 
@@ -102,6 +98,7 @@ class Game {
       this.makeCollisions()
       this.makeZoneTriggerings()
       this.makeMovableRocks()
+      this.makeSpikes()
       this.render()
     })
 
@@ -226,6 +223,20 @@ class Game {
     )
   }
 
+  makeSpikes() {
+    this.spikes = Spikes.makeSpikes(
+      this,
+      mapSpikes,
+      16,
+      this.map.width,
+      this.map.height,
+      this.mapWidth,
+      this.mapHeight,
+      this.mapZoom,
+      i => `spike${i}`,
+    )
+  }
+
   updateCanvas() {
     this.canvas.width = window.innerWidth
     this.canvas.height = window.innerHeight
@@ -274,6 +285,10 @@ class Game {
       )
       .flat()
 
+    const activeSpikesZones = this.spikes
+      .filter(spike => spike.state === 'open')
+      .map(spikes => ({zone: spikes.spikesZones, spikes}))
+
     return [
       ...this._zoneTriggerings,
       ...activeMovableRocksZones
@@ -307,6 +322,11 @@ class Game {
           }),
         }))
         .flat(),
+      ...activeSpikesZones
+        .map(({spikes, zone}) => ({
+          zones: zone,
+          action: spikes.action,
+        })),
     ]
   }
 
