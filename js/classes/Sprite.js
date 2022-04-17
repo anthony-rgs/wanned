@@ -16,13 +16,14 @@ class Sprite extends Element {
     super(name, game, variants, w, h, initialPosition)
     this.moveVariantsLength = 4
     this.fightVariantsLength = 4
-    this.walkAnimationSpeed = 1
     this.speed = speed
+    this.walkAnimationSpeed = this.speed
     this.frame = 0
     this.currentDirection = 'front'
     this.lives = 3
     this.baseLives = this.lives
-    this.fighting = false
+    this.hitting = false
+    this.stop = false
   }
 
   get moveVariants() {
@@ -50,7 +51,7 @@ class Sprite extends Element {
   }
 
   get currentVariant() {
-    if (this.fighting) {
+    if (this.hitting) {
       return this.fightVariants[this.currentDirection][this.currentVariantIndex]
     } else {
       return this.moveVariants[this.currentDirection][this.currentVariantIndex]
@@ -99,8 +100,8 @@ class Sprite extends Element {
     this.currentDirection = 'right'
   }
 
-  fight() {
-    this.fighting = true
+  hit() {
+    this.hitting = true
 
     const interval = setInterval(() => {
       if (this.currentVariantIndex < this.fightVariantsLength - 1) {
@@ -108,7 +109,7 @@ class Sprite extends Element {
       } else {
         clearInterval(interval)
         this.currentVariantIndex = 0
-        this.fighting = false
+        this.hitting = false
       }
     }, 100)
 

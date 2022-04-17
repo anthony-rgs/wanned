@@ -21,7 +21,7 @@ class Element {
     this.height = h
     this.position = initialPosition
     this.currentVariantIndex = 0
-    this.fighting = false
+    this.hitting = false
 
     this.preload()
   }
@@ -90,7 +90,7 @@ class Element {
         this.currentVariant.image,
         x ?? this.x,
         y ?? this.y,
-        this.fighting ? this.width * 1.5 : this.width,
+        this.hitting ? this.width * 1.5 : this.width,
         this.height,
       )
     }
