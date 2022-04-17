@@ -30,6 +30,8 @@ class Spikes extends Element {
     this.actionActivated = true
     this.action = new Action(async () => {
       if (this.actionActivated) {
+        console.log('spikes action')
+
         game.mainCharacter.lives -= 1
 
         const mainCharacterSpeed = game.mainCharacter.speed
@@ -40,12 +42,12 @@ class Spikes extends Element {
         }, this.remainingTime)
 
         this.actionActivated = false
-      }
 
-      setInterval(() => {
-        this.actionActivated = true
-      }, this.remainingTime)
-    }, true)
+        setInterval(() => {
+          this.actionActivated = true
+        }, this.remainingTime)
+      }
+    }, false)
 
     if (this.state === 'open') {
       this.open()
@@ -59,8 +61,8 @@ class Spikes extends Element {
     }, this.intervalDuration)
 
     setInterval(() => {
-      this.lastIntervalTriggered += 50
-    }, 50)
+      this.lastIntervalTriggered += 100
+    }, 100)
   }
 
   get remainingTime() {
