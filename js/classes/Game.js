@@ -28,6 +28,7 @@ class Game {
     this.mapHeight = 400
     this.mapSpeed = 5
     this.fps = 0
+    this.hasCollisions = false
     this.startTime = Date.now()
     this.mapCollisions = []
     this.mapDoors = []
@@ -314,6 +315,8 @@ class Game {
   }
 
   checkCollisions(element) {
+    if (!this.hasCollisions) return false
+
     return this.collisions
       .filter(
         collision =>

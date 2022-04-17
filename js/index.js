@@ -1,7 +1,7 @@
 import Game from './classes/Game.js'
 import Story from './classes/Story.js'
 
-// window.debug = true
+window.debug = true
 
 const story = new Story(
   [
@@ -39,14 +39,14 @@ if (story.disabled) {
   storySection.remove()
 }
 
-document.addEventListener("click", () => {
-    story.skip()
-});
+document.addEventListener('click', () => {
+  story.skip()
+})
 
-document.addEventListener('keypress', (event) => {
-    if (event.key === " " || event.onclick) {
-        story.skip()
-    }
+document.addEventListener('keypress', event => {
+  if (event.key === ' ' || event.onclick) {
+    story.skip()
+  }
 })
 
 story.start()
