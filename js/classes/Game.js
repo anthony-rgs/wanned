@@ -5,7 +5,8 @@ import Baptiste from './elements/sprites/baptiste.js'
 import Fabien from './elements/sprites/fabien.js'
 import HUD from './HUD.js'
 import TextDialog from './TextDialog.js'
-import action1 from '../actions/zone-1/action-1.js'
+import triggerTalk from '../actions/zones/1/triggerTalk.js'
+import triggerFight from '../actions/zones/2/triggerFight.js'
 import Door from './elements/door.js'
 import mapDoors from '../../assets/resources/mapDoors.js'
 import Zone from './Zone.js'
@@ -15,6 +16,8 @@ import mapMovableRocks from '../../assets/resources/mapMovableRocks.js'
 import Action from './Action.js'
 import Sprite from './Sprite.js'
 import Key from './Key.js'
+import Monster from './elements/sprites/monster.js'
+import handleContact from '../actions/zones/2/handleContact.js'
 import mapSpikes from "../../assets/resources/mapSpikes.js";
 import Spikes from "./elements/spikes.js";
 
@@ -69,7 +72,7 @@ class Game {
         action: 'Hit',
       },
     ]
-    this._elements = [new Fabien(this), new Baptiste(this)]
+    this._elements = [new Fabien(this), new Baptiste(this), new Monster(this)]
     this.dialogBox = new TextDialog()
     this._lastZone = null
     this._zoneTriggerings = []
@@ -113,8 +116,8 @@ class Game {
         }
       })
 
-      if (e.key === 'f' && !this.mainCharacter.fighting) {
-        this.mainCharacter.fight()
+      if (e.key === 'f' && !this.mainCharacter.hitting) {
+        this.mainCharacter.hit()
       }
     })
 
@@ -204,7 +207,11 @@ class Game {
     this._zoneTriggerings = [
       {
         zones: zones.filter(zone => zone.id === '01'),
-        action: action1(this),
+        action: triggerTalk(this),
+      },
+      {
+        zones: zones.filter(zone => zone.id === '02'),
+        action: triggerFight(this),
       },
     ]
   }
@@ -261,6 +268,10 @@ class Game {
 
   get mainCharacter() {
     return this.baptiste
+  }
+
+  get monster() {
+    return this.findSprite('monster')
   }
 
   get zoneTriggerings() {
@@ -327,6 +338,10 @@ class Game {
           zones: zone,
           action: spikes.action,
         })),
+      {
+        zones: [this.monster.zone],
+        action: handleContact(this),
+      },
     ]
   }
 
@@ -423,7 +438,11 @@ class Game {
     const rightKey = this.findKey('Aller à droite', 'action')
     const hitKey = this.findKey('Hit', 'action')
 
-    if (!this.mainCharacter.fighting && !hitKey.pressed) {
+    if (
+      !this.mainCharacter.hitting &&
+      !hitKey.pressed &&
+      !this.mainCharacter.stop
+    ) {
       if (frontKey.pressed) {
         this.move(this.mainCharacter, { y: -this.mapSpeed })
       } else if (leftKey.pressed) {
@@ -441,6 +460,8 @@ class Game {
         this.mainCharacter.currentVariantIndex = 0
       }
     }
+
+    this.monster.lead()
 
     this.ctx.drawImage(
       this.map,
