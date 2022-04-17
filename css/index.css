@@ -144,3 +144,58 @@ body {
 .textDialog.hide {
   display: none;
 }
+
+.bubbleContainer{
+  overflow: hidden;
+  user-select: none;
+  cursor: crosshair;
+  width: 50%;
+  height: 70%;
+  background-color: #251319;
+  position: absolute;
+  bottom: 50%;
+  left: 25%;
+  z-index: 2;
+  
+
+  transform: translateY(50%);
+}
+
+.score{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.bubbleContainer h3{
+  font-size: 3rem;
+  text-align: center;
+  color: white;
+}
+
+.counterDisplay{
+  text-align: center;
+  font-size: 3rem;
+  color: white;
+}
+
+.bubble {
+  position: absolute;
+  border-radius: 300px;
+  object-fit: cover;
+  background: rgba(255, 166, 0, 0.612);
+  animation: anim 8s forwards;
+  filter: hue-rotate(0deg);
+  z-index: 99;
+
+}
+
+@keyframes anim {
+  to {
+    top: -250px;
+    left: var(--left);
+    opacity: 1;
+  }
+}
