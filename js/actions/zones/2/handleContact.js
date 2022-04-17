@@ -1,11 +1,16 @@
 import Action from '../../../classes/Action.js'
-import wait from '../../../utils/wait.js'
 
 export default game =>
-  new Action(async trigger => {
+  new Action(() => {
     if (game.monster.hitting && !game.mainCharacter.safe) {
+      new Audio('../../../../assets/audios/contact.mp3').play()
       if (game.mainCharacter.lives > 0) {
         game.mainCharacter.lives -= 0.5
+
+        if (game.mainCharacter.lives <= 0) {
+          console.log('you loose')
+        }
+
         game.mainCharacter.safe = true
         setTimeout(() => {
           game.mainCharacter.safe = false
@@ -14,6 +19,7 @@ export default game =>
         console.log('you loose')
       }
     } else if (game.mainCharacter.hitting && !game.monster.safe) {
+      new Audio('../../../../assets/audios/contact.mp3').play()
       if (game.monster.lives > 0) {
         game.monster.lives -= 1
         game.monster.safe = true

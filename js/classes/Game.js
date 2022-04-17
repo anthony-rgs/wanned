@@ -18,8 +18,8 @@ import Sprite from './Sprite.js'
 import Key from './Key.js'
 import Monster from './elements/sprites/monster.js'
 import handleContact from '../actions/zones/2/handleContact.js'
-import mapSpikes from "../../assets/resources/mapSpikes.js";
-import Spikes from "./elements/spikes.js";
+import mapSpikes from '../../assets/resources/mapSpikes.js'
+import Spikes from './elements/spikes.js'
 
 class Game {
   constructor(canvas) {
@@ -298,7 +298,7 @@ class Game {
 
     const activeSpikesZones = this.spikes
       .filter(spike => spike.state === 'open')
-      .map(spikes => ({zone: spikes.spikesZones, spikes}))
+      .map(spikes => ({ zone: spikes.spikesZones, spikes }))
 
     return [
       ...this._zoneTriggerings,
@@ -333,11 +333,10 @@ class Game {
           }),
         }))
         .flat(),
-      ...activeSpikesZones
-        .map(({spikes, zone}) => ({
-          zones: zone,
-          action: spikes.action,
-        })),
+      ...activeSpikesZones.map(({ spikes, zone }) => ({
+        zones: zone,
+        action: spikes.action,
+      })),
       {
         zones: [this.monster.zone],
         action: handleContact(this),

@@ -80,24 +80,28 @@ class Monster extends Sprite {
     this.lives = 3
     this.stop = true
     this.safe = false
+    this.interval = null
   }
 
   get zone() {
     return new Zone(this.x, this.y, this.width, this.height, 'monster')
   }
 
+  disableAttack() {
+    clearInterval(this.interval)
+  }
+
   handleAttack() {
-    if (!this.stop) {
-      setInterval(() => {
-        if (Math.random() < 0.5) {
-          this.hit()
-        }
-      }, 500)
-    }
+    this.interval = setInterval(() => {
+      if (Math.random() < 0.5) {
+        this.hit()
+      }
+    }, 500)
   }
 
   die() {
     this.stop = true
+    this.disableAttack()
   }
 
   lead() {

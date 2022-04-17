@@ -125,6 +125,8 @@ class Sprite extends Element {
   hit() {
     this.hitting = true
 
+    new Audio('../../assets/audios/sword.mp3').play()
+
     const interval = setInterval(() => {
       if (this.currentVariantIndex < this.fightVariantsLength - 1) {
         this.currentVariantIndex++
