@@ -30,8 +30,6 @@ class Spikes extends Element {
     this.actionActivated = true
     this.action = new Action(async () => {
       if (this.actionActivated) {
-        console.log('spikes action')
-
         game.mainCharacter.lives -= 1
 
         const mainCharacterSpeed = game.mainCharacter.speed

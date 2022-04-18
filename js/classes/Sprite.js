@@ -16,8 +16,8 @@ class Sprite extends Element {
     super(name, game, variants, w, h, initialPosition)
     this.moveVariantsLength = 4
     this.fightVariantsLength = 4
-    this.speed = speed
-    this.walkAnimationSpeed = 1
+    this._speed = speed
+    this._walkAnimationSpeed = 1
     this.frame = 0
     this.currentDirection = 'front'
     this._lives = 3
@@ -27,6 +27,23 @@ class Sprite extends Element {
     this.canHit = true
     this.stop = false
     this.isDead = false
+    this.run = false
+  }
+
+  get speed() {
+    return this._speed * (this.run ? 1.5 : 1)
+  }
+
+  set speed(value) {
+    this._speed = value
+  }
+
+  get walkAnimationSpeed() {
+    return this._walkAnimationSpeed * (this.run ? 2 : 1)
+  }
+
+  set walkAnimationSpeed(value) {
+    this._walkAnimationSpeed = value
   }
 
   get lives() {

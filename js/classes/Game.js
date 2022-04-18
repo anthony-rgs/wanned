@@ -101,7 +101,7 @@ class Game {
   triggerGameOver() {
     if (this.gameOver === null) {
       this.gameOver = new GameOver()
-      // TODO : create stop mouvements methode
+      // TODO : create stop movements method
     }
   }
 
@@ -504,13 +504,7 @@ class Game {
       }
     }
 
-    if (runKey.pressed) {
-      this.mainCharacter.speed = 5
-      this.mainCharacter.walkAnimationSpeed = 2
-    } else {
-      this.mainCharacter.speed = 3
-      this.mainCharacter.walkAnimationSpeed = 1
-    }
+    this.mainCharacter.run = runKey.pressed;
 
     if (hitKey.pressed && this.mainCharacter.canHit) {
       this.mainCharacter.hit()
