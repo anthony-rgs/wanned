@@ -60,7 +60,6 @@
   align-items: center;
   transition-property: border-color, background-color;
   transition-duration: 300ms;
-  cursor: pointer;
 }
 
 .key:hover,

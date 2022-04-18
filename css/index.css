@@ -9,6 +9,18 @@
   --background-color: #251319;
 }
 
+* {
+  cursor: none;
+}
+
+.cursor {
+  z-index: 999;
+  width: 20px;
+  height: 20px;
+  position: fixed;
+  pointer-events: none;
+}
+
 body {
   height: 100vh;
   overscroll-behavior: none;
@@ -138,10 +150,6 @@ body {
   text-decoration: underline;
 }
 
-.choicesElement li {
-  cursor: pointer;
-}
-
 .textDialog.hide {
   display: none;
 }
@@ -242,7 +250,7 @@ body {
   font-size: 2rem;
   font-family: 'Press Start 2P',
   cursive;
-  cursor: pointer;
+  /* cursor: pointer; */
   transition: transform 0.4s ease;
 }
 
