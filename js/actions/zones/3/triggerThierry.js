@@ -1,11 +1,18 @@
 import Action from '../../../classes/Action.js'
 import wait from '../../../utils/wait.js'
+import triggerBubbles from './triggerBubbles.js'
 
-export default game =>
-  new Action(async trigger => {
+export default (game) =>
+  new Action(async () => {
+    if (game.thierryTriggered) {
+      triggerBubbles(game)
+      return
+    } else {
+      game.thierryTriggered = true
+    }
+
     game.thierry.stopWalk()
     game.mainCharacter.stop = true
-
     await wait(1000)
 
     game.dialogBox.messages = [
@@ -32,16 +39,14 @@ export default game =>
         ],
       },
       {
-        text: "Le but : éclater le plus de bulles en 10s. Si tu en éclates plus que 40 tu passes, sinon c'est retour à la case départ. Compris ?",
+        text: 'Parfait, le but est simple : tu dois éclater 20 bulles pour passer. Compris ?',
         choices: [
           {
             text: "Let's go !",
             callback: () => {
               game.mainCharacter.stop = false
               game.dialogBox.hide()
-
-              trigger()
-              console.log('bubbles')
+              triggerBubbles(game)
             },
           },
         ],

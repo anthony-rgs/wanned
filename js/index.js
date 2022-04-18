@@ -1,7 +1,7 @@
 import Game from './classes/Game.js'
 import Story from './classes/Story.js'
 
-window.debug = true
+window.debug = false
 
 const story = new Story(
   [
@@ -26,7 +26,7 @@ const story = new Story(
       duration: 9000,
     },
   ],
-  3000,
+  3000
 )
 
 const storySection = document.querySelector('#story')
@@ -43,7 +43,7 @@ document.addEventListener('click', () => {
   story.skip()
 })
 
-document.addEventListener('keypress', event => {
+document.addEventListener('keypress', (event) => {
   if (event.key === ' ' || event.onclick) {
     story.skip()
   }
@@ -71,6 +71,6 @@ window.addEventListener('resize', () => {
 
 const keyInfo = document.querySelector('#key-info')
 
-keyInfo.addEventListener('set', e => {
+keyInfo.addEventListener('set', (e) => {
   keyInfo.innerText = e.detail.action || ''
 })

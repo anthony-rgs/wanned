@@ -1,62 +1,62 @@
 div.hud {
-    position: absolute;
-    top: 0;
-    left: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
 
-    z-index: 100;
+  z-index: 100;
 
-    width: fit-content;
-    height: fit-content;
+  width: fit-content;
+  height: fit-content;
 
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 
-    padding: 1rem;
+  padding: 1rem;
 }
 
 div.hud__lives-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
 
-    width: fit-content;
-    height: fit-content;
+  width: fit-content;
+  height: fit-content;
 }
 
 div.hud__lives-display {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 0.5rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
 
-    width: fit-content;
-    height: fit-content;
+  width: fit-content;
+  height: fit-content;
 }
 
 img.hud__head {
-    width: 48px;
-    height: auto;
+  width: 48px;
+  height: auto;
 }
 
 .lives-display-heart {
-    height: 32px;
-    width: 32px;
+  height: 32px;
+  width: 32px;
 
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .lives-display-heart--full {
-    background-image: url(../assets/images/hud/full-life.png);
+  background-image: url(../assets/images/hud/full-life.png);
 }
 
 .lives-display-heart--mid {
-    background-image: url(../assets/images/hud/mid-life.png);
+  background-image: url(../assets/images/hud/mid-life.png);
 }
 
 .lives-display-heart--empty {
-    background-image: url(../assets/images/hud/no-life.png);
+  background-image: url(../assets/images/hud/no-life.png);
 }
