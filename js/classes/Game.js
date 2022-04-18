@@ -37,7 +37,7 @@ class Game {
     this.mapHeight = 400
     this.mapSpeed = 5
     this.fps = 0
-    this.hasCollisions = false
+    this.hasCollisions = true
     this.startTime = Date.now()
     this.mapCollisions = []
     this.mapDoors = []
@@ -74,6 +74,11 @@ class Game {
         key: 'f',
         pressed: false,
         action: 'Hit',
+      },
+      {
+        key: 'Shift',
+        pressed: false,
+        action: 'Run',
       },
     ]
     this._elements = [
@@ -462,6 +467,7 @@ class Game {
     const leftKey = this.findKey('Aller à gauche', 'action')
     const rightKey = this.findKey('Aller à droite', 'action')
     const hitKey = this.findKey('Hit', 'action')
+    const runKey = this.findKey('Run', 'action')
 
     if (
       !this.mainCharacter.hitting &&
@@ -484,6 +490,14 @@ class Game {
       ) {
         this.mainCharacter.currentVariantIndex = 0
       }
+    }
+
+    if (runKey.pressed) {
+      this.mainCharacter.speed = 5
+      this.mainCharacter.walkAnimationSpeed = 2
+    } else {
+      this.mainCharacter.speed = 3
+      this.mainCharacter.walkAnimationSpeed = 1
     }
 
     if (hitKey.pressed && this.mainCharacter.canHit) {
