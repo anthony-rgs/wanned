@@ -11,7 +11,7 @@ class Sprite extends Element {
       x: 0,
       y: 0,
     },
-    speed = 4,
+    speed = 4
   ) {
     super(name, game, variants, w, h, initialPosition)
     this.moveVariantsLength = 4
@@ -26,6 +26,7 @@ class Sprite extends Element {
     this.hitDelay = 500
     this.canHit = true
     this.stop = false
+    this.isDead = false
   }
 
   get lives() {
@@ -54,7 +55,7 @@ class Sprite extends Element {
     const moveVariants = {}
 
     Object.entries(this.variants).forEach(([direction, variants]) => {
-      moveVariants[direction] = variants.filter(variant => {
+      moveVariants[direction] = variants.filter((variant) => {
         return variant.type === 'move'
       })
     })
@@ -66,7 +67,7 @@ class Sprite extends Element {
     const moveVariants = {}
 
     Object.entries(this.variants).forEach(([direction, variants]) => {
-      moveVariants[direction] = variants.filter(variant => {
+      moveVariants[direction] = variants.filter((variant) => {
         return variant.type === 'fight'
       })
     })
@@ -142,6 +143,12 @@ class Sprite extends Element {
         this.hitting = false
       }
     }, 100)
+  }
+
+  die() {
+    this.stop = true
+    this.isDead = true
+    this?.disableAttack()
   }
 
   preload() {
