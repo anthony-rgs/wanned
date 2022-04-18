@@ -73,7 +73,7 @@ class Baptiste extends Sprite {
       30,
       30,
       { x: 640, y: 992 },
-      10,
+      3,
     )
     this.safe = false
   }
