@@ -2,7 +2,7 @@ import Action from '../../../classes/Action.js'
 import wait from '../../../utils/wait.js'
 
 export default game =>
-  new Action(async trigger => {
+  new Action(trigger => {
     game.mainCharacter.stop = true
 
     game.dialogBox.messages = [
@@ -24,15 +24,12 @@ export default game =>
             text: 'Oui',
             callback: async () => {
               game.dialogBox.next()
-
               await wait(2000)
-
               game.dialogBox.hide()
-
               game.mainCharacter.stop = false
-
               game.monster.handleAttack()
               game.monster.stop = false
+              trigger()
             },
           },
         ],
