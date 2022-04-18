@@ -44,10 +44,12 @@ class Game {
     this.movableRocks = []
     this.spikes = []
     this.frame = 0
+    this.thierryTriggered = false
+    this.bubblesTriggered = false
     this.baptisteHud = new HUD(
       '../../assets/images/hud/baptiste-head.png',
       3,
-      document.querySelector('canvas'),
+      document.querySelector('canvas')
     )
     this.keys = [
       {
@@ -103,8 +105,10 @@ class Game {
     }
   }
 
-  gameBubble() {
+  makeBubbles() {
     this.bubble = new BubbleMaker()
+
+    return this.bubble
   }
 
   get elements() {
@@ -132,24 +136,24 @@ class Game {
       this.render()
     })
 
-    window.addEventListener('keydown', e => {
+    window.addEventListener('keydown', (e) => {
       const key = document.querySelector(`#${e.key}`)
 
       key?.classList.add('active')
 
-      this.keys.map(k => {
+      this.keys.map((k) => {
         if (k.key === e.key) {
           this.findKey(e.key, 'key').pressed = true
         }
       })
     })
 
-    window.addEventListener('keyup', e => {
+    window.addEventListener('keyup', (e) => {
       const key = document.querySelector(`#${e.key}`)
 
       key?.classList.remove('active')
 
-      this.keys.map(k => {
+      this.keys.map((k) => {
         if (k.key === e.key) {
           this.findKey(e.key, 'key').pressed = false
         }
@@ -168,13 +172,13 @@ class Game {
   }
 
   currentZone(element) {
-    return this.zoneTriggerings.find(zoneTriggering => {
+    return this.zoneTriggerings.find((zoneTriggering) => {
       return this.checkInZone(
         element.position.x,
         element.position.y,
         element.width,
         element.height,
-        zoneTriggering.zones,
+        zoneTriggering.zones
       )
     })
   }
@@ -183,8 +187,8 @@ class Game {
     if (this.mapCollisions) {
       return [
         ...this.mapCollisions,
-        ...this.elements.map(element => element.collisions).flat(),
-      ].filter(collision => collision)
+        ...this.elements.map((element) => element.collisions).flat(),
+      ].filter((collision) => collision)
     } else {
       return []
     }
@@ -198,7 +202,7 @@ class Game {
       this.map.height,
       this.mapWidth,
       this.mapHeight,
-      this.mapZoom,
+      this.mapZoom
     )
   }
 
@@ -212,7 +216,7 @@ class Game {
       this.mapWidth,
       this.mapHeight,
       this.mapZoom,
-      i => `door${i}`,
+      (i) => `door${i}`
     )
   }
 
@@ -224,20 +228,20 @@ class Game {
       this.map.height,
       this.mapWidth,
       this.mapHeight,
-      this.mapZoom,
+      this.mapZoom
     )
 
     this._zoneTriggerings = [
       {
-        zones: zones.filter(zone => zone.id === '01'),
+        zones: zones.filter((zone) => zone.id === '01'),
         action: triggerFabien(this),
       },
       {
-        zones: zones.filter(zone => zone.id === '02'),
+        zones: zones.filter((zone) => zone.id === '02'),
         action: triggerMonster(this),
       },
       {
-        zones: zones.filter(zone => zone.id === '03'),
+        zones: zones.filter((zone) => zone.id === '03'),
         action: triggerThierry(this),
       },
     ]
@@ -253,7 +257,7 @@ class Game {
       this.mapWidth,
       this.mapHeight,
       this.mapZoom,
-      i => `movableRock${i}`,
+      (i) => `movableRock${i}`
     )
   }
 
@@ -267,7 +271,7 @@ class Game {
       this.mapWidth,
       this.mapHeight,
       this.mapZoom,
-      i => `spike${i}`,
+      (i) => `spike${i}`
     )
   }
 
@@ -278,7 +282,7 @@ class Game {
   }
 
   findSprite(name) {
-    return this.elements.find(element => element.name === name)
+    return this.elements.find((element) => element.name === name)
   }
 
   get baptiste() {
@@ -297,6 +301,14 @@ class Game {
     return this.findSprite('door01')
   }
 
+  get door2() {
+    return this.findSprite('door02')
+  }
+
+  get door3() {
+    return this.findSprite('door03')
+  }
+
   get mainCharacter() {
     return this.baptiste
   }
@@ -307,9 +319,9 @@ class Game {
 
   get zoneTriggerings() {
     const activeMovableRocksZones = this.movableRocks
-      .map(rock =>
+      .map((rock) =>
         rock.movableZones
-          .filter(zone => {
+          .filter((zone) => {
             const zonePosition = zone.id.split('-')[1]
 
             return (
@@ -323,13 +335,13 @@ class Game {
                 zonePosition === 'right')
             )
           })
-          .map(zone => ({ zone, rock })),
+          .map((zone) => ({ zone, rock }))
       )
       .flat()
 
     const activeSpikesZones = this.spikes
-      .filter(spike => spike.state === 'open')
-      .map(spikes => ({ zone: spikes.spikesZones, spikes }))
+      .filter((spike) => spike.state === 'open')
+      .map((spikes) => ({ zone: spikes.spikesZones, spikes }))
 
     return [
       ...this._zoneTriggerings,
@@ -376,7 +388,7 @@ class Game {
   }
 
   findKey(key, type) {
-    return this.keys.find(k => k[type] === key)
+    return this.keys.find((k) => k[type] === key)
   }
 
   checkCollisions(element) {
@@ -384,17 +396,17 @@ class Game {
 
     return this.collisions
       .filter(
-        collision =>
-          collision.parent === null || element.id !== collision.parent?.id,
+        (collision) =>
+          collision.parent === null || element.id !== collision.parent?.id
       )
-      .some(collision =>
+      .some((collision) =>
         collision.collide(
           element.position.x,
           element.position.y,
           element.width,
           element.height,
-          element instanceof Sprite,
-        ),
+          element instanceof Sprite
+        )
       )
   }
 
@@ -448,7 +460,7 @@ class Game {
     const controlsContainer = document.querySelector('#controls-container')
     controlsContainer.appendChild(arrowKeysBottomWrapper)
 
-    this.keys.forEach(key => {
+    this.keys.forEach((key) => {
       if (key.key.includes('Arrow')) {
         if (key.key !== 'ArrowUp') {
           new Key(key, arrowKeysBottomWrapper)
@@ -511,10 +523,10 @@ class Game {
       -this.mainCharacter.x + this.canvas.width / 2,
       -this.mainCharacter.y + this.canvas.height / 2,
       this.mapWidth * this.mapZoom,
-      this.mapHeight * this.mapZoom,
+      this.mapHeight * this.mapZoom
     )
 
-    this.elements.forEach(element => {
+    this.elements.forEach((element) => {
       element.draw(
         this.ctx,
         element === this.mainCharacter
@@ -522,31 +534,31 @@ class Game {
           : element.x - this.mainCharacter.x + this.canvas.width / 2,
         element === this.mainCharacter
           ? this.canvas.height / 2
-          : element.y - this.mainCharacter.y + this.canvas.height / 2,
+          : element.y - this.mainCharacter.y + this.canvas.height / 2
       )
     })
     this.fpsCounter.draw(this.ctx, this.canvas.width - 40, 30)
 
     if (window.debug) {
       this.ctx.fillStyle = '#33d1d4aa'
-      this.collisions?.forEach(collision => {
+      this.collisions?.forEach((collision) => {
         this.ctx.fillRect(
           collision.startX - this.mainCharacter.x + this.canvas.width / 2,
           collision.startY - this.mainCharacter.y + this.canvas.height / 2,
           collision.endX - collision.startX,
-          collision.endY - collision.startY,
+          collision.endY - collision.startY
         )
       })
       this.ctx.fillStyle = 'rgba(212,51,51,0.67)'
       this.zoneTriggerings
-        ?.map(zoneTriggering => zoneTriggering.zones)
+        ?.map((zoneTriggering) => zoneTriggering.zones)
         .flat()
-        .forEach(zone => {
+        .forEach((zone) => {
           this.ctx.fillRect(
             zone.x - this.mainCharacter.x + this.canvas.width / 2,
             zone.y - this.mainCharacter.y + this.canvas.height / 2,
             zone.width,
-            zone.height,
+            zone.height
           )
         })
     }

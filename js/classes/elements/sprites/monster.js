@@ -7,7 +7,7 @@ class Monster extends Sprite {
       'monster',
       game,
       Object.fromEntries(
-        ['front', 'back', 'left', 'right'].map(direction => {
+        ['front', 'back', 'left', 'right'].map((direction) => {
           return [
             direction,
             [
@@ -69,12 +69,12 @@ class Monster extends Sprite {
               },
             ],
           ]
-        }),
+        })
       ),
       30,
       30,
       { x: 1200, y: 300 },
-      0.4,
+      0.4
     )
 
     this.lives = 3
@@ -97,11 +97,6 @@ class Monster extends Sprite {
         this.hit()
       }
     }, 500)
-  }
-
-  die() {
-    this.stop = true
-    this.disableAttack()
   }
 
   lead() {
