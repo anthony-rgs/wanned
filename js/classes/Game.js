@@ -21,6 +21,8 @@ import handleContact from "../actions/zones/2/handleContact.js";
 import mapSpikes from "../../assets/resources/mapSpikes.js";
 import Spikes from "./elements/spikes.js";
 import BubbleMaker from "./BubbleMaker.js";
+import GameOver from "./GameOver.js";
+import wait from "../utils/wait.js";
 
 class Game {
   constructor(canvas) {
@@ -78,8 +80,16 @@ class Game {
     this._lastZone = null;
     this._zoneTriggerings = [];
     this.bubble = null;
+    this.gameOver = null;
     this.init();
     this.displayKeys();
+  }
+
+  triggerGameOver() {
+    if (this.gameOver === null) {
+      this.gameOver = new GameOver();
+      // TODO : create stop mouvements methode
+    }
   }
 
   gameBubble() {
@@ -120,8 +130,8 @@ class Game {
         if (k.key === e.key) {
           this.findKey(e.key, "key").pressed = true;
         }
-      })
-    })
+      });
+    });
 
     window.addEventListener("keyup", (e) => {
       const key = document.querySelector(`#${e.key}`);
@@ -463,10 +473,10 @@ class Game {
     }
 
     if (hitKey.pressed && this.mainCharacter.canHit) {
-      this.mainCharacter.hit()
+      this.mainCharacter.hit();
     }
 
-    this.monster.lead()
+    this.monster.lead();
 
     this.ctx.drawImage(
       this.map,
@@ -520,6 +530,10 @@ class Game {
 
     this.baptisteHud.baseLives = this.baptiste.baseLives;
     this.baptisteHud.lives = this.baptiste.lives;
+
+    if (this.baptiste.lives <= 0) {
+      this.triggerGameOver();
+    }
 
     this.frame++;
     const time = Date.now();

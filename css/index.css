@@ -3,6 +3,7 @@
 @import url('./story.css');
 @import url('./hud.css');
 @import url('./keys.css');
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
 :root {
   --background-color: #251319;
@@ -199,3 +200,68 @@ body {
     opacity: 1;
   }
 }
+
+.game-over{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  height: 100vh;
+  width: 100vw;
+  z-index: 101;
+  background-color: rgba(0, 0, 0,0.65);
+  backdrop-filter: blur(4px);
+  animation: opacity 0.5s ease-out;
+}
+
+.game-over h2{
+  text-align: center;
+  color: red;
+  font-size: 6rem;
+  font-family: 'Press Start 2P',
+  cursive;
+}
+
+.button-container{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 100px;
+  gap: 30px;
+  width: 30%;
+  height: 30%;
+}
+
+.button-container button{
+  height: 40%;
+  color: white;
+  text-align: center;
+  border: 4px solid white;
+  font-size: 2rem;
+  font-family: 'Press Start 2P',
+  cursive;
+  cursor: pointer;
+  transition: transform 0.4s ease;
+}
+
+.button-container button:hover{
+  transform: scale(1.05);
+  color: #FDEA4F;
+  border: 4px solid #FDEA4F;
+}
+.button-container .quit:hover{
+  color: red;
+  border: 4px solid red;
+}
+
+@keyframes opacity {
+  from{
+    opacity: 0;
+  }
+  to{
+    opacity: 1;
+  }
+}
+
