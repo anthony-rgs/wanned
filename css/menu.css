@@ -1,0 +1,42 @@
+.menu {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    z-index: 102;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    font-family: 'Press Start 2P',
+    cursive;
+    color: white;
+    display: none;
+    
+}
+
+.menu .show {
+    display: block;
+}
+
+
+h1 {
+    font-size: 10rem;
+
+}
+.launch, .settings, .credits, .quit {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 400px;
+    height: 1rem;
+    background-color: white;
+    color: black;
+    margin: 2rem;
+padding: 2rem;
+}
+
+.launch:hover, .settings:hover, .credits:hover, .quit:hover {
+    transform: scale(1.05);
+}
