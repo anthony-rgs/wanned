@@ -31,7 +31,7 @@ class Sprite extends Element {
   }
 
   get speed() {
-    return this._speed * (this.run ? 1.5 : 1)
+    return this._speed * (this.run ? 1.5 : 1) / (this.game.fps === 0 ? 1 : this.game.fps / 60)
   }
 
   set speed(value) {
@@ -39,7 +39,7 @@ class Sprite extends Element {
   }
 
   get walkAnimationSpeed() {
-    return this._walkAnimationSpeed * (this.run ? 2 : 1)
+    return Math.round((this._walkAnimationSpeed * (this.run ? 1.5 : 1) / Math.max(this.game.fps / 60, 1)) * 2) / 2
   }
 
   set walkAnimationSpeed(value) {
