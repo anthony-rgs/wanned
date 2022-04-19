@@ -29,14 +29,18 @@ Dans le cadre d'un projet Front dans notre [école](https://www.hetic.net/), nou
 
 ### 4. Objectifs supplémentaires
 - Création de map et de 8 personnages (en pixel)
-- Collisions sur les bors de la map
+- Collisions sur les bords de la map
 - Landing page
 - Générique en début de jeu qui peut être skip et ne sera pas remontré si déjà vu
 - Page pour mort du joueur et victoire
 - Animations sur les personnages (coup d'épée et transformation)
 - Mini jeu de tir sur des bulles
 - Déplacement de rochers pour ouvrir le chemin
--...
+- Changement du curseur
+- Possibilité de courir avec jauge d'énergie
+- Possibilité de mettre un coup d'épée
+- Affichage de la touche pressée
+- Mise en ligne du RPG avec un nom de domaine
 
 <br>
 
