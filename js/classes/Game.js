@@ -367,6 +367,10 @@ class Game {
     return this.findSprite('door03')
   }
 
+  get door4() {
+    return this.findSprite('door04')
+  }
+
   get mainCharacter() {
     return this.baptiste
   }

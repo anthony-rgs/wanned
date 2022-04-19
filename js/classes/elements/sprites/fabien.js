@@ -3,13 +3,13 @@ import wait from '../../../utils/wait.js'
 
 class Fabien extends Sprite {
   constructor(game) {
-    const initialPosition = {x: 100, y: 1008}
+    const initialPosition = { x: 100, y: 1008 }
 
     super(
       'fabien',
       game,
       Object.fromEntries(
-        ['front', 'back', 'left', 'right'].map(direction => {
+        ['front', 'back', 'left', 'right'].map((direction) => {
           return [
             direction,
             [
@@ -43,12 +43,12 @@ class Fabien extends Sprite {
               },
             ],
           ]
-        }),
+        })
       ),
       30,
       30,
       initialPosition,
-      0.25,
+      0.25
     )
 
     this.stepCounter = 0
@@ -70,19 +70,19 @@ class Fabien extends Sprite {
       if (this.walking) {
         this.startWalk()
       }
-    }, 1000 / this.game.capFps * 2)
+    }, (1000 / this.game.capFps) * 2)
   }
 
   stopWalk() {
     clearTimeout(this.walkTimeout)
     this.walking = false
-    this.currentDirection = 'front'
+    this.currentDirection = 'back'
   }
 
   async _pullOverMovement() {
     if (!(86 - this.speed / 2 < this.x && this.x < 86 + this.speed / 2)) {
-      this.game.move(this, {x: -this.speed})
-      await wait(1000 / this.game.capFps * 2)
+      this.game.move(this, { x: -this.speed })
+      await wait((1000 / this.game.capFps) * 2)
       await this._pullOverMovement()
     } else {
       this.stopWalk()

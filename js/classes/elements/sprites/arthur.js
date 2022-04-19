@@ -76,11 +76,11 @@ class Arthur extends Sprite {
   stopWalk() {
     clearTimeout(this.walkTimeout)
     this.walking = false
-    this.currentDirection = 'front'
+    this.currentDirection = 'back'
   }
 
   async _pullOverMovement() {
-    if (!(86 - this.speed / 2 < this.x && this.x < 86 + this.speed / 2)) {
+    if (!(1860 - this.speed / 2 < this.x && this.x < 1860 + this.speed / 2)) {
       this.game.move(this, { x: -this.speed })
       await wait((1000 / this.game.capFps) * 2)
       await this._pullOverMovement()
