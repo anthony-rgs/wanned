@@ -21,7 +21,7 @@ body {
 }
 
 .cursor {
-  z-index: 999;
+  z-index: 99999;
   width: 20px;
   height: 20px;
   position: fixed;

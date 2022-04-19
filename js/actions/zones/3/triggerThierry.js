@@ -3,7 +3,7 @@ import wait from '../../../utils/wait.js'
 import triggerBubbles from './triggerBubbles.js'
 
 export default (game) =>
-  new Action(async () => {
+  new Action(() => {
     if (game.thierryTriggered) {
       triggerBubbles(game)
       return
@@ -13,7 +13,6 @@ export default (game) =>
 
     game.thierry.stopWalk()
     game.mainCharacter.stop = true
-    await wait(1000)
 
     game.dialogBox.messages = [
       {

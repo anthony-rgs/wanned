@@ -1,11 +1,11 @@
 import Sprite from '../../Sprite.js'
 
-class Thierry extends Sprite {
+class Victor extends Sprite {
   constructor(game) {
-    const initialPosition = { x: 1400, y: 650 }
+    const initialPosition = { x: 1970, y: 1040 }
 
     super(
-      'thierry',
+      'victor',
       game,
       Object.fromEntries(
         ['front', 'back', 'left', 'right'].map((direction) => {
@@ -15,28 +15,28 @@ class Thierry extends Sprite {
               {
                 type: 'move',
                 image:
-                  '../../assets/elements/sprites/thierry/' +
+                  '../../assets/elements/sprites/victor/' +
                   direction +
                   '/1.png',
               },
               {
                 type: 'move',
                 image:
-                  '../../assets/elements/sprites/thierry/' +
+                  '../../assets/elements/sprites/victor/' +
                   direction +
                   '/2.png',
               },
               {
                 type: 'move',
                 image:
-                  '../../assets/elements/sprites/thierry/' +
+                  '../../assets/elements/sprites/victor/' +
                   direction +
                   '/3.png',
               },
               {
                 type: 'move',
                 image:
-                  '../../assets/elements/sprites/thierry/' +
+                  '../../assets/elements/sprites/victor/' +
                   direction +
                   '/4.png',
               },
@@ -50,33 +50,19 @@ class Thierry extends Sprite {
       1
     )
 
-    this.stepCounter = 0
-    this.walking = true
-    this.startWalk()
+    setInterval(() => {
+      this.lookSomewhere()
+    }, 2000)
   }
 
-  startWalk() {
-    this.walkTimeout = setTimeout(() => {
-      this.game.move(this, {
-        y:
-          Math.floor(this.stepCounter / 100) % 2 === 0
-            ? this.speed
-            : -this.speed,
-      })
+  lookSomewhere() {
+    const directions = ['left', 'front', 'back']
 
-      this.stepCounter++
+    const randomDirection =
+      directions[Math.floor(Math.random() * directions.length)]
 
-      if (this.walking) {
-        this.startWalk()
-      }
-    }, (1000 / this.game.fps) * 2)
-  }
-
-  stopWalk() {
-    clearTimeout(this.walkTimeout)
-    this.walking = false
-    this.currentDirection = 'front'
+    this.currentDirection = randomDirection
   }
 }
 
-export default Thierry
+export default Victor

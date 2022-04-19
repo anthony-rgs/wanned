@@ -1,0 +1,38 @@
+import Action from '../../../classes/Action.js'
+import wait from '../../../utils/wait.js'
+
+export default (game) =>
+  new Action((trigger) => {
+    game.dialogBox.messages = [
+      {
+        text: 'Bonjour jeune homme, un petit remontant ?',
+        choices: [
+          {
+            text: 'Allez ! Pourquoi pas',
+            callback: async () => {
+              game.dialogBox.next()
+              if (game.mainCharacter.lives <= 2) {
+                game.mainCharacter.lives += 1
+              }
+
+              await wait(2000)
+
+              game.dialogBox.hide()
+              trigger()
+            },
+          },
+          {
+            text: 'Nan merci ça va',
+            callback: () => {
+              game.dialogBox.hide()
+            },
+          },
+        ],
+      },
+      {
+        text: 'Et voilà un peu de vie pour vous. Bonne continuation !',
+      },
+    ]
+
+    game.dialogBox.show()
+  }, false)

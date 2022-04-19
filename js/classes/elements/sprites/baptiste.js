@@ -6,7 +6,7 @@ class Baptiste extends Sprite {
       'baptiste',
       game,
       Object.fromEntries(
-        ['front', 'back', 'left', 'right'].map(direction => {
+        ['front', 'back', 'left', 'right'].map((direction) => {
           return [
             direction,
             [
@@ -68,12 +68,12 @@ class Baptiste extends Sprite {
               },
             ],
           ]
-        }),
+        })
       ),
       30,
       30,
       { x: 640, y: 992 },
-      3,
+      10
     )
     this.safe = false
   }
