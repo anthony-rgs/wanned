@@ -50,6 +50,7 @@ class Game {
     this.movableRocks = []
     this.spikes = []
     this.frame = 0
+    this.movementsEnabled = true
     this.thierryTriggered = false
     this.bubblesTriggered = false
     this.speedMeasure = 10
@@ -478,32 +479,42 @@ class Game {
     return false
   }
 
+  enableMovements() {
+    this.movementsEnabled = true
+  }
+
+  disableMovements() {
+    this.movementsEnabled = false
+  }
+
   move(element, movement, speed = element.speed) {
-    const {x, y} = element.position
+    if (element !== this.mainCharacter || this.movementsEnabled) {
+      const {x, y} = element.position
 
-    if (movement.x) {
-      if (movement.x < 0) {
-        element.position.x -= speed
-      } else {
-        element.position.x += speed
+      if (movement.x) {
+        if (movement.x < 0) {
+          element.position.x -= speed
+        } else {
+          element.position.x += speed
+        }
       }
-    }
 
-    if (movement.y) {
-      if (movement.y < 0) {
-        element.position.y -= speed
-      } else {
-        element.position.y += speed
+      if (movement.y) {
+        if (movement.y < 0) {
+          element.position.y -= speed
+        } else {
+          element.position.y += speed
+        }
       }
-    }
 
-    if (element.animate) {
-      element.animate(movement)
-    }
+      if (element.animate) {
+        element.animate(movement)
+      }
 
-    if (this.checkCollisions(element)) {
-      element.position.x = x
-      element.position.y = y
+      if (this.checkCollisions(element)) {
+        element.position.x = x
+        element.position.y = y
+      }
     }
   }
 
