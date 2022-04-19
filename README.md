@@ -28,7 +28,15 @@ Dans le cadre d'un projet Front dans notre [école](https://www.hetic.net/), nou
 
 
 ### 4. Objectifs supplémentaires
-- 
+- Création de map et de 8 personnages (en pixel)
+- Collisions sur les bors de la map
+- Landing page
+- Générique en début de jeu qui peut être skip et ne sera pas remontré si déjà vu
+- Page pour mort du joueur et victoire
+- Animations sur les personnages (coup d'épée et transformation)
+- Mini jeu de tir sur des bulles
+- Déplacement de rochers pour ouvrir le chemin
+-...
 
 <br>
 
@@ -43,5 +51,4 @@ Dans le cadre d'un projet Front dans notre [école](https://www.hetic.net/), nou
 ![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white)
 ![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white)
 ![GitHub](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)
-
-<br>
+![Adobe Photoshop](https://img.shields.io/badge/adobe%20photoshop-%2331A8FF.svg?style=for-the-badge&logo=adobe%20photoshop&logoColor=white)
