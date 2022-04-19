@@ -5,12 +5,14 @@ import Baptiste from './elements/sprites/baptiste.js'
 import Fabien from './elements/sprites/fabien.js'
 import Thierry from './elements/sprites/thierry.js'
 import Victor from './elements/sprites/victor.js'
+import Arthur from './elements/sprites/arthur.js'
 import HUD from './HUD.js'
 import TextDialog from './TextDialog.js'
 import triggerFabien from '../actions/zones/1/triggerFabien.js'
 import triggerMonster from '../actions/zones/2/triggerMonster.js'
 import triggerThierry from '../actions/zones/3/triggerThierry.js'
 import triggerVictor from '../actions/zones/4/triggerVictor.js'
+import triggerArthur from '../actions/zones/4/triggerArthur.js'
 import Door from './elements/door.js'
 import mapDoors from '../../assets/resources/mapDoors.js'
 import Zone from './Zone.js'
@@ -25,10 +27,10 @@ import handleContact from '../actions/zones/2/handleContact.js'
 import mapSpikes from '../../assets/resources/mapSpikes.js'
 import Spikes from './elements/spikes.js'
 import BubbleMaker from './BubbleMaker.js'
-import GameOver from './GameOver.js'
+import EndScreen from './EndScreen.js'
 import Menu from './Menu.js'
-import Key from "./elements/key.js";
-import mapKeys from "../../assets/resources/mapKeys.js";
+import Key from './elements/key.js'
+import mapKeys from '../../assets/resources/mapKeys.js'
 
 class Game {
   constructor(canvas) {
@@ -43,7 +45,7 @@ class Game {
     this.mapSpeed = 5
     this.fps = 0
     this.capFps = 120
-    this.hasCollisions = true
+    this.hasCollisions = false
     this.startTime = Date.now()
     this.mapCollisions = []
     this.mapDoors = []
@@ -104,19 +106,20 @@ class Game {
       new Monster(this),
       new Thierry(this),
       new Victor(this),
+      new Arthur(this),
     ]
     this.dialogBox = new TextDialog()
     this._lastZone = null
     this._zoneTriggerings = []
     this.bubbles = null
-    this.gameOver = null
+    this.endScreen = null
     this.init()
     this.displayKeys()
   }
 
   triggerGameOver() {
-    if (this.gameOver === null) {
-      this.gameOver = new GameOver()
+    if (this.endScreen === null) {
+      this.endScreen = new EndScreen('Game Over')
       // TODO : create stop movements method
     }
   }
@@ -158,7 +161,7 @@ class Game {
     })
 
     window.addEventListener('keydown', (e) => {
-      const key = document.querySelector(`#${e.key}`)
+      const key = document.querySelector(`[data-key="${e.key}"]`)
 
       key?.classList.add('active')
 
@@ -273,6 +276,10 @@ class Game {
         zones: zones.filter((zone) => zone.id === '04'),
         action: triggerVictor(this),
       },
+      {
+        zones: zones.filter((zone) => zone.id === '05'),
+        action: triggerArthur(this),
+      },
     ]
   }
 
@@ -344,6 +351,10 @@ class Game {
     return this.findSprite('victor')
   }
 
+  get arthur() {
+    return this.findSprite('arthur')
+  }
+
   get door1() {
     return this.findSprite('door01')
   }
@@ -354,6 +365,10 @@ class Game {
 
   get door3() {
     return this.findSprite('door03')
+  }
+
+  get door4() {
+    return this.findSprite('door04')
   }
 
   get mainCharacter() {
@@ -382,18 +397,18 @@ class Game {
                 zonePosition === 'right')
             )
           })
-          .map((zone) => ({zone, rock}))
+          .map((zone) => ({ zone, rock }))
       )
       .flat()
 
     const activeSpikesZones = this.spikes
       .filter((spike) => spike.state === 'open')
-      .map((spikes) => ({zone: spikes.spikesZones, spikes}))
+      .map((spikes) => ({ zone: spikes.spikesZones, spikes }))
 
     return [
       ...this._zoneTriggerings,
       ...activeMovableRocksZones
-        .map(({zone, rock}) => ({
+        .map(({ zone, rock }) => ({
           zones: [zone],
           action: new Action(() => {
             const zonePosition = zone.id.split('-')[1]
@@ -403,27 +418,27 @@ class Game {
               zonePosition === 'bottom' &&
               this.findKey('Avancer', 'action').pressed
             ) {
-              this.move(rock, {y: -speed}, speed)
+              this.move(rock, { y: -speed }, speed)
             } else if (
               zonePosition === 'top' &&
               this.findKey('Reculer', 'action').pressed
             ) {
-              this.move(rock, {y: speed}, speed)
+              this.move(rock, { y: speed }, speed)
             } else if (
               zonePosition === 'left' &&
               this.findKey('Aller à droite', 'action').pressed
             ) {
-              this.move(rock, {x: speed}, speed)
+              this.move(rock, { x: speed }, speed)
             } else if (
               zonePosition === 'right' &&
               this.findKey('Aller à gauche', 'action').pressed
             ) {
-              this.move(rock, {x: -speed}, speed)
+              this.move(rock, { x: -speed }, speed)
             }
           }),
         }))
         .flat(),
-      ...activeSpikesZones.map(({spikes, zone}) => ({
+      ...activeSpikesZones.map(({ spikes, zone }) => ({
         zones: zone,
         action: spikes.action,
       })),
@@ -431,13 +446,15 @@ class Game {
         zones: [this.monster.zone],
         action: handleContact(this),
       },
-      ...this.mapKeys.map((key) => ({
-        zones: key.zone,
-        action: new Action(() => {
-          this.mapKeys = this.mapKeys.filter((mapKey) => mapKey !== key)
-          this.mainCharacter.inventory.push(key)
-        }),
-      })).flat(),
+      ...this.mapKeys
+        .map((key) => ({
+          zones: key.zone,
+          action: new Action(() => {
+            this.mapKeys = this.mapKeys.filter((mapKey) => mapKey !== key)
+            this.mainCharacter.inventory.push(key)
+          }),
+        }))
+        .flat(),
     ]
   }
 
@@ -490,7 +507,7 @@ class Game {
 
   move(element, movement, speed = element.speed) {
     if (element !== this.mainCharacter || this.movementsEnabled) {
-      const {x, y} = element.position
+      const { x, y } = element.position
 
       if (movement.x) {
         if (movement.x < 0) {
@@ -559,13 +576,13 @@ class Game {
       !this.mainCharacter.stop
     ) {
       if (frontKey.pressed) {
-        this.move(this.mainCharacter, {y: -this.mapSpeed})
+        this.move(this.mainCharacter, { y: -this.mapSpeed })
       } else if (leftKey.pressed) {
-        this.move(this.mainCharacter, {x: -this.mapSpeed})
+        this.move(this.mainCharacter, { x: -this.mapSpeed })
       } else if (backKey.pressed) {
-        this.move(this.mainCharacter, {y: this.mapSpeed})
+        this.move(this.mainCharacter, { y: this.mapSpeed })
       } else if (rightKey.pressed) {
-        this.move(this.mainCharacter, {x: this.mapSpeed})
+        this.move(this.mainCharacter, { x: this.mapSpeed })
       } else if (
         !frontKey.pressed &&
         !backKey.pressed &&

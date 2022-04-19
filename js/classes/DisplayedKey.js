@@ -26,7 +26,7 @@ class DisplayedKey {
     )
   }
 
-  onClick(cb) {
+  onClick(cb = null) {
     this._clickAction = cb
   }
 
@@ -43,7 +43,7 @@ class DisplayedKey {
     window.addEventListener('mouseup', () => (this.key.pressed = false))
 
     key.addEventListener('click', () => {
-      this._clickAction()
+      this._clickAction?.()
     })
 
     if (this.parent) {

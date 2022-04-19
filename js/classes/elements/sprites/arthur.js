@@ -1,11 +1,12 @@
 import Sprite from '../../Sprite.js'
+import wait from '../../../utils/wait.js'
 
-class Thierry extends Sprite {
+class Arthur extends Sprite {
   constructor(game) {
-    const initialPosition = { x: 1400, y: 650 }
+    const initialPosition = { x: 1880, y: 830 }
 
     super(
-      'thierry',
+      'arthur',
       game,
       Object.fromEntries(
         ['front', 'back', 'left', 'right'].map((direction) => {
@@ -15,28 +16,28 @@ class Thierry extends Sprite {
               {
                 type: 'move',
                 image:
-                  '../../assets/elements/sprites/thierry/' +
+                  '../../assets/elements/sprites/arthur/' +
                   direction +
                   '/1.png',
               },
               {
                 type: 'move',
                 image:
-                  '../../assets/elements/sprites/thierry/' +
+                  '../../assets/elements/sprites/arthur/' +
                   direction +
                   '/2.png',
               },
               {
                 type: 'move',
                 image:
-                  '../../assets/elements/sprites/thierry/' +
+                  '../../assets/elements/sprites/arthur/' +
                   direction +
                   '/3.png',
               },
               {
                 type: 'move',
                 image:
-                  '../../assets/elements/sprites/thierry/' +
+                  '../../assets/elements/sprites/arthur/' +
                   direction +
                   '/4.png',
               },
@@ -47,7 +48,7 @@ class Thierry extends Sprite {
       30,
       30,
       initialPosition,
-      1
+      0.25
     )
 
     this.stepCounter = 0
@@ -56,29 +57,42 @@ class Thierry extends Sprite {
   }
 
   startWalk() {
-    this.walking = true
-
     this.walkTimeout = setTimeout(() => {
       this.game.move(this, {
-        y:
-          Math.floor(this.stepCounter / 100) % 2 === 0
+        x:
+          Math.floor(this.stepCounter / 48) % 2 === 0
             ? this.speed
             : -this.speed,
       })
 
-      this.stepCounter++
+      this.stepCounter += this.speed
 
       if (this.walking) {
         this.startWalk()
       }
-    }, (1000 / this.game.capFps) * 3)
+    }, (1000 / this.game.capFps) * 2)
   }
 
   stopWalk() {
     clearTimeout(this.walkTimeout)
     this.walking = false
-    this.currentDirection = 'front'
+    this.currentDirection = 'back'
+  }
+
+  async _pullOverMovement() {
+    if (!(1860 - this.speed / 2 < this.x && this.x < 1860 + this.speed / 2)) {
+      this.game.move(this, { x: -this.speed })
+      await wait((1000 / this.game.capFps) * 2)
+      await this._pullOverMovement()
+    } else {
+      this.stopWalk()
+    }
+  }
+
+  async pullOver() {
+    this.stopWalk()
+    await this._pullOverMovement()
   }
 }
 
-export default Thierry
+export default Arthur
