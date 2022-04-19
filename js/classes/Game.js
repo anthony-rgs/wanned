@@ -39,7 +39,8 @@ class Game {
     this.mapHeight = 400
     this.mapSpeed = 5
     this.fps = 0
-    this.hasCollisions = false
+    this.capFps = 120
+    this.hasCollisions = true
     this.startTime = Date.now()
     this.mapCollisions = []
     this.mapDoors = []
@@ -143,7 +144,10 @@ class Game {
       this.makeZoneTriggerings()
       this.makeMovableRocks()
       this.makeSpikes()
-      this.render()
+
+      setInterval(() => {
+        this.render()
+      }, 1000 / this.capFps)
     })
 
     window.addEventListener('keydown', (e) => {
@@ -577,7 +581,6 @@ class Game {
           : element.y - this.mainCharacter.y + this.canvas.height / 2
       )
     })
-    this.fpsCounter.draw(this.ctx, this.canvas.width - 40, 30)
 
     if (window.debug) {
       this.ctx.fillStyle = '#33d1d4aa'
@@ -625,8 +628,6 @@ class Game {
       this.frame = 0
       this.fpsCounter.text = this.fps
     }
-
-    window.requestAnimationFrame(() => this.render())
   }
 }
 

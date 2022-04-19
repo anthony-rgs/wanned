@@ -69,7 +69,7 @@ class Thierry extends Sprite {
       if (this.walking) {
         this.startWalk()
       }
-    }, (1000 / this.game.fps) * 2)
+    }, 1000 / this.game.capFps * 3)
   }
 
   stopWalk() {
