@@ -14,7 +14,7 @@ class BubbleMaker {
     this.bubble = null
 
     this.score.classList.add('score')
-    this.counterDisplay.classList.add('counterDisplay')
+    this.counterDisplay.classList.add('counter-display')
 
     setInterval(() => {
       const bubbles = document.querySelectorAll('.bubble')
@@ -41,7 +41,7 @@ class BubbleMaker {
   }
 
   bubbleContainerMaker() {
-    this.bubbleContainer.classList.add('bubbleContainer')
+    this.bubbleContainer.classList.add('bubbles-container')
 
     this.bubbleContainer.appendChild(this.score)
     this.score.innerHTML = `<h3>Score :</h3>`

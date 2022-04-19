@@ -3,13 +3,20 @@
 @import url('./story.css');
 @import url('./hud.css');
 @import url('./keys.css');
+@import url('./bubbles.css');
+@import url('./game-over.css');
+@import url('./text-dialog.css');
+@import url('./load-screen.css');
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
 :root {
   --background-color: #251319;
 }
 
-* {
+body {
+  height: 100vh;
+  overscroll-behavior: none;
+  font-family: 'Museo', sans-serif;
   cursor: none;
 }
 
@@ -19,12 +26,6 @@
   height: 20px;
   position: fixed;
   pointer-events: none;
-}
-
-body {
-  height: 100vh;
-  overscroll-behavior: none;
-  font-family: 'Museo', sans-serif;
 }
 
 #wanned {
@@ -91,185 +92,4 @@ body {
 
 #light.hidden {
   opacity: 0;
-}
-
-.textDialog {
-  display: flex;
-  flex-direction: column-reverse;
-  align-items: stretch;
-  justify-content: center;
-  gap: 10px;
-
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  z-index: 2;
-
-  transform: translateX(-50%);
-
-  width: 50%;
-  max-width: 70ch;
-
-  padding: 4px;
-  margin: auto 0 1rem;
-
-  user-select: none;
-}
-
-.textContent {
-  box-sizing: border-box;
-  background-color: white;
-  color: #251319;
-
-  padding: 40px;
-  border-radius: 15px;
-  box-shadow: inset 0 0 0 5px #fff, inset 0 0 0 7px #000;
-}
-
-.textDialog p {
-  margin: 0;
-  font-size: 1.5rem;
-}
-
-.choicesElement {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  align-self: flex-end;
-  align-items: flex-start;
-
-  padding: 20px;
-  border-radius: 10px;
-
-  background-color: white;
-  box-shadow: inset 0 0 0 5px #fff, inset 0 0 0 7px #000;
-}
-
-.choicesElement li:hover {
-  text-decoration: underline;
-}
-
-.textDialog.hide {
-  display: none;
-}
-
-.bubbleContainer {
-  overflow: hidden;
-  user-select: none;
-  cursor: crosshair;
-  width: 50%;
-  height: 70%;
-  background-color: #251319;
-  position: absolute;
-  bottom: 50%;
-  left: 25%;
-  z-index: 2;
-
-  transform: translateY(50%);
-}
-
-.score {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-  margin-top: 20px;
-}
-
-.bubbleContainer h3 {
-  font-size: 3rem;
-  text-align: center;
-  color: white;
-}
-
-.counterDisplay {
-  text-align: center;
-  font-size: 3rem;
-  color: white;
-}
-
-.bubble {
-  position: absolute;
-  border-radius: 300px;
-  object-fit: cover;
-  background: rgba(255, 166, 0, 0.612);
-  animation: anim 8s forwards;
-  filter: hue-rotate(0deg);
-  z-index: 99;
-}
-
-@keyframes anim {
-  to {
-    top: -250px;
-    left: var(--left);
-    opacity: 1;
-  }
-}
-
-.game-over {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  top: 0;
-  height: 100vh;
-  width: 100vw;
-  z-index: 101;
-  background-color: rgba(0, 0, 0, 0.65);
-  backdrop-filter: blur(4px);
-  animation: opacity 0.5s ease-out;
-}
-
-.game-over h2 {
-  text-align: center;
-  color: red;
-  font-size: 6rem;
-  font-family: 'Press Start 2P', cursive;
-}
-
-.button-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin-top: 100px;
-  gap: 30px;
-  width: 30%;
-  height: 30%;
-}
-
-.button-container button {
-  height: 40%;
-  color: white;
-  text-align: center;
-  border: 4px solid white;
-  font-size: 2rem;
-  font-family: 'Press Start 2P', cursive;
-  transition: transform 0.4s ease;
-}
-
-.button-container button:hover {
-  transform: scale(1.05);
-  color: #fdea4f;
-  border: 4px solid #fdea4f;
-}
-.button-container .quit:hover {
-  color: red;
-  border: 4px solid red;
-}
-
-@keyframes opacity {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes fade-bubbles-out {
-  to {
-    transform: translate3d(0, -100%, 0);
-    opacity: 0;
-  }
 }

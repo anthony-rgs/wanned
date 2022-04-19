@@ -1,7 +1,7 @@
 import Game from './classes/Game.js'
 import Story from './classes/Story.js'
 
-document.body.style.cursor = "cursor.png";
+document.body.style.cursor = '../cursor.png'
 
 window.debug = false
 
@@ -34,12 +34,12 @@ const story = new Story(
 const storySection = document.querySelector('#story')
 const fog = document.querySelector('#fog')
 const light = document.querySelector('#light')
-const cursor = document.querySelector('.cursor');
+const cursor = document.querySelector('.cursor')
 
-const moveCursor = (e)=> {
-  const mouseY = e.clientY;
-  const mouseX = e.clientX;
-  cursor.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`;
+const moveCursor = (e) => {
+  const mouseY = e.clientY
+  const mouseX = e.clientX
+  cursor.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`
 }
 
 window.addEventListener('mousemove', moveCursor)

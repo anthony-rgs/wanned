@@ -1,0 +1,59 @@
+.bubbles-container {
+  overflow: hidden;
+  user-select: none;
+  cursor: crosshair;
+  width: 50%;
+  height: 70%;
+  background-color: #251319;
+  position: absolute;
+  bottom: 50%;
+  left: 25%;
+  z-index: 2;
+
+  transform: translateY(50%);
+}
+
+.score {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.bubbles-container h3 {
+  font-size: 3rem;
+  text-align: center;
+  color: white;
+}
+
+.counter-display {
+  text-align: center;
+  font-size: 3rem;
+  color: white;
+}
+
+.bubble {
+  position: absolute;
+  border-radius: 300px;
+  object-fit: cover;
+  background: rgba(255, 166, 0, 0.612);
+  animation: bubble-moving-up 8s forwards;
+  filter: hue-rotate(0deg);
+  z-index: 99;
+}
+
+@keyframes bubble-moving-up {
+  to {
+    top: -250px;
+    left: var(--left);
+    opacity: 1;
+  }
+}
+
+@keyframes fade-bubbles-out {
+  to {
+    transform: translate3d(0, -100%, 0);
+    opacity: 0;
+  }
+}
