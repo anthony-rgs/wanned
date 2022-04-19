@@ -9,7 +9,7 @@ class Thierry extends Sprite {
       'thierry',
       game,
       Object.fromEntries(
-        ['front', 'back', 'left', 'right'].map(direction => {
+        ['front', 'back', 'left', 'right'].map((direction) => {
           return [
             direction,
             [
@@ -43,12 +43,12 @@ class Thierry extends Sprite {
               },
             ],
           ]
-        }),
+        })
       ),
       30,
       30,
       initialPosition,
-      2,
+      2
     )
 
     this.stepCounter = 0
