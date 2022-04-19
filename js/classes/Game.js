@@ -28,7 +28,6 @@ import mapSpikes from '../../assets/resources/mapSpikes.js'
 import Spikes from './elements/spikes.js'
 import BubbleMaker from './BubbleMaker.js'
 import EndScreen from './EndScreen.js'
-import Menu from './Menu.js'
 import Key from './elements/key.js'
 import mapKeys from '../../assets/resources/mapKeys.js'
 
@@ -53,6 +52,9 @@ class Game {
     this.movableRocks = []
     this.spikes = []
     this.frame = 0
+    this.ambianceSound = new Audio('../../assets/audios/ambiance.mp3')
+    this.fightSound = new Audio('../../assets/audios/fight.mp3')
+    this.soundVolume = 0.5
     this.movementsEnabled = true
     this.thierryTriggered = false
     this.bubblesTriggered = false
@@ -113,8 +115,6 @@ class Game {
     this._zoneTriggerings = []
     this.bubbles = null
     this.endScreen = null
-    this.init()
-    this.displayKeys()
   }
 
   triggerGameOver() {
@@ -141,6 +141,9 @@ class Game {
   }
 
   init() {
+    this.ambianceSound.volume = this.soundVolume
+    this.ambianceSound.play()
+    this.displayKeys()
     this.map = new Image()
     this.map.src = '../../assets/images/map.png'
 

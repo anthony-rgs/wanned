@@ -33,6 +33,8 @@ export default (game) =>
       if (game.monster.lives > 0 && !game.monster.isDead) {
         game.monster.lives -= 1
       } else {
+        game.fightSound.pause()
+        game.ambianceSound.play()
         game.monster.die()
         await wait(1000)
         game.door2.open()

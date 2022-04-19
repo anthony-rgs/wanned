@@ -71,13 +71,15 @@ const wanned = new Game(document.querySelector('#wanned'))
 window.g = wanned
 
 story.onEnd(() => {
-  wanned.draw()
   fog.classList.remove('hidden')
   light.classList.remove('hidden')
   storySection.classList.add('hidden')
   setTimeout(() => {
     const menu = new Menu()
     menu.create()
+    menu.onStartClicked(() => {
+      wanned.init()
+    })
     storySection.remove()
     localStorage.setItem('story-finish', true)
   }, 500)

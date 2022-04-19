@@ -1,9 +1,10 @@
 import Action from '../../../classes/Action.js'
 import wait from '../../../utils/wait.js'
 
-export default game =>
-  new Action(trigger => {
+export default (game) =>
+  new Action((trigger) => {
     game.mainCharacter.stop = true
+    game.ambianceSound.pause()
 
     game.dialogBox.messages = [
       {
@@ -25,6 +26,7 @@ export default game =>
             callback: async () => {
               game.dialogBox.next()
               await wait(2000)
+              game.fightSound.play()
               game.dialogBox.hide()
               game.mainCharacter.stop = false
               game.monster.handleAttack()
