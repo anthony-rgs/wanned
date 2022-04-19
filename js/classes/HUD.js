@@ -1,7 +1,10 @@
 class HUD {
-  constructor(headImgSrc, lives, previousSibling) {
+  constructor(headImgSrc, lives, speedMeasure, previousSibling) {
     this._lives = lives
     this._baseLives = this.lives
+
+    this._speedMeasure = speedMeasure
+    this._baseSpeedMeasure = this.speedMeasure
 
     this._hudContainer = document.createElement('div')
     this._hudContainer.classList.add('hud')
@@ -18,11 +21,25 @@ class HUD {
     this.livesDisplay.classList.add('hud__lives-display')
     this.livesContainer.appendChild(this.livesDisplay)
 
+    this.speedMeasureContainer = document.createElement('div')
+    this.speedMeasureContainer.classList.add('hud__speed-measure-container')
+
+    this.speedMeasureText = document.createElement('p')
+    this.speedMeasureText.classList.add('hud__speed-measure-text')
+    this.speedMeasureText.innerText = 'Vitesse'
+    this.speedMeasureContainer.appendChild(this.speedMeasureText)
+
+    this.speedMeasureDisplay = document.createElement('div')
+    this.speedMeasureDisplay.classList.add('hud__speed-measure-display')
+    this.speedMeasureContainer.appendChild(this.speedMeasureDisplay)
+
     this._hudContainer.appendChild(this.livesContainer)
+    this._hudContainer.appendChild(this.speedMeasureContainer)
 
     previousSibling.parentNode.insertBefore(this._hudContainer, previousSibling.nextSibling)
 
     this.updateLives()
+    this.updateSpeedMeasure()
   }
 
   get lives() {
@@ -32,6 +49,19 @@ class HUD {
   set lives(lives) {
     this._lives = lives
     this.updateLives()
+  }
+
+  get speedMeasure() {
+    return this._speedMeasure
+  }
+
+  set speedMeasure(speedMeasure) {
+    this._speedMeasure = speedMeasure
+    this.updateSpeedMeasure()
+  }
+
+  get speedMeasurePercentage() {
+    return this.speedMeasure / this._baseSpeedMeasure
   }
 
   get baseLives() {
@@ -49,6 +79,11 @@ class HUD {
       ${'<div class="lives-display-heart lives-display-heart--mid"></div>'.repeat(Math.ceil(this.lives % 1))}
       ${'<div class="lives-display-heart lives-display-heart--empty"></div>'.repeat(this.baseLives - Math.ceil(this.lives))}
     `
+  }
+
+  updateSpeedMeasure() {
+    // this.speedMeasureDisplay.style.width = `${this.speedMeasurePercentage * 100}%`
+    this.speedMeasureDisplay.style.flex = `${this.speedMeasurePercentage}`
   }
 }
 

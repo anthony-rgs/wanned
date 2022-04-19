@@ -1,5 +1,4 @@
 import Sprite from '../../Sprite.js'
-import wait from '../../../utils/wait.js'
 
 class Thierry extends Sprite {
   constructor(game) {
@@ -48,43 +47,35 @@ class Thierry extends Sprite {
       30,
       30,
       initialPosition,
-      2
+      1,
     )
 
     this.stepCounter = 0
+    this.walking = true
     this.startWalk()
   }
 
   startWalk() {
-    this.walkInterval = setInterval(() => {
+    this.walkTimeout = setTimeout(() => {
       this.game.move(this, {
         y:
-          Math.floor(this.stepCounter / 50) % 2 === 0
+          Math.floor(this.stepCounter / 256) % 2 === 0
             ? this.speed
             : -this.speed,
       })
+
       this.stepCounter++
-    }, 100)
+
+      if (this.walking) {
+        this.startWalk()
+      }
+    }, 1000 / this.game.fps * 2)
   }
 
   stopWalk() {
-    clearInterval(this.walkInterval)
+    clearTimeout(this.walkTimeout)
+    this.walking = false
     this.currentDirection = 'front'
-  }
-
-  async _pullOverMovement() {
-    if (!(86 - this.speed / 2 < this.x && this.x < 86 + this.speed / 2)) {
-      this.game.move(this, { x: -this.speed })
-      await wait(100)
-      await this._pullOverMovement()
-    } else {
-      this.stopWalk()
-    }
-  }
-
-  async pullOver() {
-    this.stopWalk()
-    await this._pullOverMovement()
   }
 }
 

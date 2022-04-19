@@ -9,8 +9,9 @@ div.hud {
   height: fit-content;
 
   display: flex;
-  flex-direction: row;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
 
   padding: 1rem;
 }
@@ -59,4 +60,27 @@ img.hud__head {
 
 .lives-display-heart--empty {
   background-image: url(../assets/images/hud/no-life.png);
+}
+
+.hud__speed-measure-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+
+  width: 100%;
+  height: fit-content;
+}
+
+.hud__speed-measure-text {
+  color: #fff;
+  user-select: none;
+  font-size: 0.8rem;
+}
+
+.hud__speed-measure-display {
+  height: 0.5rem;
+  border-radius: 0;
+  background-color: #0aa7e7;
 }

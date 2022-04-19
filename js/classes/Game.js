@@ -46,9 +46,11 @@ class Game {
     this.frame = 0
     this.thierryTriggered = false
     this.bubblesTriggered = false
+    this.speedMeasure = 10
     this.baptisteHud = new HUD(
       '../../assets/images/hud/baptiste-head.png',
       3,
+      10,
       document.querySelector('canvas')
     )
     this.keys = [
@@ -504,7 +506,21 @@ class Game {
       }
     }
 
-    this.mainCharacter.run = runKey.pressed;
+    if (runKey.pressed && this.speedMeasure > 0 && (
+      frontKey.pressed ||
+      backKey.pressed ||
+      leftKey.pressed ||
+      rightKey.pressed
+    )) {
+      this.mainCharacter.run = true
+      this.speedMeasure -= 0.05
+    } else {
+      this.mainCharacter.run = false
+
+      if (this.speedMeasure < 10) {
+        this.speedMeasure += 0.01
+      }
+    }
 
     if (hitKey.pressed && this.mainCharacter.canHit) {
       this.mainCharacter.hit()
@@ -564,6 +580,7 @@ class Game {
 
     this.baptisteHud.baseLives = this.baptiste.baseLives
     this.baptisteHud.lives = this.baptiste.lives
+    this.baptisteHud.speedMeasure = this.speedMeasure
 
     if (this.baptiste.lives <= 0) {
       this.triggerGameOver()
