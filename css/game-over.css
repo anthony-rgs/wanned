@@ -13,9 +13,15 @@
   animation: game-over-appearing 0.5s ease-out;
 }
 
-.game-over h2 {
-  text-align: center;
+.title.title-red {
   color: red;
+}
+.title.title-green {
+  color: green;
+}
+
+.title {
+  text-align: center;
   font-size: 6rem;
   font-family: 'Press Start 2P', cursive;
 }
@@ -31,6 +37,7 @@
 }
 
 .button-container button {
+  background-color: transparent;
   height: 40%;
   color: white;
   text-align: center;
@@ -38,6 +45,7 @@
   font-size: 2rem;
   font-family: 'Press Start 2P', cursive;
   transition: transform 0.4s ease;
+  padding: 0;
 }
 
 .button-container button:hover {
