@@ -19,7 +19,7 @@ class Sprite extends Element {
     this._speed = speed
     this.walkAnimationSpeed = 1
     this.frame = 0
-    this.currentDirection = 'front'
+    this.currentDirection = 'up'
     this._lives = 3
     this.baseLives = this.lives
     this.hitting = false
@@ -112,19 +112,19 @@ class Sprite extends Element {
       }
     } else if ('y' in movement) {
       if (movement.y < 0) {
-        this.front()
+        this.up()
       } else if (movement.y > 0) {
-        this.back()
+        this.down()
       }
     }
   }
 
-  front() {
-    this.currentDirection = 'front'
+  up() {
+    this.currentDirection = 'up'
   }
 
-  back() {
-    this.currentDirection = 'back'
+  down() {
+    this.currentDirection = 'down'
   }
 
   left() {

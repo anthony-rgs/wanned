@@ -30,6 +30,7 @@ import BubbleMaker from './BubbleMaker.js'
 import EndScreen from './EndScreen.js'
 import Key from './elements/key.js'
 import mapKeys from '../../assets/resources/mapKeys.js'
+import keyboardKeys from '../../assets/resources/keyboardKeys.js'
 
 class Game {
   constructor(canvas) {
@@ -38,70 +39,37 @@ class Game {
     this.canvas.height = window.innerHeight
     this.ctx = this.canvas.getContext('2d')
     this.map = null
+    this.bubbles = null
+    this.endScreen = null
     this.mapZoom = 3
     this.mapWidth = 700
     this.mapHeight = 400
     this.mapSpeed = 5
+    this.speedMeasure = 10
     this.fps = 0
+    this.frame = 0
     this.capFps = 120
-    this.hasCollisions = false
-    this.startTime = Date.now()
+    this.soundVolume = 0
     this.mapCollisions = []
     this.mapDoors = []
     this.mapKeys = []
     this.movableRocks = []
     this.spikes = []
-    this.frame = 0
+    this.keys = keyboardKeys
+    this.startTime = Date.now()
     this.ambianceSound = new Audio('../../assets/audios/ambiance.mp3')
     this.fightSound = new Audio('../../assets/audios/fight.mp3')
-    this.soundVolume = 0.5
+    this.hasCollisions = false
     this.movementsEnabled = true
     this.thierryTriggered = false
     this.bubblesTriggered = false
-    this.speedMeasure = 10
     this.baptisteHud = new HUD(
       '../../assets/images/hud/baptiste-head.png',
       3,
       10,
-      document.querySelector('canvas')
+      document.querySelector('#wanned')
     )
-    this.keys = [
-      {
-        key: 'ArrowUp',
-        pressed: false,
-        action: 'Avancer',
-      },
-      {
-        key: 'ArrowLeft',
-        pressed: false,
-        action: 'Aller à gauche',
-      },
-      {
-        key: 'ArrowDown',
-        pressed: false,
-        action: 'Reculer',
-      },
-      {
-        key: 'ArrowRight',
-        pressed: false,
-        action: 'Aller à droite',
-      },
-      {
-        key: 'f',
-        pressed: false,
-        action: 'Hit',
-      },
-      {
-        key: 'm',
-        pressed: false,
-        action: 'Fullscreen mode',
-      },
-      {
-        key: 'Shift',
-        pressed: false,
-        action: 'Run',
-      },
-    ]
+    this.dialogBox = new TextDialog()
     this._elements = [
       new Fabien(this),
       new Baptiste(this),
@@ -110,11 +78,8 @@ class Game {
       new Victor(this),
       new Arthur(this),
     ]
-    this.dialogBox = new TextDialog()
     this._lastZone = null
     this._zoneTriggerings = []
-    this.bubbles = null
-    this.endScreen = null
   }
 
   triggerGameOver() {
