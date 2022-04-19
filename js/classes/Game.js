@@ -5,12 +5,14 @@ import Baptiste from './elements/sprites/baptiste.js'
 import Fabien from './elements/sprites/fabien.js'
 import Thierry from './elements/sprites/thierry.js'
 import Victor from './elements/sprites/victor.js'
+import Arthur from './elements/sprites/arthur.js'
 import HUD from './HUD.js'
 import TextDialog from './TextDialog.js'
 import triggerFabien from '../actions/zones/1/triggerFabien.js'
 import triggerMonster from '../actions/zones/2/triggerMonster.js'
 import triggerThierry from '../actions/zones/3/triggerThierry.js'
 import triggerVictor from '../actions/zones/4/triggerVictor.js'
+import triggerArthur from '../actions/zones/4/triggerArthur.js'
 import Door from './elements/door.js'
 import mapDoors from '../../assets/resources/mapDoors.js'
 import Zone from './Zone.js'
@@ -40,7 +42,7 @@ class Game {
     this.mapSpeed = 5
     this.fps = 0
     this.capFps = 120
-    this.hasCollisions = true
+    this.hasCollisions = false
     this.startTime = Date.now()
     this.mapCollisions = []
     this.mapDoors = []
@@ -99,6 +101,7 @@ class Game {
       new Monster(this),
       new Thierry(this),
       new Victor(this),
+      new Arthur(this),
     ]
     this.dialogBox = new TextDialog()
     this._lastZone = null
@@ -151,7 +154,7 @@ class Game {
     })
 
     window.addEventListener('keydown', (e) => {
-      const key = document.querySelector(`#${e.key}`)
+      const key = document.querySelector(`[data-key="${e.key}"]`)
 
       key?.classList.add('active')
 
@@ -266,6 +269,10 @@ class Game {
         zones: zones.filter((zone) => zone.id === '04'),
         action: triggerVictor(this),
       },
+      {
+        zones: zones.filter((zone) => zone.id === '05'),
+        action: triggerArthur(this),
+      },
     ]
   }
 
@@ -321,6 +328,10 @@ class Game {
 
   get victor() {
     return this.findSprite('victor')
+  }
+
+  get arthur() {
+    return this.findSprite('arthur')
   }
 
   get door1() {

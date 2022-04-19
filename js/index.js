@@ -3,7 +3,7 @@ import Story from './classes/Story.js'
 
 document.body.style.cursor = '../cursor.png'
 
-window.debug = false
+window.debug = true
 
 const story = new Story(
   [
