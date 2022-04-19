@@ -26,6 +26,7 @@ import mapSpikes from '../../assets/resources/mapSpikes.js'
 import Spikes from './elements/spikes.js'
 import BubbleMaker from './BubbleMaker.js'
 import GameOver from './GameOver.js'
+import Menu from './Menu.js'
 import Key from "./elements/key.js";
 import mapKeys from "../../assets/resources/mapKeys.js";
 

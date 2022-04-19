@@ -1,5 +1,6 @@
 import Game from './classes/Game.js'
 import Story from './classes/Story.js'
+import Menu from './classes/Menu.js'
 
 document.body.style.cursor = '../cursor.png'
 
@@ -75,6 +76,8 @@ story.onEnd(() => {
   light.classList.remove('hidden')
   storySection.classList.add('hidden')
   setTimeout(() => {
+    const menu = new Menu()
+    menu.create()
     storySection.remove()
     localStorage.setItem('story-finish', true)
   }, 500)
