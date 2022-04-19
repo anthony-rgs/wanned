@@ -17,7 +17,7 @@ import MovableRock from './elements/movableRock.js'
 import mapMovableRocks from '../../assets/resources/mapMovableRocks.js'
 import Action from './Action.js'
 import Sprite from './Sprite.js'
-import Key from './Key.js'
+import DisplayedKey from './DisplayedKey.js'
 import Monster from './elements/sprites/monster.js'
 import handleContact from '../actions/zones/2/handleContact.js'
 import mapSpikes from '../../assets/resources/mapSpikes.js'
@@ -78,6 +78,11 @@ class Game {
         action: 'Hit',
       },
       {
+        key: 'm',
+        pressed: false,
+        action: 'Fullscreen mode',
+      },
+      {
         key: 'Shift',
         pressed: false,
         action: 'Run',
@@ -92,7 +97,7 @@ class Game {
     this.dialogBox = new TextDialog()
     this._lastZone = null
     this._zoneTriggerings = []
-    this.bubble = null
+    this.bubbles = null
     this.gameOver = null
     this.init()
     this.displayKeys()
@@ -106,9 +111,9 @@ class Game {
   }
 
   makeBubbles() {
-    this.bubble = new BubbleMaker()
+    this.bubbles = new BubbleMaker()
 
-    return this.bubble
+    return this.bubbles
   }
 
   get elements() {
@@ -141,6 +146,10 @@ class Game {
 
       key?.classList.add('active')
 
+      if (e.key === this.findKey('Fullscreen mode', 'action').key) {
+        document.body.requestFullscreen()
+      }
+
       this.keys.map((k) => {
         if (k.key === e.key) {
           this.findKey(e.key, 'key').pressed = true
@@ -149,7 +158,7 @@ class Game {
     })
 
     window.addEventListener('keyup', (e) => {
-      const key = document.querySelector(`#${e.key}`)
+      const key = document.querySelector(`[data-key="${e.key}"]`)
 
       key?.classList.remove('active')
 
@@ -463,12 +472,20 @@ class Game {
     this.keys.forEach((key) => {
       if (key.key.includes('Arrow')) {
         if (key.key !== 'ArrowUp') {
-          new Key(key, arrowKeysBottomWrapper)
+          new DisplayedKey(key, arrowKeysBottomWrapper)
         } else {
-          new Key(key)
+          new DisplayedKey(key)
         }
+      } else if (key.action === 'Fullscreen mode') {
+        new DisplayedKey(key).onClick(() =>
+          window.dispatchEvent(
+            new KeyboardEvent('keydown', {
+              key: this.findKey('Fullscreen mode', 'action').key,
+            })
+          )
+        )
       } else {
-        new Key(key)
+        new DisplayedKey(key)
       }
     })
   }
@@ -504,7 +521,7 @@ class Game {
       }
     }
 
-    this.mainCharacter.run = runKey.pressed;
+    this.mainCharacter.run = runKey.pressed
 
     if (hitKey.pressed && this.mainCharacter.canHit) {
       this.mainCharacter.hit()

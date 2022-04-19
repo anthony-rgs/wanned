@@ -1,8 +1,9 @@
-class Key {
+class DisplayedKey {
   constructor(key, parent) {
     this.key = key
     this.parent = parent
     this.timeout = null
+    this._clickAction = null
     this.init()
   }
 
@@ -21,21 +22,29 @@ class Key {
         detail: {
           action,
         },
-      }),
+      })
     )
+  }
+
+  onClick(cb) {
+    this._clickAction = cb
   }
 
   init() {
     const key = document.createElement('div')
     key.classList.add('key')
-    key.id = this.key.key
+    key.setAttribute('data-key', this.key.key)
 
     key.addEventListener('mouseenter', () =>
-      this.dispatchEvent(this.key.action),
+      this.dispatchEvent(this.key.action)
     )
     key.addEventListener('mouseleave', () => this.dispatchEvent(null))
     key.addEventListener('mousedown', () => (this.key.pressed = true))
     window.addEventListener('mouseup', () => (this.key.pressed = false))
+
+    key.addEventListener('click', () => {
+      this._clickAction()
+    })
 
     if (this.parent) {
       this.parent.appendChild(key)
@@ -91,4 +100,4 @@ class Key {
   }
 }
 
-export default Key
+export default DisplayedKey

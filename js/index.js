@@ -42,6 +42,10 @@ const moveCursor = (e) => {
   cursor.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`
 }
 
+window.addEventListener('load', () => {
+  document.querySelector('#load').style.display = 'none'
+})
+
 window.addEventListener('mousemove', moveCursor)
 
 story.disabled = localStorage.getItem('story-finish') !== null

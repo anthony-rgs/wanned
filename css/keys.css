@@ -95,6 +95,10 @@
   font-weight: bold;
 }
 
+[data-key='Shift'] {
+  width: calc(var(--control-size) * 2);
+}
+
 #controls-container div:last-child {
   display: flex;
   gap: var(--control-gap);
