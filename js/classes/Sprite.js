@@ -17,7 +17,7 @@ class Sprite extends Element {
     this.moveVariantsLength = 4
     this.fightVariantsLength = 4
     this._speed = speed
-    this._walkAnimationSpeed = 1
+    this.walkAnimationSpeed = 1
     this.frame = 0
     this.currentDirection = 'front'
     this._lives = 3
@@ -28,22 +28,15 @@ class Sprite extends Element {
     this.stop = false
     this.isDead = false
     this.run = false
+    this.inventory = []
   }
 
   get speed() {
-    return this._speed * (this.run ? 1.5 : 1) / (this.game.fps === 0 ? 1 : this.game.fps / 60)
+    return this._speed * (this.run ? 1.75 : 1)
   }
 
   set speed(value) {
     this._speed = value
-  }
-
-  get walkAnimationSpeed() {
-    return Math.round((this._walkAnimationSpeed * (this.run ? 1.5 : 1) / Math.max(this.game.fps / 60, 1)) * 2) / 2
-  }
-
-  set walkAnimationSpeed(value) {
-    this._walkAnimationSpeed = value
   }
 
   get lives() {

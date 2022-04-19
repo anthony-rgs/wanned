@@ -27,6 +27,8 @@ import Spikes from './elements/spikes.js'
 import BubbleMaker from './BubbleMaker.js'
 import GameOver from './GameOver.js'
 import Menu from './Menu.js'
+import Key from "./elements/key.js";
+import mapKeys from "../../assets/resources/mapKeys.js";
 
 class Game {
   constructor(canvas) {
@@ -40,13 +42,16 @@ class Game {
     this.mapHeight = 400
     this.mapSpeed = 5
     this.fps = 0
-    this.hasCollisions = false
+    this.capFps = 120
+    this.hasCollisions = true
     this.startTime = Date.now()
     this.mapCollisions = []
     this.mapDoors = []
+    this.mapKeys = []
     this.movableRocks = []
     this.spikes = []
     this.frame = 0
+    this.movementsEnabled = true
     this.thierryTriggered = false
     this.bubblesTriggered = false
     this.speedMeasure = 10
@@ -127,6 +132,7 @@ class Game {
       ...this.mapDoors,
       ...this.movableRocks,
       ...this.spikes,
+      ...this.mapKeys,
       ...this._elements.sort((a, b) => a.y - b.y),
     ]
   }
@@ -144,7 +150,11 @@ class Game {
       this.makeZoneTriggerings()
       this.makeMovableRocks()
       this.makeSpikes()
-      this.render()
+      this.makeKeys()
+
+      setInterval(() => {
+        this.render()
+      }, 1000 / this.capFps)
     })
 
     window.addEventListener('keydown', (e) => {
@@ -294,6 +304,20 @@ class Game {
     )
   }
 
+  makeKeys() {
+    this.mapKeys = Key.makeKeys(
+      this,
+      mapKeys,
+      16,
+      this.map.width,
+      this.map.height,
+      this.mapWidth,
+      this.mapHeight,
+      this.mapZoom,
+      (i) => `key${i}`
+    )
+  }
+
   updateCanvas() {
     this.canvas.width = window.innerWidth
     this.canvas.height = window.innerHeight
@@ -358,18 +382,18 @@ class Game {
                 zonePosition === 'right')
             )
           })
-          .map((zone) => ({ zone, rock }))
+          .map((zone) => ({zone, rock}))
       )
       .flat()
 
     const activeSpikesZones = this.spikes
       .filter((spike) => spike.state === 'open')
-      .map((spikes) => ({ zone: spikes.spikesZones, spikes }))
+      .map((spikes) => ({zone: spikes.spikesZones, spikes}))
 
     return [
       ...this._zoneTriggerings,
       ...activeMovableRocksZones
-        .map(({ zone, rock }) => ({
+        .map(({zone, rock}) => ({
           zones: [zone],
           action: new Action(() => {
             const zonePosition = zone.id.split('-')[1]
@@ -379,27 +403,27 @@ class Game {
               zonePosition === 'bottom' &&
               this.findKey('Avancer', 'action').pressed
             ) {
-              this.move(rock, { y: -speed }, speed)
+              this.move(rock, {y: -speed}, speed)
             } else if (
               zonePosition === 'top' &&
               this.findKey('Reculer', 'action').pressed
             ) {
-              this.move(rock, { y: speed }, speed)
+              this.move(rock, {y: speed}, speed)
             } else if (
               zonePosition === 'left' &&
               this.findKey('Aller à droite', 'action').pressed
             ) {
-              this.move(rock, { x: speed }, speed)
+              this.move(rock, {x: speed}, speed)
             } else if (
               zonePosition === 'right' &&
               this.findKey('Aller à gauche', 'action').pressed
             ) {
-              this.move(rock, { x: -speed }, speed)
+              this.move(rock, {x: -speed}, speed)
             }
           }),
         }))
         .flat(),
-      ...activeSpikesZones.map(({ spikes, zone }) => ({
+      ...activeSpikesZones.map(({spikes, zone}) => ({
         zones: zone,
         action: spikes.action,
       })),
@@ -407,6 +431,13 @@ class Game {
         zones: [this.monster.zone],
         action: handleContact(this),
       },
+      ...this.mapKeys.map((key) => ({
+        zones: key.zone,
+        action: new Action(() => {
+          this.mapKeys = this.mapKeys.filter((mapKey) => mapKey !== key)
+          this.mainCharacter.inventory.push(key)
+        }),
+      })).flat(),
     ]
   }
 
@@ -449,32 +480,42 @@ class Game {
     return false
   }
 
+  enableMovements() {
+    this.movementsEnabled = true
+  }
+
+  disableMovements() {
+    this.movementsEnabled = false
+  }
+
   move(element, movement, speed = element.speed) {
-    const { x, y } = element.position
+    if (element !== this.mainCharacter || this.movementsEnabled) {
+      const {x, y} = element.position
 
-    if (movement.x) {
-      if (movement.x < 0) {
-        element.position.x -= speed
-      } else {
-        element.position.x += speed
+      if (movement.x) {
+        if (movement.x < 0) {
+          element.position.x -= speed
+        } else {
+          element.position.x += speed
+        }
       }
-    }
 
-    if (movement.y) {
-      if (movement.y < 0) {
-        element.position.y -= speed
-      } else {
-        element.position.y += speed
+      if (movement.y) {
+        if (movement.y < 0) {
+          element.position.y -= speed
+        } else {
+          element.position.y += speed
+        }
       }
-    }
 
-    if (element.animate) {
-      element.animate(movement)
-    }
+      if (element.animate) {
+        element.animate(movement)
+      }
 
-    if (this.checkCollisions(element)) {
-      element.position.x = x
-      element.position.y = y
+      if (this.checkCollisions(element)) {
+        element.position.x = x
+        element.position.y = y
+      }
     }
   }
 
@@ -518,13 +559,13 @@ class Game {
       !this.mainCharacter.stop
     ) {
       if (frontKey.pressed) {
-        this.move(this.mainCharacter, { y: -this.mapSpeed })
+        this.move(this.mainCharacter, {y: -this.mapSpeed})
       } else if (leftKey.pressed) {
-        this.move(this.mainCharacter, { x: -this.mapSpeed })
+        this.move(this.mainCharacter, {x: -this.mapSpeed})
       } else if (backKey.pressed) {
-        this.move(this.mainCharacter, { y: this.mapSpeed })
+        this.move(this.mainCharacter, {y: this.mapSpeed})
       } else if (rightKey.pressed) {
-        this.move(this.mainCharacter, { x: this.mapSpeed })
+        this.move(this.mainCharacter, {x: this.mapSpeed})
       } else if (
         !frontKey.pressed &&
         !backKey.pressed &&
@@ -578,7 +619,6 @@ class Game {
           : element.y - this.mainCharacter.y + this.canvas.height / 2
       )
     })
-    this.fpsCounter.draw(this.ctx, this.canvas.width - 40, 30)
 
     if (window.debug) {
       this.ctx.fillStyle = '#33d1d4aa'
@@ -626,8 +666,6 @@ class Game {
       this.frame = 0
       this.fpsCounter.text = this.fps
     }
-
-    window.requestAnimationFrame(() => this.render())
   }
 }
 
