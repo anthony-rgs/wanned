@@ -28,6 +28,7 @@ class Sprite extends Element {
     this.stop = false
     this.isDead = false
     this.run = false
+    this.inventory = []
   }
 
   get speed() {

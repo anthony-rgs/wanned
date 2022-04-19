@@ -27,7 +27,10 @@ import handleContact from '../actions/zones/2/handleContact.js'
 import mapSpikes from '../../assets/resources/mapSpikes.js'
 import Spikes from './elements/spikes.js'
 import BubbleMaker from './BubbleMaker.js'
-import GameOver from './GameOver.js'
+import EndScreen from './EndScreen.js'
+import Menu from './Menu.js'
+import Key from './elements/key.js'
+import mapKeys from '../../assets/resources/mapKeys.js'
 
 class Game {
   constructor(canvas) {
@@ -46,9 +49,11 @@ class Game {
     this.startTime = Date.now()
     this.mapCollisions = []
     this.mapDoors = []
+    this.mapKeys = []
     this.movableRocks = []
     this.spikes = []
     this.frame = 0
+    this.movementsEnabled = true
     this.thierryTriggered = false
     this.bubblesTriggered = false
     this.speedMeasure = 10
@@ -107,14 +112,14 @@ class Game {
     this._lastZone = null
     this._zoneTriggerings = []
     this.bubbles = null
-    this.gameOver = null
+    this.endScreen = null
     this.init()
     this.displayKeys()
   }
 
   triggerGameOver() {
-    if (this.gameOver === null) {
-      this.gameOver = new GameOver()
+    if (this.endScreen === null) {
+      this.endScreen = new EndScreen('Game Over')
       // TODO : create stop movements method
     }
   }
@@ -130,6 +135,7 @@ class Game {
       ...this.mapDoors,
       ...this.movableRocks,
       ...this.spikes,
+      ...this.mapKeys,
       ...this._elements.sort((a, b) => a.y - b.y),
     ]
   }
@@ -147,6 +153,7 @@ class Game {
       this.makeZoneTriggerings()
       this.makeMovableRocks()
       this.makeSpikes()
+      this.makeKeys()
 
       setInterval(() => {
         this.render()
@@ -304,6 +311,20 @@ class Game {
     )
   }
 
+  makeKeys() {
+    this.mapKeys = Key.makeKeys(
+      this,
+      mapKeys,
+      16,
+      this.map.width,
+      this.map.height,
+      this.mapWidth,
+      this.mapHeight,
+      this.mapZoom,
+      (i) => `key${i}`
+    )
+  }
+
   updateCanvas() {
     this.canvas.width = window.innerWidth
     this.canvas.height = window.innerHeight
@@ -421,6 +442,15 @@ class Game {
         zones: [this.monster.zone],
         action: handleContact(this),
       },
+      ...this.mapKeys
+        .map((key) => ({
+          zones: key.zone,
+          action: new Action(() => {
+            this.mapKeys = this.mapKeys.filter((mapKey) => mapKey !== key)
+            this.mainCharacter.inventory.push(key)
+          }),
+        }))
+        .flat(),
     ]
   }
 
@@ -463,32 +493,42 @@ class Game {
     return false
   }
 
+  enableMovements() {
+    this.movementsEnabled = true
+  }
+
+  disableMovements() {
+    this.movementsEnabled = false
+  }
+
   move(element, movement, speed = element.speed) {
-    const { x, y } = element.position
+    if (element !== this.mainCharacter || this.movementsEnabled) {
+      const { x, y } = element.position
 
-    if (movement.x) {
-      if (movement.x < 0) {
-        element.position.x -= speed
-      } else {
-        element.position.x += speed
+      if (movement.x) {
+        if (movement.x < 0) {
+          element.position.x -= speed
+        } else {
+          element.position.x += speed
+        }
       }
-    }
 
-    if (movement.y) {
-      if (movement.y < 0) {
-        element.position.y -= speed
-      } else {
-        element.position.y += speed
+      if (movement.y) {
+        if (movement.y < 0) {
+          element.position.y -= speed
+        } else {
+          element.position.y += speed
+        }
       }
-    }
 
-    if (element.animate) {
-      element.animate(movement)
-    }
+      if (element.animate) {
+        element.animate(movement)
+      }
 
-    if (this.checkCollisions(element)) {
-      element.position.x = x
-      element.position.y = y
+      if (this.checkCollisions(element)) {
+        element.position.x = x
+        element.position.y = y
+      }
     }
   }
 
