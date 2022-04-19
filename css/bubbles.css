@@ -1,7 +1,6 @@
 .bubbles-container {
   overflow: hidden;
   user-select: none;
-  cursor: crosshair;
   width: 50%;
   height: 70%;
   background-color: #251319;
