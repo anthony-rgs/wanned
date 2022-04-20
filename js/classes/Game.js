@@ -31,7 +31,7 @@ import triggerArthur from '../actions/zones/4/triggerArthur.js'
 import triggerMap2 from '../actions/zones/6/triggerMap2.js'
 
 import keyboardKeys from '../../assets/resources/keyboardKeys.js'
-import maps from '../../assets/resources/maps.js';
+import maps from '../../assets/resources/maps.js'
 
 class Game {
   constructor(canvas) {
@@ -59,8 +59,14 @@ class Game {
 
     this.startTime = Date.now()
 
-    this.ambianceSound = new Sound('../../assets/audios/ambiance.mp3', this.soundVolume / 3)
-    this.fightSound = new Sound('../../assets/audios/fight.mp3', this.soundVolume / 3)
+    this.ambianceSound = new Sound(
+      '../../assets/audios/ambiance.mp3',
+      this.soundVolume / 3
+    )
+    this.fightSound = new Sound(
+      '../../assets/audios/fight.mp3',
+      this.soundVolume / 3
+    )
     this.rockSound = new Sound('../../assets/audios/rock.mp3', this.soundVolume)
 
     this.movementsEnabled = true
@@ -98,7 +104,13 @@ class Game {
   }
 
   get initialized() {
-    return this.mapDoors && this.movableRocks && this.spikes && this.mapKeys && this._elements
+    return (
+      this.mapDoors &&
+      this.movableRocks &&
+      this.spikes &&
+      this.mapKeys &&
+      this._elements
+    )
   }
 
   get currentMapIndex() {
@@ -466,6 +478,27 @@ class Game {
     return this.bubblesGame
   }
 
+  retry() {
+    this.bubblesGame = null
+    this.bubblesTriggered = false
+    this.endScreen = null
+    this.currentMapIndex = 0
+    this.speedMeasure = 10
+    this.movementsEnabled = true
+    this.thierryTriggered = false
+    this.startTime = Date.now()
+    this.dialogBox = new TextDialog()
+    this._lastZoneTriggered = null
+    this.elements.forEach((element) => {
+      if (element instanceof Sprite) {
+        element.inventory = []
+      }
+    })
+    this.baptiste.lives = 3
+    this.baptiste.position = { x: 640, y: 992 }
+    this.baptiste.currentDirection = 'up'
+  }
+
   updateCanvas() {
     this.canvas.width = window.innerWidth
     this.canvas.height = window.innerHeight
@@ -482,7 +515,7 @@ class Game {
 
   triggerGameOver() {
     if (this.endScreen === null) {
-      this.endScreen = new EndScreen('Game Over')
+      this.endScreen = new EndScreen('Game Over', this)
       this.disableMovements()
     }
   }

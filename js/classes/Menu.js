@@ -1,78 +1,59 @@
 class Menu {
   constructor() {
-    this.menu = null
-    this.title = null
-    this.launch = null
-    this.settings = null
-    this.credits = null
-    this.quit = null
+    this.menu = document.querySelector('.menu')
+
+    this.title = this.menu.querySelector('.menu h1')
+    this.menuButtons = this.menu.querySelector('.menu .menu-buttons')
+
+    this.launch = this.menuButtons.querySelector('.menu-button.launch')
+    this.credits = this.menuButtons.querySelector('.menu-button.credits')
+    this.quit = this.menuButtons.querySelector('.menu-button.quit')
+
+    this.confirm = document.querySelector('.confirm-container')
+    this.confirmButtons = this.confirm.querySelector('.confirm-buttons')
+    this.yesButton = this.confirmButtons.querySelector('.confirm-container .yes')
+    this.noButton = this.confirmButtons.querySelector('.confirm-container .no')
+
+    this.load = document.querySelector('#load')
+
     this.bgPositionStart = null
     this.bgPositionEnd = null
     this._onStartClicked = null
-    this.Load = document.querySelector('#load')
   }
 
   create() {
-    this.menu = document.querySelector('.menu')
-    this.menuOptions = document.querySelector('.menu-container')
-    this.title = document.querySelector('.title')
-    this.launch = document.querySelector('.launch')
-    this.credits = document.querySelector('.credits')
-    this.quit = document.querySelector('.quit')
     this.bgPositionStart = ''
     this.bgPositionEnd = ''
-    this.confirm = document.querySelector('.confirm-container')
-    this.yesButton = document.querySelector('.yes-yes')
-    this.noButton = document.querySelector('.no-no')
-    
+
     this.launch.addEventListener('click', this.hideMenu.bind(this))
     this.show()
   }
-  quitGame(){
-    this.menu = document.querySelector('.menu')
-    this.menuOptions = document.querySelector('.menu-container')
-    this.title = document.querySelector('.title')
-    this.launch = document.querySelector('.launch')
-    this.credits = document.querySelector('.credits')
-    this.quit = document.querySelector('.quit')
-    this.confirm = document.querySelector('.confirm-container')
-    this.yesButton = document.querySelector('.yes-yes')
-    this.noButton = document.querySelector('.no-no')
 
-
-    this.confirm.classList.add('show')
-    this.menuOptions.classList.add('hide')
-  }
-  quitButtonClicked(){
-    this.quit.addEventListener('click',this.quitGame)
+  quitGame() {
+    this.confirm.classList.remove('hide')
+    this.menuButtons.classList.add('hide')
   }
 
-leaveGame(){
-  window.close()
-}
-
-  yesButtonClicked(){
-    this.yesButton.addEventListener('click',this.leaveGame)
+  quitButtonClicked() {
+    this.quit.addEventListener('click', this.quitGame.bind(this))
   }
 
-cancelQuit(){
-  this.menu = document.querySelector('.menu')
-  this.menuOptions = document.querySelector('.menu-container')
-  this.title = document.querySelector('.title')
-  this.launch = document.querySelector('.launch')
-  this.credits = document.querySelector('.credits')
-  this.quit = document.querySelector('.quit')
-  this.confirm = document.querySelector('.confirm-container')
-  this.yesButton = document.querySelector('.yes-yes')
-  this.noButton = document.querySelector('.no-no')
+  leaveGame() {
+    window.close()
+  }
 
-  this.confirm.classList.remove('show')
-  this.menuOptions.classList.remove('hide')
-}
+  yesButtonClicked() {
+    this.yesButton.addEventListener('click', this.leaveGame.bind(this))
+  }
 
-noButtonClicked(){
-  this.noButton.addEventListener('click',this.cancelQuit)
-}
+  cancelQuit() {
+    this.confirm.classList.add('hide')
+    this.menuButtons.classList.remove('hide')
+  }
+
+  noButtonClicked() {
+    this.noButton.addEventListener('click', this.cancelQuit.bind(this))
+  }
 
   onStartClicked(cb) {
     this._onStartClicked = cb
@@ -80,7 +61,7 @@ noButtonClicked(){
 
   hideMenu() {
     this._onStartClicked()
-    this.menu.classList.remove('show')
+    this.menu.classList.add('hide')
   }
 
   show() {
@@ -91,8 +72,8 @@ noButtonClicked(){
       this.bgPositionStart =
         this.bgPositionEnd === ''
           ? `${Math.floor(Math.random() * window.innerWidth)}px ${Math.floor(
-              Math.random() * window.innerHeight
-            )}px`
+            Math.random() * window.innerHeight
+          )}px`
           : this.bgPositionEnd
       this.bgPositionEnd = `${Math.floor(
         Math.random() * window.innerWidth
@@ -102,7 +83,7 @@ noButtonClicked(){
         this.bgPositionStart
       )
       this.menu.style.setProperty('--menu-bg-position-end', this.bgPositionEnd)
-    }, parseFloat(getComputedStyle(this.menu).animationDuration.replace('s', '') * 1000))
+    }, parseFloat(getComputedStyle(this.menu).animationDuration.replace('s', '')) * 1000)
   }
 }
 
