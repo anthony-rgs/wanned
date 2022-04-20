@@ -4,6 +4,7 @@ import wait from '../../../utils/wait.js'
 export default (game) =>
   new Action(async (trigger) => {
     game.arthur.stopWalk()
+    game.disableMovements()
 
     // Easter egg
     const voice = new Audio('../../../../assets/audios/as-soon-as-we-get.mp3')
@@ -40,6 +41,7 @@ export default (game) =>
                 game.door4.open()
                 trigger()
                 game.dialogBox.hide()
+                game.enableMovements()
               }
             }
           ]
