@@ -15,24 +15,24 @@
       <div id="progress-bar"></div>
     </section>
 
-    <div class="menu show">
-      <div class="title"><h1>Wanned</h1></div>
-      <div class="menu-container">
-        <div class="launch"><button>Continuer</button></div>
-        <div class="credits"><button>Credits</button></div>
-        <div class="quit"><button>Quitter</button></div>
+    <div class="menu">
+      <h1>Wanned</h1>
+      <div class="menu-buttons">
+        <div class="menu-button launch"><button>Continuer</button></div>
+        <div class="menu-button credits"><button>Credits</button></div>
+        <div class="menu-button quit"><button>Quitter</button></div>
       </div>
 
-      <div class="confirm-container">
-        <p>Etes-vous sur de vouloir quitter</p>
-        <div class="confirm-button-container">
-          <button class="yes-yes">Oui</button>
-          <button class="no-no">Non</button>
+      <div class="confirm-container hide">
+        <p>Etes-vous sur de vouloir quitter ?</p>
+        <div class="confirm-buttons">
+          <button class="yes">Oui</button>
+          <button class="no">Non</button>
         </div>
       </div>
     </div>
     <div id="load"></div>
-    <div class="cursor"><img src="cursor.png" /></div>
+    <div class="cursor"><img src="cursor.png"  alt="cursor"/></div>
     <canvas id="wanned"></canvas>
     <div id="light" class="hidden"></div>
     <div id="fog" class="hidden"></div>

@@ -11,24 +11,24 @@ const story = new Story(
   [
     {
       text: 'Il était une fois dans un Pays lointain, très lointain, une Principauté appelé Quimbroisie.',
-      duration: 4000,
+      duration: 4000
     },
     {
       text: 'Dans cette principauté régnait en despote un affreux personnage aussi médisant qu’arrogant dont la méchanceté n’égalait que sa médiocrité.',
-      duration: 7000,
+      duration: 7000
     },
     {
       text: 'Il était si gros qu’assis sur son trône seul son énorme tête restait visible aux yeux de ses sujets. Le ténébreux ***.',
-      duration: 7000,
+      duration: 7000
     },
     {
       text: 'Les vassaux de sa cour n’étaient pas particulièrement enthousiaste à l’idée de devoir supporter ce petit chef de pacotille. À la tête de cette révolte, le valeureux Pépin-trois-pomme! Aussi appelé “Baptiste”.',
-      duration: 10000,
+      duration: 10000
     },
     {
       text: 'Soutenue par le sorcier de la cour adepte de magie noir, le valeureux Tisbron, Pépin-trois-pomme va se faufiler à l’intérieur du donjon de l’affreux *** afin de lui couper son énorme tête.',
-      duration: 9000,
-    },
+      duration: 9000
+    }
   ],
   3000
 )
@@ -75,8 +75,10 @@ story.onEnd(() => {
   fog.classList.remove('hidden')
   light.classList.remove('hidden')
   storySection.classList.add('hidden')
+
   setTimeout(() => {
     const menu = new Menu()
+
     menu.create()
     menu.quitButtonClicked()
     menu.yesButtonClicked()
@@ -84,14 +86,15 @@ story.onEnd(() => {
     menu.onStartClicked(() => {
       wanned.init()
     })
+
     storySection.remove()
-    localStorage.setItem('story-finish', true)
+    localStorage.setItem('story-finish', 'finished')
   }, 500)
 })
 
 window.addEventListener('resize', () => {
-  if(wanned.map){
-  wanned.updateCanvas()
+  if (wanned.map) {
+    wanned.updateCanvas()
   }
 })
 
