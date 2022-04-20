@@ -22,16 +22,16 @@ export default [
       {
         key: 'f',
         pressed: false,
-        action: 'Hit',
+        action: 'Frapper',
       },
       {
         key: 'm',
         pressed: false,
-        action: 'Fullscreen mode',
+        action: 'Mode plein écran',
       },
       {
         key: 'Shift',
         pressed: false,
-        action: 'Run',
+        action: 'Courrir',
       },
     ]

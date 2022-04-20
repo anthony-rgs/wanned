@@ -4,6 +4,7 @@ import wait from '../../../utils/wait.js'
 export default (game) =>
   new Action((trigger) => {
     game.mainCharacter.stop = true
+    game.mainCharacter.isWalking = false
     game.ambianceSound.pause()
 
     game.dialogBox.messages = [

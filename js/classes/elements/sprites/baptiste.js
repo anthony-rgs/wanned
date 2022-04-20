@@ -1,3 +1,4 @@
+import Sound from '../../Sound.js'
 import Sprite from '../../Sprite.js'
 
 class Baptiste extends Sprite {
@@ -73,10 +74,15 @@ class Baptiste extends Sprite {
       30,
       30,
       { x: 640, y: 992 },
-      // 1.25
-      10
+      1.25
+      // 5
     )
     this.safe = false
+    this.isWalking = false
+    this.walkingSound = new Sound(
+      '../../assets/audios/steps.mp3',
+      game.soundVolume
+    )
   }
 }
 

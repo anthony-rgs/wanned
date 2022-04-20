@@ -31,6 +31,7 @@ import EndScreen from './EndScreen.js'
 import Key from './elements/key.js'
 import mapKeys from '../../assets/resources/mapKeys.js'
 import keyboardKeys from '../../assets/resources/keyboardKeys.js'
+import Sound from '../classes/Sound.js'
 
 class Game {
   constructor(canvas) {
@@ -49,7 +50,7 @@ class Game {
     this.fps = 0
     this.frame = 0
     this.capFps = 120
-    this.soundVolume = 0
+    this.soundVolume = 0.3
     this.mapCollisions = []
     this.mapDoors = []
     this.mapKeys = []
@@ -57,9 +58,16 @@ class Game {
     this.spikes = []
     this.keys = keyboardKeys
     this.startTime = Date.now()
-    this.ambianceSound = new Audio('../../assets/audios/ambiance.mp3')
-    this.fightSound = new Audio('../../assets/audios/fight.mp3')
-    this.hasCollisions = false
+    this.ambianceSound = new Sound(
+      '../../assets/audios/ambiance.mp3',
+      this.soundVolume / 3
+    )
+    this.fightSound = new Sound(
+      '../../assets/audios/fight.mp3',
+      this.soundVolume / 3
+    )
+    this.rockSound = new Sound('../../assets/audios/rock.mp3', this.soundVolume)
+    this.hasCollisions = true
     this.movementsEnabled = true
     this.thierryTriggered = false
     this.bubblesTriggered = false
@@ -70,14 +78,7 @@ class Game {
       document.querySelector('#wanned')
     )
     this.dialogBox = new TextDialog()
-    this._elements = [
-      new Fabien(this),
-      new Baptiste(this),
-      new Monster(this),
-      new Thierry(this),
-      new Victor(this),
-      new Arthur(this),
-    ]
+    this._elements = null
     this._lastZone = null
     this._zoneTriggerings = []
   }
@@ -90,7 +91,7 @@ class Game {
   }
 
   makeBubbles() {
-    this.bubbles = new BubbleMaker()
+    this.bubbles = new BubbleMaker(this)
 
     return this.bubbles
   }
@@ -106,13 +107,18 @@ class Game {
   }
 
   init() {
-    this.ambianceSound.volume = this.soundVolume
-    this.ambianceSound.play()
     this.displayKeys()
     this.map = new Image()
     this.map.src = '../../assets/images/map.png'
-
     this.fpsCounter = new Text(this.fps, 'Museo', 16, 'white', 30, 30)
+    this._elements = [
+      new Fabien(this),
+      new Baptiste(this),
+      new Monster(this),
+      new Thierry(this),
+      new Victor(this),
+      new Arthur(this),
+    ]
 
     this.map.addEventListener('load', () => {
       this.ctx.drawImage(this.map, 0, 0)
@@ -133,7 +139,7 @@ class Game {
 
       key?.classList.add('active')
 
-      if (e.key === this.findKey('Fullscreen mode', 'action').key) {
+      if (e.key === this.fullScreenKey.key) {
         document.body.requestFullscreen()
       }
 
@@ -165,6 +171,8 @@ class Game {
         currentZone.action.trigger()
       }
     }, 100)
+
+    this.ambianceSound.play()
   }
 
   currentZone(element) {
@@ -339,6 +347,34 @@ class Game {
     return this.findSprite('door04')
   }
 
+  get upKey() {
+    return this.findKey('Avancer', 'action')
+  }
+
+  get downKey() {
+    return this.findKey('Reculer', 'action')
+  }
+
+  get leftKey() {
+    return this.findKey('Aller à gauche', 'action')
+  }
+
+  get rightKey() {
+    return this.findKey('Aller à droite', 'action')
+  }
+
+  get hitKey() {
+    return this.findKey('Frapper', 'action')
+  }
+
+  get fullScreenKey() {
+    return this.findKey('Mode plein écran', 'action')
+  }
+
+  get runKey() {
+    return this.findKey('Courrir', 'action')
+  }
+
   get mainCharacter() {
     return this.baptiste
   }
@@ -355,14 +391,10 @@ class Game {
             const zonePosition = zone.id.split('-')[1]
 
             return (
-              (this.findKey('Avancer', 'action').pressed &&
-                zonePosition === 'bottom') ||
-              (this.findKey('Reculer', 'action').pressed &&
-                zonePosition === 'top') ||
-              (this.findKey('Aller à droite', 'action').pressed &&
-                zonePosition === 'left') ||
-              (this.findKey('Aller à gauche', 'action').pressed &&
-                zonePosition === 'right')
+              (this.upKey.pressed && zonePosition === 'bottom') ||
+              (this.downKey.pressed && zonePosition === 'top') ||
+              (this.rightKey.pressed && zonePosition === 'left') ||
+              (this.leftKey.pressed && zonePosition === 'right')
             )
           })
           .map((zone) => ({ zone, rock }))
@@ -381,26 +413,15 @@ class Game {
           action: new Action(() => {
             const zonePosition = zone.id.split('-')[1]
             const speed = this.mainCharacter.speed / 2
+            this.rockSound.play()
 
-            if (
-              zonePosition === 'bottom' &&
-              this.findKey('Avancer', 'action').pressed
-            ) {
+            if (zonePosition === 'bottom' && this.upKey.pressed) {
               this.move(rock, { y: -speed }, speed)
-            } else if (
-              zonePosition === 'top' &&
-              this.findKey('Reculer', 'action').pressed
-            ) {
+            } else if (zonePosition === 'top' && this.downKey.pressed) {
               this.move(rock, { y: speed }, speed)
-            } else if (
-              zonePosition === 'left' &&
-              this.findKey('Aller à droite', 'action').pressed
-            ) {
+            } else if (zonePosition === 'left' && this.rightKey.pressed) {
               this.move(rock, { x: speed }, speed)
-            } else if (
-              zonePosition === 'right' &&
-              this.findKey('Aller à gauche', 'action').pressed
-            ) {
+            } else if (zonePosition === 'right' && this.leftKey.pressed) {
               this.move(rock, { x: -speed }, speed)
             }
           }),
@@ -418,6 +439,8 @@ class Game {
         .map((key) => ({
           zones: key.zone,
           action: new Action(() => {
+            new Sound('../../assets/audios/key.mp3', this.soundVolume).play()
+
             this.mapKeys = this.mapKeys.filter((mapKey) => mapKey !== key)
             this.mainCharacter.inventory.push(key)
           }),
@@ -494,6 +517,12 @@ class Game {
       }
 
       if (element.animate) {
+        if (this.mainCharacter.isWalking) {
+          this.mainCharacter.walkingSound.play()
+        } else {
+          this.mainCharacter.walkingSound.pause()
+        }
+
         element.animate(movement)
       }
 
@@ -516,11 +545,11 @@ class Game {
         } else {
           new DisplayedKey(key)
         }
-      } else if (key.action === 'Fullscreen mode') {
+      } else if (key.action === 'Mode plein écran') {
         new DisplayedKey(key).onClick(() =>
           window.dispatchEvent(
             new KeyboardEvent('keydown', {
-              key: this.findKey('Fullscreen mode', 'action').key,
+              key: this.fullScreenKey.key,
             })
           )
         )
@@ -531,43 +560,43 @@ class Game {
   }
 
   draw() {
-    const frontKey = this.findKey('Avancer', 'action')
-    const backKey = this.findKey('Reculer', 'action')
-    const leftKey = this.findKey('Aller à gauche', 'action')
-    const rightKey = this.findKey('Aller à droite', 'action')
-    const hitKey = this.findKey('Hit', 'action')
-    const runKey = this.findKey('Run', 'action')
-
     if (
       !this.mainCharacter.hitting &&
-      !hitKey.pressed &&
+      !this.hitKey.pressed &&
       !this.mainCharacter.stop
     ) {
-      if (frontKey.pressed) {
+      if (this.upKey.pressed) {
+        this.mainCharacter.isWalking = true
         this.move(this.mainCharacter, { y: -this.mapSpeed })
-      } else if (leftKey.pressed) {
+      } else if (this.leftKey.pressed) {
+        this.mainCharacter.isWalking = true
         this.move(this.mainCharacter, { x: -this.mapSpeed })
-      } else if (backKey.pressed) {
+      } else if (this.downKey.pressed) {
+        this.mainCharacter.isWalking = true
         this.move(this.mainCharacter, { y: this.mapSpeed })
-      } else if (rightKey.pressed) {
+      } else if (this.rightKey.pressed) {
+        this.mainCharacter.isWalking = true
         this.move(this.mainCharacter, { x: this.mapSpeed })
       } else if (
-        !frontKey.pressed &&
-        !backKey.pressed &&
-        !leftKey.pressed &&
-        !rightKey.pressed
+        !this.upKey.pressed &&
+        !this.downKey.pressed &&
+        !this.leftKey.pressed &&
+        !this.rightKey.pressed
       ) {
         this.mainCharacter.currentVariantIndex = 0
+        this.mainCharacter.isWalking = false
+        this.rockSound.pause()
+        this.rockSound.reset()
       }
     }
 
     if (
-      runKey.pressed &&
+      this.runKey.pressed &&
       this.speedMeasure > 0 &&
-      (frontKey.pressed ||
-        backKey.pressed ||
-        leftKey.pressed ||
-        rightKey.pressed)
+      (this.upKey.pressed ||
+        this.downKey.pressed ||
+        this.leftKey.pressed ||
+        this.rightKey.pressed)
     ) {
       this.mainCharacter.run = true
       this.speedMeasure -= 0.05
@@ -579,7 +608,7 @@ class Game {
       }
     }
 
-    if (hitKey.pressed && this.mainCharacter.canHit) {
+    if (this.hitKey.pressed && this.mainCharacter.canHit) {
       this.mainCharacter.hit()
     }
 

@@ -1,4 +1,5 @@
 import Element from './Element.js'
+import Sound from './Sound.js'
 
 class Sprite extends Element {
   constructor(
@@ -96,7 +97,10 @@ class Sprite extends Element {
   animate(movement) {
     this.frame++
 
-    if (this.frame % (10 / this.walkAnimationSpeed) === 0) {
+    if (
+      (this.frame / (this.run ? 1.3 : 1.7)) % (10 / this.walkAnimationSpeed) ===
+      0
+    ) {
       if (this.currentVariantIndex < this.moveVariantsLength - 1) {
         this.currentVariantIndex++
       } else {
@@ -142,7 +146,7 @@ class Sprite extends Element {
       this.canHit = true
     }, this.hitDelay)
 
-    new Audio('../../assets/audios/sword.mp3').play()
+    new Sound('../../assets/audios/sword.mp3', this.game.soundVolume).play()
 
     const interval = setInterval(() => {
       if (this.currentVariantIndex < this.fightVariantsLength - 1) {
