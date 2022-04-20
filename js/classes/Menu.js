@@ -14,17 +14,65 @@ class Menu {
 
   create() {
     this.menu = document.querySelector('.menu')
+    this.menuOptions = document.querySelector('.menu-container')
     this.title = document.querySelector('.title')
     this.launch = document.querySelector('.launch')
-    this.settings = document.querySelector('.settings')
     this.credits = document.querySelector('.credits')
     this.quit = document.querySelector('.quit')
     this.bgPositionStart = ''
     this.bgPositionEnd = ''
-
+    this.confirm = document.querySelector('.confirm-container')
+    this.yesButton = document.querySelector('.yes-yes')
+    this.noButton = document.querySelector('.no-no')
+    
     this.launch.addEventListener('click', this.hideMenu.bind(this))
     this.show()
   }
+  quitGame(){
+    this.menu = document.querySelector('.menu')
+    this.menuOptions = document.querySelector('.menu-container')
+    this.title = document.querySelector('.title')
+    this.launch = document.querySelector('.launch')
+    this.credits = document.querySelector('.credits')
+    this.quit = document.querySelector('.quit')
+    this.confirm = document.querySelector('.confirm-container')
+    this.yesButton = document.querySelector('.yes-yes')
+    this.noButton = document.querySelector('.no-no')
+
+
+    this.confirm.classList.add('show')
+    this.menuOptions.classList.add('hide')
+  }
+  quitButtonClicked(){
+    this.quit.addEventListener('click',this.quitGame)
+  }
+
+leaveGame(){
+  window.close()
+}
+
+  yesButtonClicked(){
+    this.yesButton.addEventListener('click',this.leaveGame)
+  }
+
+cancelQuit(){
+  this.menu = document.querySelector('.menu')
+  this.menuOptions = document.querySelector('.menu-container')
+  this.title = document.querySelector('.title')
+  this.launch = document.querySelector('.launch')
+  this.credits = document.querySelector('.credits')
+  this.quit = document.querySelector('.quit')
+  this.confirm = document.querySelector('.confirm-container')
+  this.yesButton = document.querySelector('.yes-yes')
+  this.noButton = document.querySelector('.no-no')
+
+  this.confirm.classList.remove('show')
+  this.menuOptions.classList.remove('hide')
+}
+
+noButtonClicked(){
+  this.noButton.addEventListener('click',this.cancelQuit)
+}
 
   onStartClicked(cb) {
     this._onStartClicked = cb
