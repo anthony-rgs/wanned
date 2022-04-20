@@ -21,13 +21,12 @@ class EndScreen {
     this.buttonContainer = document.createElement('div')
     this.retryButton = document.createElement('button')
     this.quitButton = document.createElement('button')
-    this.title = document.createElement('h2')
+    this.title = document.createElement('h1')
 
-    this.gameOverScreen.classList.add('game-over')
-    this.buttonContainer.classList.add('button-container')
-    this.retryButton.classList.add('retry')
-    this.quitButton.classList.add('quit')
-    this.title.classList.add('title-end-screen')
+    this.gameOverScreen.classList.add('game-over', 'screen-choices')
+    this.buttonContainer.classList.add('button-container', 'choices-buttons')
+    this.retryButton.classList.add('retry', 'choice-button')
+    this.quitButton.classList.add('quit', 'choice-button')
 
     this.title.textContent = this.titleEndScreen
     this.title.classList.add(`title-${this.color}`)
