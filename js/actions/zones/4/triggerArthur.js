@@ -14,11 +14,14 @@ export default (game) =>
       e.key === 'p' && voice.play()
     })
 
-    if (game.mainCharacter.inventory.find((object) => object.name === 'key01') === undefined) {
+    if (
+      game.mainCharacter.inventory.find((object) => object.name === 'key01') ===
+      undefined
+    ) {
       game.dialogBox.messages = [
         {
-          text: 'Salut ! On dirait que tu n\'a pas la clé pour ouvrir la porte. Je ne l\'ai pas trouvée non plus...'
-        }
+          text: "Salut ! On dirait que tu n'a pas la clé pour ouvrir la porte. Je ne l'ai pas trouvée non plus...",
+        },
       ]
 
       game.dialogBox.show()
@@ -26,13 +29,14 @@ export default (game) =>
       game.dialogBox.next()
       game.arthur.walking = true
       game.arthur.startWalk()
+      game.enableMovements()
     } else {
       game.dialogBox.messages = [
         {
-          text: 'Bonjour, vous voici à l\'étape finale. Vous devez battre le maître Tisbron !',
+          text: "Bonjour, vous voici à l'étape finale. Vous devez battre le maître Tisbron !",
           choices: [
             {
-              text: 'Let\'s go !',
+              text: "Let's go !",
               callback: async () => {
                 game.dialogBox.next()
                 await wait(1000)
@@ -42,13 +46,13 @@ export default (game) =>
                 trigger()
                 game.dialogBox.hide()
                 game.enableMovements()
-              }
-            }
-          ]
+              },
+            },
+          ],
         },
         {
-          text: 'Bonne chance camarade !'
-        }
+          text: 'Bonne chance camarade !',
+        },
       ]
 
       game.dialogBox.show()
