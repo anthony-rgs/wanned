@@ -3,6 +3,8 @@ import wait from '../../../utils/wait.js'
 
 export default (game) =>
   new Action((trigger) => {
+    game.disableMovements()
+
     game.dialogBox.messages = [
       {
         text: 'Bonjour jeune homme, un petit remontant ?',
@@ -18,6 +20,7 @@ export default (game) =>
               await wait(2000)
 
               game.dialogBox.hide()
+              game.enableMovements()
               trigger()
             },
           },
@@ -25,6 +28,7 @@ export default (game) =>
             text: 'Nan merci ça va',
             callback: () => {
               game.dialogBox.hide()
+              game.enableMovements()
             },
           },
         ],

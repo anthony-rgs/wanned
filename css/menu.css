@@ -1,115 +1,137 @@
 :root {
-    --menu-bg-position-start:0;
-    --menu-bg-position-end:100;
-    
-}
-* {
-    font-family: 'Press Start 2P', cursive;
-    text-transform: uppercase;
-}
-.menu {
-    position: absolute;
-    width: 100vw;
-    height: 100vh;
-    z-index: 102;
-    font-family: 'Press Start 2P',cursive;
-    color: white;
-    visibility: hidden;
-    pointer-events: none;
-    display: flex;
-    justify-content: center;
-    align-items:flex-end;
+  --menu-bg-position-start: 0;
+  --menu-bg-position-end: 100;
 
-    opacity: 0;
-    transition: opacity 0.5s ease;
-
-}  
-
-.menu.show {
-    opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
-    background-image: url('../assets/images/anim_background.png');
-    image-rendering: pixelated;
-    background-size: 200%;
-   
-    animation: bg-animation 5s infinite;
-
+  --button-hover-color: #fdea4f;
 }
 
 @keyframes bg-animation {
-    0% {background-position: var(--menu-bg-position-start)}
-    100% {background-position: var(--menu-bg-position-end)}
+  0% {
+    background-position: var(--menu-bg-position-start)
+  }
+  100% {
+    background-position: var(--menu-bg-position-end)
+  }
 }
 
-.title {
-    position: fixed;
-    top:5%;
-    font-size: 10rem;
-    margin: 3rem;
+.menu {
+  position: absolute;
+  z-index: 102;
 
+  width: 100%;
+  height: 100%;
+
+  color: white;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+
+  transition: opacity 0.5s ease;
+
+  image-rendering: pixelated;
+  background-size: 200%;
+  background-image: url('../assets/images/anim_background.png');
+
+  animation: bg-animation 5s infinite;
 }
 
-.menu-container {
-    margin: 8rem;
+.menu.hide {
+  pointer-events: none;
+  visibility: hidden;
+  opacity: 0;
 }
 
-.menu-container.hide{
-display: none;
+.menu h1 {
+  padding: 3rem;
+  font-size: 10rem;
 }
 
-.launch, .settings, .credits, .quit {
-    background-color: transparent;
-    height: 7rem;
-    color: white;
-    border: 4px solid white;
-    font-size: 2rem;
-    transition: transform 0.4s ease;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 400px;
-    margin: 2rem;
-    padding: 2rem;
+.menu button {
+  font-size: 2rem;
 }
+
+.menu-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  gap: 2rem;
+}
+
+.menu-buttons.hide {
+  display: none;
+}
+
+.menu-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: transparent;
+
+  color: white;
+  border: 4px solid white;
+
+  transition: transform 0.4s ease;
+
+  width: fit-content;
+  min-width: 100%;
+  padding: 1.5rem;
+}
+
+.menu-button:hover {
+  transform: scale(1.05);
+
+  color: var(--button-hover-color);
+  border: 4px solid var(--button-hover-color);
+}
+
 .confirm-container {
-    display: none;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  gap: 2rem;
 
-}
-.confirm-container.show {
-    position: fixed;
-    top: 35%;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    justify-content: space-between;
-    background-color: transparent;
-    color: white;
-    border: 4px solid white;
-    font-size: 4rem;
-    width: 700px;
-    height: 500px;
-    padding: 1rem;
+  background-color: transparent;
+  color: white;
+
+  border: 4px solid white;
+  font-size: 4rem;
+
+  width: 50%;
+
+  padding: 1rem;
 }
 
-.confirm-button-container {
-    display: flex;
-    justify-content: space-around;
-    height:100px;
-    width: 700px;
-}
-.yes-yes,.no-no {
-    padding: 10px;
+.confirm-container p {
+  font-size: 3rem;
+  text-align: center;
 }
 
-.yes-yes:hover,.no-no:hover{
-    transform: scale(1.05);
-    color: #fdea4f;
+.confirm-container.hide {
+  display: none;
 }
 
-.launch:hover, .settings:hover, .credits:hover, .quit:hover {
-    transform: scale(1.05);
-    color: #fdea4f;
-  border: 4px solid #fdea4f;
+.confirm-buttons {
+  display: flex;
+  justify-content: space-around;
+
+  width: 100%;
+}
+
+.yes, .no {
+  padding: 10px;
+}
+
+.yes:hover, .no:hover {
+  transform: scale(1.05);
+  color: var(--button-hover-color);
 }
