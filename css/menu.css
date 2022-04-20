@@ -1,8 +1,6 @@
 :root {
   --menu-bg-position-start: 0;
   --menu-bg-position-end: 100;
-
-  --button-hover-color: #fdea4f;
 }
 
 @keyframes bg-animation {
@@ -15,19 +13,6 @@
 }
 
 .menu {
-  position: absolute;
-  z-index: 102;
-
-  width: 100%;
-  height: 100%;
-
-  color: white;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
   visibility: visible;
   opacity: 1;
   pointer-events: auto;
