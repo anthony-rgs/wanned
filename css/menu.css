@@ -107,15 +107,12 @@
   padding: 1rem;
 }
 
-<<<<<<< Updated upstream
 .confirm-container p {
   font-size: 3rem;
   text-align: center;
 }
 
-=======
 .credits-container.hide,
->>>>>>> Stashed changes
 .confirm-container.hide {
   display: none;
 }
