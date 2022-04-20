@@ -58,10 +58,7 @@ class Victor extends Sprite {
   lookSomewhere() {
     const directions = ['left', 'up', 'down']
 
-    const randomDirection =
-      directions[Math.floor(Math.random() * directions.length)]
-
-    this.currentDirection = randomDirection
+    this.currentDirection = directions[Math.floor(Math.random() * directions.length)]
   }
 }
 
