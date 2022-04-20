@@ -80,6 +80,42 @@ class Game {
     this._lastZoneTriggered = null
   }
 
+  retry(){
+    this.bubblesGame = null
+    this.bubblesTriggered = false
+
+    this.endScreen = null
+
+    this.currentMapIndex = 0
+
+    this.speedMeasure = 10
+
+    this.movementsEnabled = true
+
+    this.thierryTriggered = false
+
+    this.startTime = Date.now()
+
+    this.baptisteHud = new HUD(
+      '../../assets/images/hud/baptiste-head.png',
+      3,
+      10,
+      document.querySelector('#wanned')
+      
+    )
+
+    this.dialogBox = new TextDialog()
+
+    this._lastZoneTriggered = null
+
+    this.elements.forEach(element => {
+      if(element instanceof Sprite){
+        element.inventory = []
+      }
+    })
+    this.baptiste.lives = 3
+  }
+
   get initialized() {
     return this.mapDoors && this.movableRocks && this.spikes && this.mapKeys && this._elements
   }
@@ -440,7 +476,7 @@ class Game {
 
   triggerGameOver() {
     if (this.endScreen === null) {
-      this.endScreen = new EndScreen('Game Over')
+      this.endScreen = new EndScreen('Game Over',this)
       this.disableMovements()
     }
   }
@@ -650,6 +686,8 @@ class Game {
         })
     }
   }
+
+  
 
   render() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)

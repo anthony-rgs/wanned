@@ -1,13 +1,15 @@
 import wait from '../utils/wait.js'
 
 class EndScreen {
-  constructor(title) {
+  constructor(title, game) {
     this.isRetry = false
     this.isQuit = false
     this.titleEndScreen = title
     this.parent = document.querySelector('body')
     this.child = document.querySelector('#wanned')
     this.color = this.titleEndScreen === 'Game Over' ? 'red' : 'green'
+    this._onStartClicked = null
+    this.game = game
 
     this.init()
   }
@@ -40,15 +42,22 @@ class EndScreen {
     this.retryButton.addEventListener('click', () => {
       this.isRetry = true
       this.gameOverScreen.remove()
+      this.game.retry()
+      
+      
     })
+
+
 
     this.quitButton.addEventListener('click', () => {
       this.isQuit = true
-      this.gameOverScreen.remove()
+      // this.gameOverScreen.remove()
+      location.reload()
     })
 
     this.parent.insertBefore(this.gameOverScreen, this.child)
   }
+
 }
 
 export default EndScreen
