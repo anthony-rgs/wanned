@@ -33,13 +33,12 @@ class Key extends Element {
       numberOfTilesByRow
     } = TilesUtils.calculateTileSize(rawKeys, builtKeysSize, mapWidth, mapHeight, realMapWidth, realMapHeight, mapZoom)
     return TilesUtils.mapTilesToPositions(rawKeys, numberOfTilesByColumn, numberOfTilesByRow, realTileWidth, realTileHeight, 6, false)
-      .map((position, i) => new Key(
+      .map((position) => new Key(
         game,
         position.startX,
         position.startY,
         position.width,
         position.height,
-        i % 2 === 0 ? 'closed' : 'open',
         idMaker(position.tileId)
       ))
   }

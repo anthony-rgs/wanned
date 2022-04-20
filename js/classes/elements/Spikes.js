@@ -32,16 +32,12 @@ class Spikes extends Element {
       if (this.actionActivated) {
         game.mainCharacter.lives -= 1
 
-        const mainCharacterSpeed = game.mainCharacter.speed
-        game.mainCharacter.speed = 0
-
-        setInterval(() => {
-          game.mainCharacter.speed = mainCharacterSpeed
-        }, this.remainingTime)
+        game.disableMovements()
 
         this.actionActivated = false
 
-        setInterval(() => {
+        setTimeout(() => {
+          game.enableMovements()
           this.actionActivated = true
         }, this.remainingTime)
       }

@@ -3,6 +3,7 @@ import wait from '../../../utils/wait.js'
 
 export default (game) =>
   new Action((trigger) => {
+    game.disableMovements()
     game.fabien.stopWalk()
 
     game.dialogBox.messages = [
@@ -21,6 +22,7 @@ export default (game) =>
               await wait(1000)
               game.door1.open()
               game.dialogBox.next()
+              game.enableMovements()
 
               trigger()
             },
@@ -36,6 +38,7 @@ export default (game) =>
               game.dialogBox.hide()
               game.fabien.startWalk()
               game.mainCharacter.lives -= 0.5
+              game.enableMovements()
             },
           },
         ],

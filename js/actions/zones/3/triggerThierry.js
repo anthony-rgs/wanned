@@ -1,5 +1,4 @@
 import Action from '../../../classes/Action.js'
-import wait from '../../../utils/wait.js'
 import triggerBubbles from './triggerBubbles.js'
 
 export default (game) =>
@@ -12,8 +11,7 @@ export default (game) =>
     }
 
     game.thierry.stopWalk()
-    game.mainCharacter.stop = true
-    game.mainCharacter.isWalking = false
+    game.disableMovements()
 
     game.dialogBox.messages = [
       {

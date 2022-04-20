@@ -81,6 +81,10 @@ class Monster extends Sprite {
     this.stop = true
     this.safe = false
     this.interval = null
+
+    setInterval(() => {
+      this.lead()
+    }, 1000 / this.game.fps)
   }
 
   get zone() {
