@@ -27,7 +27,7 @@ class EndScreen {
     this.buttonContainer.classList.add('button-container')
     this.retryButton.classList.add('retry')
     this.quitButton.classList.add('quit')
-    this.title.classList.add('title')
+    this.title.classList.add('title-end-screen')
 
     this.title.textContent = this.titleEndScreen
     this.title.classList.add(`title-${this.color}`)
@@ -43,11 +43,7 @@ class EndScreen {
       this.isRetry = true
       this.gameOverScreen.remove()
       this.game.retry()
-      
-      
     })
-
-
 
     this.quitButton.addEventListener('click', () => {
       this.isQuit = true
@@ -57,7 +53,6 @@ class EndScreen {
 
     this.parent.insertBefore(this.gameOverScreen, this.child)
   }
-
 }
 
 export default EndScreen

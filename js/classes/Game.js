@@ -30,7 +30,7 @@ import triggerVictor from '../actions/zones/4/triggerVictor.js'
 import triggerArthur from '../actions/zones/4/triggerArthur.js'
 
 import keyboardKeys from '../../assets/resources/keyboardKeys.js'
-import maps from '../../assets/resources/maps.js';
+import maps from '../../assets/resources/maps.js'
 
 class Game {
   constructor(canvas) {
@@ -60,8 +60,14 @@ class Game {
 
     this.startTime = Date.now()
 
-    this.ambianceSound = new Sound('../../assets/audios/ambiance.mp3', this.soundVolume / 3)
-    this.fightSound = new Sound('../../assets/audios/fight.mp3', this.soundVolume / 3)
+    this.ambianceSound = new Sound(
+      '../../assets/audios/ambiance.mp3',
+      this.soundVolume / 3
+    )
+    this.fightSound = new Sound(
+      '../../assets/audios/fight.mp3',
+      this.soundVolume / 3
+    )
     this.rockSound = new Sound('../../assets/audios/rock.mp3', this.soundVolume)
 
     this.movementsEnabled = true
@@ -80,44 +86,14 @@ class Game {
     this._lastZoneTriggered = null
   }
 
-  retry(){
-    this.bubblesGame = null
-    this.bubblesTriggered = false
-
-    this.endScreen = null
-
-    this.currentMapIndex = 0
-
-    this.speedMeasure = 10
-
-    this.movementsEnabled = true
-
-    this.thierryTriggered = false
-
-    this.startTime = Date.now()
-
-    this.baptisteHud = new HUD(
-      '../../assets/images/hud/baptiste-head.png',
-      3,
-      10,
-      document.querySelector('#wanned')
-      
-    )
-
-    this.dialogBox = new TextDialog()
-
-    this._lastZoneTriggered = null
-
-    this.elements.forEach(element => {
-      if(element instanceof Sprite){
-        element.inventory = []
-      }
-    })
-    this.baptiste.lives = 3
-  }
-
   get initialized() {
-    return this.mapDoors && this.movableRocks && this.spikes && this.mapKeys && this._elements
+    return (
+      this.mapDoors &&
+      this.movableRocks &&
+      this.spikes &&
+      this.mapKeys &&
+      this._elements
+    )
   }
 
   get currentMap() {
@@ -125,13 +101,15 @@ class Game {
   }
 
   get elements() {
-    return this.initialized ? [
-      ...this.mapDoors,
-      ...this.movableRocks,
-      ...this.spikes,
-      ...this.mapKeys,
-      ...this._elements.sort((a, b) => a.y - b.y),
-    ] : []
+    return this.initialized
+      ? [
+          ...this.mapDoors,
+          ...this.movableRocks,
+          ...this.spikes,
+          ...this.mapKeys,
+          ...this._elements.sort((a, b) => a.y - b.y),
+        ]
+      : []
   }
 
   get baptiste() {
@@ -460,6 +438,27 @@ class Game {
     return this.bubblesGame
   }
 
+  retry() {
+    this.bubblesGame = null
+    this.bubblesTriggered = false
+    this.endScreen = null
+    this.currentMapIndex = 0
+    this.speedMeasure = 10
+    this.movementsEnabled = true
+    this.thierryTriggered = false
+    this.startTime = Date.now()
+    this.dialogBox = new TextDialog()
+    this._lastZoneTriggered = null
+    this.elements.forEach((element) => {
+      if (element instanceof Sprite) {
+        element.inventory = []
+      }
+    })
+    this.baptiste.lives = 3
+    this.baptiste.position = { x: 640, y: 992 }
+    this.baptiste.currentDirection = 'up'
+  }
+
   updateCanvas() {
     this.canvas.width = window.innerWidth
     this.canvas.height = window.innerHeight
@@ -476,7 +475,7 @@ class Game {
 
   triggerGameOver() {
     if (this.endScreen === null) {
-      this.endScreen = new EndScreen('Game Over',this)
+      this.endScreen = new EndScreen('Game Over', this)
       this.disableMovements()
     }
   }
@@ -686,8 +685,6 @@ class Game {
         })
     }
   }
-
-  
 
   render() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
