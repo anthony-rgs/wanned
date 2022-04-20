@@ -13,6 +13,7 @@ export default (game) =>
 
     game.thierry.stopWalk()
     game.mainCharacter.stop = true
+    game.mainCharacter.isWalking = false
 
     game.dialogBox.messages = [
       {

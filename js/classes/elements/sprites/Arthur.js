@@ -9,7 +9,7 @@ class Arthur extends Sprite {
       'arthur',
       game,
       Object.fromEntries(
-        ['front', 'back', 'left', 'right'].map((direction) => {
+        ['up', 'down', 'left', 'right'].map((direction) => {
           return [
             direction,
             [
@@ -76,7 +76,7 @@ class Arthur extends Sprite {
   stopWalk() {
     clearTimeout(this.walkTimeout)
     this.walking = false
-    this.currentDirection = 'back'
+    this.currentDirection = 'down'
   }
 
   async _pullOverMovement() {

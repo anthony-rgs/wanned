@@ -1,13 +1,13 @@
+import Sound from '../../Sound.js'
 import Sprite from '../../Sprite.js'
-import Zone from '../../Zone.js'
 
-class Monster extends Sprite {
+class Baptiste extends Sprite {
   constructor(game) {
     super(
-      'monster',
+      'baptiste',
       game,
       Object.fromEntries(
-        ['front', 'back', 'left', 'right'].map((direction) => {
+        ['up', 'down', 'left', 'right'].map((direction) => {
           return [
             direction,
             [
@@ -73,40 +73,17 @@ class Monster extends Sprite {
       ),
       30,
       30,
-      { x: 1200, y: 300 },
-      0.4
+      { x: 640, y: 992 },
+      1.25
+      // 5
     )
-
-    this.lives = 3
-    this.stop = true
     this.safe = false
-    this.interval = null
-  }
-
-  get zone() {
-    return new Zone(this.x, this.y, this.width, this.height, 'monster')
-  }
-
-  disableAttack() {
-    clearInterval(this.interval)
-  }
-
-  handleAttack() {
-    this.interval = setInterval(() => {
-      if (Math.random() < 0.5 && this.canHit) {
-        this.hit()
-      }
-    }, 500)
-  }
-
-  lead() {
-    if (!this.stop) {
-      this.game.move(this, {
-        x: this.game.mainCharacter.x - this.x,
-        y: this.game.mainCharacter.y - this.y,
-      })
-    }
+    this.isWalking = false
+    this.walkingSound = new Sound(
+      '../../assets/audios/steps.mp3',
+      game.soundVolume
+    )
   }
 }
 
-export default Monster
+export default Baptiste

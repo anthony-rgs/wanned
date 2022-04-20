@@ -4,7 +4,8 @@ import Menu from './classes/Menu.js'
 
 document.body.style.cursor = '../cursor.png'
 
-window.debug = true
+window.debug = false
+window.hasCollisions = true
 
 const story = new Story(
   [
@@ -77,6 +78,9 @@ story.onEnd(() => {
   setTimeout(() => {
     const menu = new Menu()
     menu.create()
+    menu.quitButtonClicked()
+    menu.yesButtonClicked()
+    menu.noButtonClicked()
     menu.onStartClicked(() => {
       wanned.init()
     })
@@ -86,7 +90,9 @@ story.onEnd(() => {
 })
 
 window.addEventListener('resize', () => {
+  if(wanned.map){
   wanned.updateCanvas()
+  }
 })
 
 const keyInfo = document.querySelector('#key-info')

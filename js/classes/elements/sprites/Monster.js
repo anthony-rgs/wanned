@@ -1,12 +1,13 @@
 import Sprite from '../../Sprite.js'
+import Zone from '../../Zone.js'
 
-class Baptiste extends Sprite {
+class Monster extends Sprite {
   constructor(game) {
     super(
-      'baptiste',
+      'monster',
       game,
       Object.fromEntries(
-        ['front', 'back', 'left', 'right'].map((direction) => {
+        ['up', 'down', 'left', 'right'].map((direction) => {
           return [
             direction,
             [
@@ -72,12 +73,44 @@ class Baptiste extends Sprite {
       ),
       30,
       30,
-      { x: 640, y: 992 },
-      // 1.25
-      10
+      { x: 1200, y: 300 },
+      0.4
     )
+
+    this.lives = 3
+    this.stop = true
     this.safe = false
+    this.interval = null
+
+    setInterval(() => {
+      this.lead()
+    }, 1000 / this.game.fps)
+  }
+
+  get zone() {
+    return new Zone(this.x, this.y, this.width, this.height, 'monster')
+  }
+
+  disableAttack() {
+    clearInterval(this.interval)
+  }
+
+  handleAttack() {
+    this.interval = setInterval(() => {
+      if (Math.random() < 0.5 && this.canHit) {
+        this.hit()
+      }
+    }, 500)
+  }
+
+  lead() {
+    if (!this.stop) {
+      this.game.move(this, {
+        x: this.game.mainCharacter.x - this.x,
+        y: this.game.mainCharacter.y - this.y,
+      })
+    }
   }
 }
 
-export default Baptiste
+export default Monster

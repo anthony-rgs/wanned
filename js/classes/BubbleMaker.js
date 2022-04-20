@@ -1,5 +1,9 @@
+import Sound from './Sound.js'
+
 class BubbleMaker {
   constructor(game) {
+    this.game = game
+
     this.isWin = false
     this.counter = 0
 
@@ -68,6 +72,7 @@ class BubbleMaker {
 
     this.bubble.addEventListener('click', (e) => {
       this.counter += 1
+      new Audio('../../assets/audios/bubble.mp3', this.game.soundVolume).play()
       this.counterDisplay.textContent = this.counter
       e.target.remove()
       console.log(this.counter)

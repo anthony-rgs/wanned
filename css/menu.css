@@ -3,23 +3,22 @@
     --menu-bg-position-end:100;
     
 }
-
+* {
+    font-family: 'Press Start 2P', cursive;
+    text-transform: uppercase;
+}
 .menu {
     position: absolute;
     width: 100vw;
     height: 100vh;
     z-index: 102;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-
-    font-family: 'Press Start 2P',
-    cursive;
+    font-family: 'Press Start 2P',cursive;
     color: white;
     visibility: hidden;
     pointer-events: none;
+    display: flex;
+    justify-content: center;
+    align-items:flex-end;
 
     opacity: 0;
     transition: opacity 0.5s ease;
@@ -31,7 +30,9 @@
     visibility: visible;
     pointer-events: auto;
     background-image: url('../assets/images/anim_background.png');
+    image-rendering: pixelated;
     background-size: 200%;
+   
     animation: bg-animation 5s infinite;
 
 }
@@ -41,24 +42,74 @@
     100% {background-position: var(--menu-bg-position-end)}
 }
 
-h1 {
+.title {
+    position: fixed;
+    top:5%;
     font-size: 10rem;
     margin: 3rem;
 
 }
+
+.menu-container {
+    margin: 8rem;
+}
+
+.menu-container.hide{
+display: none;
+}
+
 .launch, .settings, .credits, .quit {
+    background-color: transparent;
+    height: 7rem;
+    color: white;
+    border: 4px solid white;
+    font-size: 2rem;
+    transition: transform 0.4s ease;
+
     display: flex;
     justify-content: center;
     align-items: center;
     width: 400px;
-    height: 1rem;
-    background-color: white;
-    color: black;
-    font-size: 0.75rem;
-    margin: 1rem;
-padding: 2.5rem;
+    margin: 2rem;
+    padding: 2rem;
+}
+.confirm-container {
+    display: none;
+
+}
+.confirm-container.show {
+    position: fixed;
+    top: 35%;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    background-color: transparent;
+    color: white;
+    border: 4px solid white;
+    font-size: 4rem;
+    width: 700px;
+    height: 500px;
+    padding: 1rem;
+}
+
+.confirm-button-container {
+    display: flex;
+    justify-content: space-around;
+    height:100px;
+    width: 700px;
+}
+.yes-yes,.no-no {
+    padding: 10px;
+}
+
+.yes-yes:hover,.no-no:hover{
+    transform: scale(1.05);
+    color: #fdea4f;
 }
 
 .launch:hover, .settings:hover, .credits:hover, .quit:hover {
     transform: scale(1.05);
+    color: #fdea4f;
+  border: 4px solid #fdea4f;
 }

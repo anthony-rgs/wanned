@@ -32,6 +32,7 @@ body {
 #wanned {
   background-color: var(--background-color);
   display: block;
+  image-rendering: pixelated;
 }
 
 @keyframes damages {
@@ -46,6 +47,24 @@ body {
   }
 }
 
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
 #fog {
   position: absolute;
   width: 100%;
@@ -54,17 +73,38 @@ body {
   top: 0;
   left: 0;
   background: radial-gradient(
-    circle,
-    rgba(0, 0, 0, 0) 0%,
-    rgba(255, 0, 0, 0.9) 70% /*rgba(0, 0, 0, 0.9) 70%*/
+          circle,
+          rgba(0, 0, 0, 0) 0%,
+          rgba(255, 0, 0, 0.9) 70% /*rgba(0, 0, 0, 0.9) 70%*/
   );
   opacity: 1;
   filter: brightness(0);
   transition: opacity 500ms ease-out;
+  animation: map-transition 1000ms linear reverse;
 }
 
 #fog.damages {
   animation: damages 2000ms linear;
+}
+
+#fog.fade-in:after, #fog.fade-out:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+}
+
+#fog.fade-in:after {
+  animation: fade-in 1000ms linear;
+  opacity: 1;
+}
+
+#fog.fade-out:after {
+  animation: fade-out 1000ms linear;
+  opacity: 0;
 }
 
 #fog.hidden {
@@ -81,9 +121,9 @@ body {
   left: 50%;
   transform: translate(-50%, -50%);
   background: radial-gradient(
-    circle,
-    rgba(0, 0, 0, 0) 0%,
-    rgba(255, 255, 255, 0.3) 80%
+          circle,
+          rgba(0, 0, 0, 0) 0%,
+          rgba(255, 255, 255, 0.3) 80%
   );
   border-radius: 50%;
   filter: blur(40px);

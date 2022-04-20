@@ -8,7 +8,7 @@ class Victor extends Sprite {
       'victor',
       game,
       Object.fromEntries(
-        ['front', 'back', 'left', 'right'].map((direction) => {
+        ['up', 'down', 'left', 'right'].map((direction) => {
           return [
             direction,
             [
@@ -56,12 +56,9 @@ class Victor extends Sprite {
   }
 
   lookSomewhere() {
-    const directions = ['left', 'front', 'back']
+    const directions = ['left', 'up', 'down']
 
-    const randomDirection =
-      directions[Math.floor(Math.random() * directions.length)]
-
-    this.currentDirection = randomDirection
+    this.currentDirection = directions[Math.floor(Math.random() * directions.length)]
   }
 }
 
