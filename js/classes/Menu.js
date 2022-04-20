@@ -8,11 +8,19 @@ class Menu {
     this.launch = this.menuButtons.querySelector('.menu-button.launch')
     this.credits = this.menuButtons.querySelector('.menu-button.credits')
     this.quit = this.menuButtons.querySelector('.menu-button.quit')
+    this.returnMenu = document.querySelector('.back-button')
+
+    this.creditsContainer = document.querySelector('.credits-container')
 
     this.confirm = document.querySelector('.confirm-container')
     this.confirmButtons = this.confirm.querySelector('.confirm-buttons')
-    this.yesButton = this.confirmButtons.querySelector('.confirm-container .yes')
+    this.yesButton = this.confirmButtons.querySelector(
+      '.confirm-container .yes'
+    )
     this.noButton = this.confirmButtons.querySelector('.confirm-container .no')
+
+    this.credits.addEventListener('click', this.creditMenu.bind(this))
+    this.returnMenu.addEventListener('click', this.cancelQuit.bind(this))
 
     this.load = document.querySelector('#load')
 
@@ -27,6 +35,11 @@ class Menu {
 
     this.launch.addEventListener('click', this.hideMenu.bind(this))
     this.show()
+  }
+
+  creditMenu() {
+    this.creditsContainer.classList.remove('hide')
+    this.menuButtons.classList.add('hide')
   }
 
   quitGame() {
@@ -48,6 +61,7 @@ class Menu {
 
   cancelQuit() {
     this.confirm.classList.add('hide')
+    this.creditsContainer.classList.add('hide')
     this.menuButtons.classList.remove('hide')
   }
 
@@ -72,8 +86,8 @@ class Menu {
       this.bgPositionStart =
         this.bgPositionEnd === ''
           ? `${Math.floor(Math.random() * window.innerWidth)}px ${Math.floor(
-            Math.random() * window.innerHeight
-          )}px`
+              Math.random() * window.innerHeight
+            )}px`
           : this.bgPositionEnd
       this.bgPositionEnd = `${Math.floor(
         Math.random() * window.innerWidth

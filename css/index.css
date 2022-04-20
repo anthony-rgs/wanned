@@ -15,12 +15,14 @@
   --background-color: #251319;
 }
 
-html, body {
+html,
+body {
   height: 100vh;
   width: 100vw;
   overscroll-behavior: none;
   font-family: 'Museo', sans-serif;
   cursor: none;
+  overflow: hidden;
 }
 
 .cursor {
