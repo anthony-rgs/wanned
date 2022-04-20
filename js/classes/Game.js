@@ -1,37 +1,36 @@
 import Text from './Text.js'
 import Collision from './Collision.js'
-import mapCollisions from '../../assets/resources/mapCollisions.js'
+import Zone from './Zone.js'
+import Action from './Action.js'
+import Sprite from './Sprite.js'
+import DisplayedKey from './DisplayedKey.js'
+import BubbleMaker from './BubbleMaker.js'
+import EndScreen from './EndScreen.js'
+import Sound from './Sound.js'
+
 import Baptiste from './elements/sprites/baptiste.js'
 import Fabien from './elements/sprites/fabien.js'
 import Thierry from './elements/sprites/thierry.js'
 import Victor from './elements/sprites/victor.js'
 import Arthur from './elements/sprites/arthur.js'
+import Door from './elements/door.js'
+import MovableRock from './elements/movableRock.js'
+import Monster from './elements/sprites/monster.js'
+import Spikes from './elements/spikes.js'
+import Key from './elements/key.js'
+
 import HUD from './HUD.js'
 import TextDialog from './TextDialog.js'
+
 import triggerFabien from '../actions/zones/1/triggerFabien.js'
 import triggerMonster from '../actions/zones/2/triggerMonster.js'
+import handleContact from '../actions/zones/2/handleContact.js'
 import triggerThierry from '../actions/zones/3/triggerThierry.js'
 import triggerVictor from '../actions/zones/4/triggerVictor.js'
 import triggerArthur from '../actions/zones/4/triggerArthur.js'
-import Door from './elements/door.js'
-import mapDoors from '../../assets/resources/mapDoors.js'
-import Zone from './Zone.js'
-import mapZones from '../../assets/resources/mapZones.js'
-import MovableRock from './elements/movableRock.js'
-import mapMovableRocks from '../../assets/resources/mapMovableRocks.js'
-import Action from './Action.js'
-import Sprite from './Sprite.js'
-import DisplayedKey from './DisplayedKey.js'
-import Monster from './elements/sprites/monster.js'
-import handleContact from '../actions/zones/2/handleContact.js'
-import mapSpikes from '../../assets/resources/mapSpikes.js'
-import Spikes from './elements/spikes.js'
-import BubbleMaker from './BubbleMaker.js'
-import EndScreen from './EndScreen.js'
-import Key from './elements/key.js'
-import mapKeys from '../../assets/resources/mapKeys.js'
+
 import keyboardKeys from '../../assets/resources/keyboardKeys.js'
-import Sound from '../classes/Sound.js'
+import maps from '../../assets/resources/maps.js';
 
 class Game {
   constructor(canvas) {
@@ -39,276 +38,64 @@ class Game {
     this.canvas.width = window.innerWidth
     this.canvas.height = window.innerHeight
     this.ctx = this.canvas.getContext('2d')
-    this.map = null
-    this.bubbles = null
+
+    this.bubblesGame = null
+    this.bubblesTriggered = false
+
     this.endScreen = null
+
+    this.currentMapIndex = 0
     this.mapZoom = 3
     this.mapWidth = 700
     this.mapHeight = 400
     this.mapSpeed = 5
+
     this.speedMeasure = 10
+
     this.fps = 0
-    this.frame = 0
     this.capFps = 120
+    this.frame = 0
+
     this.soundVolume = 0.3
-    this.mapCollisions = []
-    this.mapDoors = []
-    this.mapKeys = []
-    this.movableRocks = []
-    this.spikes = []
-    this.keys = keyboardKeys
+
     this.startTime = Date.now()
-    this.ambianceSound = new Sound(
-      '../../assets/audios/ambiance.mp3',
-      this.soundVolume / 3
-    )
-    this.fightSound = new Sound(
-      '../../assets/audios/fight.mp3',
-      this.soundVolume / 3
-    )
+
+    this.ambianceSound = new Sound('../../assets/audios/ambiance.mp3', this.soundVolume / 3)
+    this.fightSound = new Sound('../../assets/audios/fight.mp3', this.soundVolume / 3)
     this.rockSound = new Sound('../../assets/audios/rock.mp3', this.soundVolume)
-    this.hasCollisions = true
+
     this.movementsEnabled = true
+
     this.thierryTriggered = false
-    this.bubblesTriggered = false
+
     this.baptisteHud = new HUD(
       '../../assets/images/hud/baptiste-head.png',
       3,
       10,
       document.querySelector('#wanned')
     )
+
     this.dialogBox = new TextDialog()
-    this._elements = null
-    this._lastZone = null
-    this._zoneTriggerings = []
+
+    this._lastZoneTriggered = null
   }
 
-  triggerGameOver() {
-    if (this.endScreen === null) {
-      this.endScreen = new EndScreen('Game Over')
-      // TODO : create stop movements method
-    }
+  get initialized() {
+    return this.mapDoors && this.movableRocks && this.spikes && this.mapKeys && this._elements
   }
 
-  makeBubbles() {
-    this.bubbles = new BubbleMaker(this)
-
-    return this.bubbles
+  get currentMap() {
+    return maps[this.currentMapIndex]
   }
 
   get elements() {
-    return [
+    return this.initialized ? [
       ...this.mapDoors,
       ...this.movableRocks,
       ...this.spikes,
       ...this.mapKeys,
       ...this._elements.sort((a, b) => a.y - b.y),
-    ]
-  }
-
-  init() {
-    this.displayKeys()
-    this.map = new Image()
-    this.map.src = '../../assets/images/map.png'
-    this.fpsCounter = new Text(this.fps, 'Museo', 16, 'white', 30, 30)
-    this._elements = [
-      new Fabien(this),
-      new Baptiste(this),
-      new Monster(this),
-      new Thierry(this),
-      new Victor(this),
-      new Arthur(this),
-    ]
-
-    this.map.addEventListener('load', () => {
-      this.ctx.drawImage(this.map, 0, 0)
-      this.makeDoors()
-      this.makeCollisions()
-      this.makeZoneTriggerings()
-      this.makeMovableRocks()
-      this.makeSpikes()
-      this.makeKeys()
-
-      setInterval(() => {
-        this.render()
-      }, 1000 / this.capFps)
-    })
-
-    window.addEventListener('keydown', (e) => {
-      const key = document.querySelector(`[data-key="${e.key}"]`)
-
-      key?.classList.add('active')
-
-      if (e.key === this.fullScreenKey.key) {
-        document.body.requestFullscreen()
-      }
-
-      this.keys.map((k) => {
-        if (k.key === e.key) {
-          this.findKey(e.key, 'key').pressed = true
-        }
-      })
-    })
-
-    window.addEventListener('keyup', (e) => {
-      const key = document.querySelector(`[data-key="${e.key}"]`)
-
-      key?.classList.remove('active')
-
-      this.keys.map((k) => {
-        if (k.key === e.key) {
-          this.findKey(e.key, 'key').pressed = false
-        }
-      })
-    })
-
-    setInterval(() => {
-      const lastZone = this._lastZone
-      const currentZone = this.currentZone(this.mainCharacter)
-      this._lastZone = currentZone
-
-      if (currentZone && currentZone !== lastZone) {
-        currentZone.action.trigger()
-      }
-    }, 100)
-
-    this.ambianceSound.play()
-  }
-
-  currentZone(element) {
-    return this.zoneTriggerings.find((zoneTriggering) => {
-      return this.checkInZone(
-        element.position.x,
-        element.position.y,
-        element.width,
-        element.height,
-        zoneTriggering.zones
-      )
-    })
-  }
-
-  get collisions() {
-    if (this.mapCollisions) {
-      return [
-        ...this.mapCollisions,
-        ...this.elements.map((element) => element.collisions).flat(),
-      ].filter((collision) => collision)
-    } else {
-      return []
-    }
-  }
-
-  makeCollisions() {
-    this.mapCollisions = Collision.makeCollisions(
-      mapCollisions,
-      16,
-      this.map.width,
-      this.map.height,
-      this.mapWidth,
-      this.mapHeight,
-      this.mapZoom
-    )
-  }
-
-  makeDoors() {
-    this.mapDoors = Door.makeDoors(
-      this,
-      mapDoors,
-      16,
-      this.map.width,
-      this.map.height,
-      this.mapWidth,
-      this.mapHeight,
-      this.mapZoom,
-      (i) => `door${i}`
-    )
-  }
-
-  makeZoneTriggerings() {
-    const zones = Zone.makeZones(
-      mapZones,
-      16,
-      this.map.width,
-      this.map.height,
-      this.mapWidth,
-      this.mapHeight,
-      this.mapZoom
-    )
-
-    this._zoneTriggerings = [
-      {
-        zones: zones.filter((zone) => zone.id === '01'),
-        action: triggerFabien(this),
-      },
-      {
-        zones: zones.filter((zone) => zone.id === '02'),
-        action: triggerMonster(this),
-      },
-      {
-        zones: zones.filter((zone) => zone.id === '03'),
-        action: triggerThierry(this),
-      },
-      {
-        zones: zones.filter((zone) => zone.id === '04'),
-        action: triggerVictor(this),
-      },
-      {
-        zones: zones.filter((zone) => zone.id === '05'),
-        action: triggerArthur(this),
-      },
-    ]
-  }
-
-  makeMovableRocks() {
-    this.movableRocks = MovableRock.makeMovableRocks(
-      this,
-      mapMovableRocks,
-      16,
-      this.map.width,
-      this.map.height,
-      this.mapWidth,
-      this.mapHeight,
-      this.mapZoom,
-      (i) => `movableRock${i}`
-    )
-  }
-
-  makeSpikes() {
-    this.spikes = Spikes.makeSpikes(
-      this,
-      mapSpikes,
-      16,
-      this.map.width,
-      this.map.height,
-      this.mapWidth,
-      this.mapHeight,
-      this.mapZoom,
-      (i) => `spike${i}`
-    )
-  }
-
-  makeKeys() {
-    this.mapKeys = Key.makeKeys(
-      this,
-      mapKeys,
-      16,
-      this.map.width,
-      this.map.height,
-      this.mapWidth,
-      this.mapHeight,
-      this.mapZoom,
-      (i) => `key${i}`
-    )
-  }
-
-  updateCanvas() {
-    this.canvas.width = window.innerWidth
-    this.canvas.height = window.innerHeight
-    this.makeCollisions()
-  }
-
-  findSprite(name) {
-    return this.elements.find((element) => element.name === name)
+    ] : []
   }
 
   get baptiste() {
@@ -449,12 +236,217 @@ class Game {
     ]
   }
 
+  get collisions() {
+    if (this.mapCollisions) {
+      return [
+        ...this.mapCollisions,
+        ...this.elements.map((element) => element.collisions).flat(),
+      ].filter((collision) => collision)
+    } else {
+      return []
+    }
+  }
+
+  init() {
+    this.displayKeys()
+    this.map = new Image()
+    this.map.src = this.currentMap.src
+    this.fpsCounter = new Text(this.fps, 'Museo', 16, 'white', 30, 30)
+    this._elements = [
+      new Fabien(this),
+      new Baptiste(this),
+      new Monster(this),
+      new Thierry(this),
+      new Victor(this),
+      new Arthur(this),
+    ]
+
+    this.map.addEventListener('load', () => {
+      this.ctx.drawImage(this.map, 0, 0)
+      this.makeDoors()
+      this.makeCollisions()
+      this.makeZoneTriggerings()
+      this.makeMovableRocks()
+      this.makeSpikes()
+      this.makeKeys()
+
+      setInterval(() => {
+        this.render()
+      }, 1000 / this.capFps)
+    })
+
+    window.addEventListener('keydown', (e) => {
+      const key = document.querySelector(`[data-key="${e.key}"]`)
+
+      key?.classList.add('active')
+
+      if (e.key === this.fullScreenKey.key) {
+        document.body.requestFullscreen().then()
+      }
+
+      keyboardKeys.map((k) => {
+        if (k.key === e.key) {
+          this.findKey(e.key, 'key').pressed = true
+        }
+      })
+    })
+
+    window.addEventListener('keyup', (e) => {
+      const key = document.querySelector(`[data-key="${e.key}"]`)
+
+      key?.classList.remove('active')
+
+      keyboardKeys.map((k) => {
+        if (k.key === e.key) {
+          this.findKey(e.key, 'key').pressed = false
+        }
+      })
+    })
+
+    setInterval(() => {
+      const lastZone = this._lastZoneTriggered
+      const currentZone = this.mainCharacter.currentZone
+      this._lastZoneTriggered = currentZone
+
+      if (currentZone && currentZone !== lastZone) {
+        currentZone.action.trigger()
+      }
+    }, 100)
+
+    this.ambianceSound.play()
+  }
+
+  makeCollisions() {
+    this.mapCollisions = Collision.makeCollisions(
+      this.currentMap.tiles.collisions,
+      16,
+      this.map.width,
+      this.map.height,
+      this.mapWidth,
+      this.mapHeight,
+      this.mapZoom
+    )
+  }
+
+  makeDoors() {
+    this.mapDoors = Door.makeDoors(
+      this,
+      this.currentMap.tiles.doors,
+      16,
+      this.map.width,
+      this.map.height,
+      this.mapWidth,
+      this.mapHeight,
+      this.mapZoom,
+      (i) => `door${i}`
+    )
+  }
+
+  makeZoneTriggerings() {
+    const zones = Zone.makeZones(
+      this.currentMap.tiles.zones,
+      16,
+      this.map.width,
+      this.map.height,
+      this.mapWidth,
+      this.mapHeight,
+      this.mapZoom
+    )
+
+    this._zoneTriggerings = [
+      {
+        zones: zones.filter((zone) => zone.id === '01'),
+        action: triggerFabien(this),
+      },
+      {
+        zones: zones.filter((zone) => zone.id === '02'),
+        action: triggerMonster(this),
+      },
+      {
+        zones: zones.filter((zone) => zone.id === '03'),
+        action: triggerThierry(this),
+      },
+      {
+        zones: zones.filter((zone) => zone.id === '04'),
+        action: triggerVictor(this),
+      },
+      {
+        zones: zones.filter((zone) => zone.id === '05'),
+        action: triggerArthur(this),
+      },
+    ]
+  }
+
+  makeMovableRocks() {
+    this.movableRocks = MovableRock.makeMovableRocks(
+      this,
+      this.currentMap.tiles.movableRocks,
+      16,
+      this.map.width,
+      this.map.height,
+      this.mapWidth,
+      this.mapHeight,
+      this.mapZoom,
+      (i) => `movableRock${i}`
+    )
+  }
+
+  makeSpikes() {
+    this.spikes = Spikes.makeSpikes(
+      this,
+      this.currentMap.tiles.spikes,
+      16,
+      this.map.width,
+      this.map.height,
+      this.mapWidth,
+      this.mapHeight,
+      this.mapZoom,
+      (i) => `spike${i}`
+    )
+  }
+
+  makeKeys() {
+    this.mapKeys = Key.makeKeys(
+      this,
+      this.currentMap.tiles.keys,
+      16,
+      this.map.width,
+      this.map.height,
+      this.mapWidth,
+      this.mapHeight,
+      this.mapZoom,
+      (i) => `key${i}`
+    )
+  }
+
+  makeBubbles() {
+    this.bubblesGame = new BubbleMaker(this)
+    return this.bubblesGame
+  }
+
+  updateCanvas() {
+    this.canvas.width = window.innerWidth
+    this.canvas.height = window.innerHeight
+    this.makeCollisions()
+  }
+
+  findSprite(name) {
+    return this.elements.find((element) => element.name === name)
+  }
+
   findKey(key, type) {
-    return this.keys.find((k) => k[type] === key)
+    return keyboardKeys.find((k) => k[type] === key)
+  }
+
+  triggerGameOver() {
+    if (this.endScreen === null) {
+      this.endScreen = new EndScreen('Game Over')
+      this.disableMovements()
+    }
   }
 
   checkCollisions(element) {
-    if (!this.hasCollisions) return false
+    if (window.debug && !window.hasCollisions) return false
 
     return this.collisions
       .filter(
@@ -517,7 +509,7 @@ class Game {
       }
 
       if (element.animate) {
-        if (this.mainCharacter.isWalking) {
+        if (this.mainCharacter && this.mainCharacter.isWalking) {
           this.mainCharacter.walkingSound.play()
         } else {
           this.mainCharacter.walkingSound.pause()
@@ -538,7 +530,7 @@ class Game {
     const controlsContainer = document.querySelector('#controls-container')
     controlsContainer.appendChild(arrowKeysBottomWrapper)
 
-    this.keys.forEach((key) => {
+    keyboardKeys.forEach((key) => {
       if (key.key.includes('Arrow')) {
         if (key.key !== 'ArrowUp') {
           new DisplayedKey(key, arrowKeysBottomWrapper)
