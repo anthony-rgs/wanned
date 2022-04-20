@@ -5,6 +5,7 @@ import Menu from './classes/Menu.js'
 document.body.style.cursor = '../cursor.png'
 
 window.debug = false
+window.hasCollisions = true
 
 const story = new Story(
   [

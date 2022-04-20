@@ -70,6 +70,18 @@ class Element {
     this.position.y = y
   }
 
+  get currentZone() {
+    return this.game.zoneTriggerings.find((zoneTriggering) => {
+      return this.game.checkInZone(
+        this.position.x,
+        this.position.y,
+        this.width,
+        this.height,
+        zoneTriggering.zones
+      )
+    })
+  }
+
   get collisions() {
     return (this.currentVariant?.collisions ?? []).map(
       collision =>
