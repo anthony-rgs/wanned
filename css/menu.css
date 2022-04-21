@@ -21,7 +21,7 @@
 
   image-rendering: pixelated;
   background-size: 200%;
-  background-image: url('../assets/images/anim_background.png');
+  background-image: url('../assets/images/map-1.png');
 
   animation: bg-animation 5s infinite;
 }
@@ -130,7 +130,8 @@
 }
 
 .yes:hover,
-.no:hover {
+.no:hover,
+.name:hover {
   transform: scale(1.05);
   color: var(--button-hover-color);
 }

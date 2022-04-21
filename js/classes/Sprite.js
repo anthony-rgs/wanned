@@ -75,15 +75,15 @@ class Sprite extends Element {
   }
 
   get fightVariants() {
-    const moveVariants = {}
+    const fightVariants = {}
 
     Object.entries(this.variants).forEach(([direction, variants]) => {
-      moveVariants[direction] = variants.filter((variant) => {
+      fightVariants[direction] = variants.filter((variant) => {
         return variant.type === 'fight'
       })
     })
 
-    return moveVariants
+    return fightVariants
   }
 
   get currentVariant() {
@@ -94,6 +94,10 @@ class Sprite extends Element {
     }
   }
 
+  get currentVariantLength() {
+    return this.moveVariantsLength - 1
+  }
+
   animate(movement) {
     this.frame++
 
@@ -101,7 +105,7 @@ class Sprite extends Element {
       (this.frame / (this.run ? 1.3 : 1.7)) % (10 / this.walkAnimationSpeed) ===
       0
     ) {
-      if (this.currentVariantIndex < this.moveVariantsLength - 1) {
+      if (this.currentVariantIndex < this.currentVariantLength) {
         this.currentVariantIndex++
       } else {
         this.currentVariantIndex = 0
@@ -162,7 +166,8 @@ class Sprite extends Element {
   die() {
     this.stop = true
     this.isDead = true
-    this?.disableAttack()
+    this.disableAttack?.()
+    this.deadAnimation?.().then()
   }
 
   preload() {

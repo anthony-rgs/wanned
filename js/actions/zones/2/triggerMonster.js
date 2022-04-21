@@ -21,21 +21,20 @@ export default (game) =>
       },
       {
         text: 'Anthony: Qu’est-ce qu\'il m’arrive! J\ai l\impression de mourir!',
-        // choices: [
-        //   {
-        //     text: 'Oui',
-        //     callback: async () => {
-        //       game.dialogBox.next()
-        //       await wait(2000)
-        //       game.fightSound.play()
-        //       game.dialogBox.hide()
-        //       game.mainCharacter.stop = false
-        //       game.monster.handleAttack()
-        //       game.monster.stop = false
-        //       trigger()
-        //     },
-        //   },
-        // ],
+        choices: [
+          {
+            text: 'Oui',
+            callback: async () => {
+              game.dialogBox.next()
+              await wait(2000)
+              game.fightSound.play()
+              game.dialogBox.hide()
+              game.mainCharacter.stop = false
+              await game.monster.transformAnimation()
+              trigger()
+            },
+          },
+        ],
       },
       {
         text: '???: EUUUUUUUUAAAAARRRRLGH!',

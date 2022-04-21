@@ -30,30 +30,6 @@ class Element {
     return this.variants[this.currentVariantIndex]
   }
 
-  get moveVariants() {
-    const moveVariants = {}
-
-    Object.entries(this.variants).forEach(([direction, variants]) => {
-      moveVariants[direction] = variants.filter(variant => {
-        return variant.type === 'move'
-      })
-    })
-
-    return moveVariants
-  }
-
-  get fightVariants() {
-    const moveVariants = {}
-
-    Object.entries(this.variants).forEach(([direction, variants]) => {
-      moveVariants[direction] = variants.filter(variant => {
-        return variant.type === 'fight'
-      })
-    })
-
-    return moveVariants
-  }
-
   get x() {
     return this.position.x
   }

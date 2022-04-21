@@ -76,8 +76,19 @@ Dans le cadre d'un projet Front dans notre [école](https://www.hetic.net/), nou
 
 <br>
 
-## Capture d'écran 
+## Assets et sprites
+    Pour la réalisation de la map nous nous sommes servis de tiled, afin de créer la map et les colisions. 
+
+## Gameplay
 
 <p align="center">
-  <img width="70%" src="assets/images/sreenshot.png" />
+    <img width="70%" src="assets/images/sreenshot.png" />
 </p>
+
+Le gameplay du jeu reprend les bases du dungeon crawler, on s'est ici principalement inspirés de jeux n'étant
+pas particulièrement des DC mais possèdant des phases y ressemblant grandement. (Les donjons dans Zelda de Gameboy color à DS, tous les pokémons jusqu'à blanc/noir)
+
+<p align="center">
+    <img width="70%" src="assets/images/casting.png" />
+    </p>
+
