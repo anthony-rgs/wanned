@@ -19,7 +19,9 @@
 
 .screen-choices h1 {
     padding: 3rem;
-    font-size: 10rem;
+    font-size: 8rem;
+    font-family: 'Press Start 2P', cursive;
+    text-align: center;
 }
 
 .screen-choices button {

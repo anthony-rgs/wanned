@@ -1,5 +1,6 @@
 @import url('https://files.bdph.me/reset.css');
-@import url('../assets/fonts/museo.css');
+@import url('../assets/fonts/museo/museo.css');
+@import url('../assets/fonts/slkscr/slkscr.css');
 @import url('./story.css');
 @import url('./hud.css');
 @import url('./keys.css');
@@ -20,9 +21,11 @@ body {
   height: 100vh;
   width: 100vw;
   overscroll-behavior: none;
-  font-family: 'Museo', sans-serif;
+  font-family: 'Slkscr', sans-serif;
+  font-weight: 100;
   cursor: none;
   overflow: hidden;
+  user-select: none;
 }
 
 .cursor {

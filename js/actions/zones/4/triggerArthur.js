@@ -18,11 +18,11 @@ export default (game) =>
       game.mainCharacter.inventory.find((object) => object.name === 'key01') ===
       undefined
       ) {
-        game.dialogBox.messages = [
-          {
-            text:'Arthur: Salut mec, j’ai trouvé pourquoi la wifi ne fonctionne pas, il y a quelqu’un dans le deuxième sous-sol qui prend toute la bande passante pour télécharger une quantité énorme de data. Si on ne fait rien l’école va déposer le bilan!'
-          },
-          {
+      game.dialogBox.messages = [
+        {
+          text:'Arthur: Salut mec, j’ai trouvé pourquoi la wifi ne fonctionne pas, il y a quelqu’un dans le deuxième sous-sol qui prend toute la bande passante pour télécharger une quantité énorme de data. Si on ne fait rien l’école va déposer le bilan!'
+        },
+        {
           text: "Arthur: Mais la porte est fermée à clé et je ne sais pas comment l’ouvrir...",
         },
       ]
