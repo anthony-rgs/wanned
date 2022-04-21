@@ -1,5 +1,5 @@
 <p align="center">
-  <img width="70%" src="/assets/images/hud/baptiste-head.png" />
+  <img width="40%" src="/assets/images/hud/baptiste-head.png" />
 </p>
 
 ### <p align="center"> Wanned • <a href="https://wanned.fun/" > wanned.fun </a> </p>
