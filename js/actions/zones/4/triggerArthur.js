@@ -20,7 +20,7 @@ export default (game) =>
     ) {
       game.dialogBox.messages = [
         {
-          text: "Salut ! On dirait que tu n'a pas la clé pour ouvrir la porte. Je ne l'ai pas trouvée non plus...",
+          text: "Salut ! On dirait que tu n'a pas la cle pour ouvrir la porte. Je ne l'ai pas trouvee non plus...",
         },
       ]
 
@@ -33,7 +33,7 @@ export default (game) =>
     } else {
       game.dialogBox.messages = [
         {
-          text: "Bonjour, vous voici à l'étape finale. Vous devez battre le maître Tisbron !",
+          text: "Bonjour, vous voici a l'etape finale. Vous devez battre le maitre Tisbron !",
           choices: [
             {
               text: "Let's go !",

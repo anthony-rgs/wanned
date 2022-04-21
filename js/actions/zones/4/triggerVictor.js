@@ -25,7 +25,7 @@ export default (game) =>
             },
           },
           {
-            text: 'Nan merci ça va',
+            text: 'Nan merci ca va',
             callback: () => {
               game.dialogBox.hide()
               game.enableMovements()
@@ -34,7 +34,7 @@ export default (game) =>
         ],
       },
       {
-        text: 'Et voilà un peu de vie pour vous. Bonne continuation !',
+        text: 'Et voila un peu de vie pour vous. Bonne continuation !',
       },
     ]
 

@@ -20,7 +20,7 @@ export default (game) =>
         ],
       },
       {
-        text: 'Êtes-vous prêt à vous battre ?',
+        text: 'Etes-vous pret a vous battre ?',
         choices: [
           {
             text: 'Oui',
