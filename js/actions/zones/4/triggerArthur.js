@@ -17,10 +17,13 @@ export default (game) =>
     if (
       game.mainCharacter.inventory.find((object) => object.name === 'key01') ===
       undefined
-    ) {
-      game.dialogBox.messages = [
-        {
-          text: "Salut ! On dirait que tu n'a pas la clé pour ouvrir la porte. Je ne l'ai pas trouvée non plus...",
+      ) {
+        game.dialogBox.messages = [
+          {
+            text:'Arthur: Salut mec, j’ai trouvé pourquoi la wifi ne fonctionne pas, il y a quelqu’un dans le deuxième sous-sol qui prend toute la bande passante pour télécharger une quantité énorme de data. Si on ne fait rien l’école va déposer le bilan!'
+          },
+          {
+          text: "Arthur: Mais la porte est fermée à clé et je ne sais pas comment l’ouvrir...",
         },
       ]
 
@@ -33,7 +36,11 @@ export default (game) =>
     } else {
       game.dialogBox.messages = [
         {
-          text: "Bonjour, vous voici à l'étape finale. Vous devez battre le maître Tisbron !",
+          text:'Arthur: Salut mec, j’ai trouvé pourquoi la wifi ne fonctionne pas, il y a quelqu’un dans le deuxième sous-sol qui prend toute la bande passante pour télécharger une quantité énorme de data. Si on ne fait rien l’école va déposer le bilan!',
+          choices: []
+        },
+        {
+          text: "Arthur: Juste derrière cette porte se trouve l’échelle pour y accéder, bonne chance!",
           choices: [
             {
               text: "Let's go !",
@@ -51,10 +58,12 @@ export default (game) =>
           ],
         },
         {
-          text: 'Bonne chance camarade !',
+          text: 'Arthur: Bonne chance camarade !',
         },
+      
       ]
-
       game.dialogBox.show()
+      await wait (5000)
+      game.dialogBox.next()
     }
   }, false)

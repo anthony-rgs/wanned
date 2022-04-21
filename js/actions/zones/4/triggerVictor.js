@@ -7,10 +7,10 @@ export default (game) =>
 
     game.dialogBox.messages = [
       {
-        text: 'Bonjour jeune homme, un petit remontant ?',
+        text: 'Victor: Salut mec, j’ai acheté des pack de 16 aux Franprix, t’en veut une?',
         choices: [
           {
-            text: 'Allez ! Pourquoi pas',
+            text: 'Ben ouais!',
             callback: async () => {
               game.dialogBox.next()
               if (game.mainCharacter.lives <= 2) {
@@ -25,7 +25,7 @@ export default (game) =>
             },
           },
           {
-            text: 'Nan merci ça va',
+            text: 'Non c\'est bon merci!',
             callback: () => {
               game.dialogBox.hide()
               game.enableMovements()
@@ -34,7 +34,7 @@ export default (game) =>
         ],
       },
       {
-        text: 'Et voilà un peu de vie pour vous. Bonne continuation !',
+        text: 'Victor: Régale-toi!',
       },
     ]
 
