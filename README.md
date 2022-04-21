@@ -46,6 +46,7 @@ Dans le cadre d'un projet Front dans notre [école](https://www.hetic.net/), nou
 - Musique et sound effect
 - Page pour mort du joueur et victoire
 - Mise en ligne du RPG avec un nom de domaine
+- Easter egg ...
 
 <br>
 
