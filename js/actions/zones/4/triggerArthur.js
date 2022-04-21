@@ -28,11 +28,14 @@ export default (game) =>
       ]
 
       game.dialogBox.show()
-      await wait(5000)
+      await wait(3000)
       game.dialogBox.next()
       game.arthur.walking = true
-      game.arthur.startWalk()
       game.enableMovements()
+      await wait(3000)
+      game.dialogBox.next()
+      game.arthur.startWalk()
+      game.dialogBox.hide()
     } else {
       game.dialogBox.messages = [
         {
@@ -46,9 +49,9 @@ export default (game) =>
               text: "Let's go !",
               callback: async () => {
                 game.dialogBox.next()
-                await wait(1000)
+                await wait(3000)
                 await game.arthur.pullOver()
-                await wait(1000)
+                await wait(3000)
                 game.door4.open()
                 trigger()
                 game.dialogBox.hide()
@@ -63,7 +66,7 @@ export default (game) =>
       
       ]
       game.dialogBox.show()
-      await wait (5000)
+      await wait (3000)
       game.dialogBox.next()
     }
   }, false)
