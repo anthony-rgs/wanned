@@ -30,7 +30,7 @@ export default (game) =>
               game.fightSound.play()
               game.dialogBox.hide()
               game.mainCharacter.stop = false
-              game.monster.transform()
+              await game.monster.transformAnimation()
               trigger()
             },
           },

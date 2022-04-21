@@ -166,7 +166,8 @@ class Sprite extends Element {
   die() {
     this.stop = true
     this.isDead = true
-    this?.disableAttack()
+    this.disableAttack?.()
+    this.deadAnimation?.().then()
   }
 
   preload() {

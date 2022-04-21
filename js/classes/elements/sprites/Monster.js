@@ -103,7 +103,15 @@ class Monster extends Sprite {
                     type: 'transformation',
                     image: `../../assets/elements/sprites/monster/transformation/${index + 1}.png`
                   }
-                })
+                }),
+              ...Array(7)
+                .fill(0)
+                .map((_, index) => {
+                  return {
+                    type: 'death',
+                    image: `../../assets/elements/sprites/monster/death/${index + 1}.png`
+                  }
+                }),
             ]
           ]
         })
@@ -118,8 +126,8 @@ class Monster extends Sprite {
     this.stop = true
     this.safe = false
     this.interval = null
-    this.transformed = false
     this.isTransforming = false
+    this.isDying = false
 
     setInterval(() => {
       this.lead()
@@ -146,9 +154,25 @@ class Monster extends Sprite {
     return transformationVariants
   }
 
+  get deathVariants() {
+    const deathVariants = []
+
+    Object.entries(this.variants).forEach(([_, variants]) => {
+      deathVariants.push(variants.filter((variant) => {
+        return variant.type === 'death'
+      }))
+    })
+
+    return deathVariants
+  }
+
   get currentVariantLength() {
     if (this.isTransforming) {
       return 16
+    }
+
+    if (this.isDying) {
+      return 7
     }
 
     return this.moveVariantsLength - 1
@@ -159,6 +183,8 @@ class Monster extends Sprite {
       return this.fightVariants[this.currentDirection][this.currentVariantIndex]
     } else if (this.isTransforming) {
       return this.transformationVariants[0][this.currentVariantIndex]
+    } else if (this.isDying) {
+      return this.deathVariants[0][this.currentVariantIndex]
     } else {
       return this.moveVariants[this.currentDirection][this.currentVariantIndex]
     }
@@ -178,21 +204,23 @@ class Monster extends Sprite {
     }
   }
 
-  async transform() {
+  async transformAnimation() {
     this.stop = true
     this.isTransforming = true
     this.currentVariantIndex = 0
 
     const intervalCallback = () => {
-      this.currentVariantIndex++
+      if (this.currentVariantIndex < 15) {
+        this.currentVariantIndex++
+      }
     }
 
-    // 1 à 2
+    // 1 to 2
     let intervalDuration = 1500
     let interval = setInterval(intervalCallback, intervalDuration)
     await wait(intervalDuration * 2)
     clearInterval(interval)
-    // 3 à 6
+    // 3 to 6
     intervalDuration = 100
     interval = setInterval(intervalCallback, intervalDuration)
     await wait(intervalDuration * 3)
@@ -200,22 +228,21 @@ class Monster extends Sprite {
     // 7
     intervalCallback()
     await wait(1250)
-    // 8 à 9
+    // 8 to 9
     intervalDuration = 100
     interval = setInterval(intervalCallback, intervalDuration)
     await wait(intervalDuration * 2)
     clearInterval(interval)
-    // 10 à 12
+    // 10 to 12
     intervalDuration = 500
     interval = setInterval(intervalCallback, intervalDuration)
     await wait(intervalDuration * 3)
     clearInterval(interval)
-    // 13 à 16
+    // 13 to 16
     intervalDuration = 100
     interval = setInterval(intervalCallback, intervalDuration)
-    await wait(intervalDuration * 4)
+    await wait(intervalDuration * 4 + 1000)
     clearInterval(interval)
-    await wait(1000)
 
     this.stop = false
     this.handleAttack()
@@ -230,6 +257,24 @@ class Monster extends Sprite {
         })
       ]
     }))
+  }
+
+  async deadAnimation() {
+    this.stop = true
+    this.isDying = true
+    this.currentVariantIndex = 0
+
+    const intervalCallback = () => {
+      if (this.currentVariantIndex < 6) {
+        this.currentVariantIndex++
+      }
+    }
+
+    // 1 to 7
+    let intervalDuration = 100
+    let interval = setInterval(intervalCallback, intervalDuration)
+    await wait(intervalDuration * 7 + 1000)
+    clearInterval(interval)
   }
 
   disableAttack() {
