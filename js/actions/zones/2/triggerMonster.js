@@ -20,7 +20,7 @@ export default (game) =>
         // ],
       },
       {
-        text: 'Anthony: Qu’est-ce qui m’arrive! Je me sens mal!?',
+        text: 'Anthony: Qu’est-ce qu\'il m’arrive! J\ai l\impression de mourir!',
         // choices: [
         //   {
         //     text: 'Oui',
