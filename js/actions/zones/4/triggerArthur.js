@@ -1,5 +1,6 @@
 import Action from '../../../classes/Action.js'
 import wait from '../../../utils/wait.js'
+import Sound from '../../../classes/Sound.js'
 
 export default (game) =>
   new Action(async (trigger) => {
@@ -7,8 +8,7 @@ export default (game) =>
     game.disableMovements()
 
     // Easter egg
-    const voice = new Audio('../../../../assets/audios/as-soon-as-we-get.mp3')
-    voice.volume = 0.5
+    const voice = new Sound('../../../../assets/audios/as-soon-as-we-get.mp3', game.soundVolume)
 
     window.addEventListener('keydown', (e) => {
       e.key === 'p' && voice.play()
