@@ -28,7 +28,7 @@ export default (game) =>
       ]
 
       game.dialogBox.show()
-      await wait(3000)
+      await wait(5000)
       game.dialogBox.next()
       game.arthur.walking = true
       game.enableMovements()
@@ -49,7 +49,7 @@ export default (game) =>
               text: "Let's go !",
               callback: async () => {
                 game.dialogBox.next()
-                await wait(3000)
+                await wait(5000)
                 await game.arthur.pullOver()
                 await wait(3000)
                 game.door4.open()
