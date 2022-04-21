@@ -130,7 +130,8 @@
 }
 
 .yes:hover,
-.no:hover {
+.no:hover,
+.name:hover {
   transform: scale(1.05);
   color: var(--button-hover-color);
 }
