@@ -1,5 +1,6 @@
 import Action from '../../../classes/Action.js'
 import wait from '../../../utils/wait.js'
+import Sound from '../../../classes/Sound.js'
 
 export default (game) =>
   new Action(async (trigger) => {
@@ -7,8 +8,7 @@ export default (game) =>
     game.disableMovements()
 
     // Easter egg
-    const voice = new Audio('../../../../assets/audios/as-soon-as-we-get.mp3')
-    voice.volume = 0.5
+    const voice = new Sound('../../../../assets/audios/as-soon-as-we-get.mp3', game.soundVolume)
 
     window.addEventListener('keydown', (e) => {
       e.key === 'p' && voice.play()
@@ -17,10 +17,13 @@ export default (game) =>
     if (
       game.mainCharacter.inventory.find((object) => object.name === 'key01') ===
       undefined
-    ) {
-      game.dialogBox.messages = [
-        {
-          text: "Salut ! On dirait que tu n'a pas la clé pour ouvrir la porte. Je ne l'ai pas trouvée non plus...",
+      ) {
+        game.dialogBox.messages = [
+          {
+            text:'Arthur: Salut mec, j’ai trouvé pourquoi la wifi ne fonctionne pas, il y a quelqu’un dans le deuxième sous-sol qui prend toute la bande passante pour télécharger une quantité énorme de data. Si on ne fait rien l’école va déposer le bilan!'
+          },
+          {
+          text: "Arthur: Mais la porte est fermée à clé et je ne sais pas comment l’ouvrir...",
         },
       ]
 
@@ -28,20 +31,27 @@ export default (game) =>
       await wait(5000)
       game.dialogBox.next()
       game.arthur.walking = true
-      game.arthur.startWalk()
       game.enableMovements()
+      await wait(3000)
+      game.dialogBox.next()
+      game.arthur.startWalk()
+      game.dialogBox.hide()
     } else {
       game.dialogBox.messages = [
         {
-          text: "Bonjour, vous voici à l'étape finale. Vous devez battre le maître Tisbron !",
+          text:'Arthur: Salut mec, j’ai trouvé pourquoi la wifi ne fonctionne pas, il y a quelqu’un dans le deuxième sous-sol qui prend toute la bande passante pour télécharger une quantité énorme de data. Si on ne fait rien l’école va déposer le bilan!',
+          choices: []
+        },
+        {
+          text: "Arthur: Juste derrière cette porte se trouve l’échelle pour y accéder, bonne chance!",
           choices: [
             {
               text: "Let's go !",
               callback: async () => {
                 game.dialogBox.next()
-                await wait(1000)
+                await wait(5000)
                 await game.arthur.pullOver()
-                await wait(1000)
+                await wait(3000)
                 game.door4.open()
                 trigger()
                 game.dialogBox.hide()
@@ -51,10 +61,12 @@ export default (game) =>
           ],
         },
         {
-          text: 'Bonne chance camarade !',
+          text: 'Arthur: Bonne chance camarade !',
         },
+      
       ]
-
       game.dialogBox.show()
+      await wait (3000)
+      game.dialogBox.next()
     }
   }, false)

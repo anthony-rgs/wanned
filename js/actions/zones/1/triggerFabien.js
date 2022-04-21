@@ -8,13 +8,13 @@ export default (game) =>
 
     game.dialogBox.messages = [
       {
-        text: 'Quel type de fibre optique HETIC utilise-t-elle ?',
+        text: 'Fabien: Tu es là Baptiste! J’essaye d’ouvrir cette porte mais elle refuse de fonctionner sans la connexion, J\’ai besoin de me souvenir, elle est en FTTB ou en FTTH?',
         choices: [
           {
             text: 'FTTB',
             callback: async () => {
               game.dialogBox.messages.push({
-                text: "Ok merci de l'info ! Tu peux passer.",
+                text: "Fabien: Merci ! Je vais pouvoir l’ouvrir maintenant.",
               })
               game.dialogBox.next()
               await wait(1000)
@@ -31,7 +31,7 @@ export default (game) =>
             text: 'FTTH',
             callback: async () => {
               game.dialogBox.messages.push({
-                text: 'Mmmh, je pense pas...',
+                text: 'Fabien: Nan....je crois pas que ça fonctionne...',
               })
               game.dialogBox.next()
               await wait(3000)
