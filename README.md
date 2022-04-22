@@ -1,6 +1,4 @@
-<p align="center">
-  <img width="8%" src="assets/images/teteBaptoufou.png" />
-</p>
+![wanned](assets/images/banner-transparent.png)
 
 ### <p align="center"> Wanned • <a href="https://wanned.fun/" > wanned.fun </a> </p>
 
