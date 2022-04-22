@@ -8,7 +8,7 @@ export default (game) =>
 
     game.dialogBox.messages = [
       {
-        text: 'Fabien: Tu es la Baptiste! J’essaye d’ouvrir cette porte mais elle refuse de fonctionner sans la connexion, J’ai besoin de me souvenir, elle est en FTTB ou en FTTH?',
+        text: 'Fabien: Tu es la Baptiste! J’essaye d’ouvrir cette porte mais elle refuse de fonctionner sans la connexion, J’ai besoin de me souvenir, quel type de fibre optique HETIC utilise-t-elle ?',
         choices: [
           {
             text: 'FTTB',

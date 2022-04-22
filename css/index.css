@@ -25,6 +25,8 @@ body {
   font-weight: 100;
   overflow: hidden;
   user-select: none;
+  position: relative;
+  cursor: none;
 }
 
 #wanned {
@@ -134,8 +136,16 @@ body {
   opacity: 0;
 }
 
+.cursor {
+  z-index: 99999;
+  width: 20px;
+  height: 20px;
+  position: fixed;
+  pointer-events: none;
+}
+
 #mobile-not-available {
-  z-index: 999;
+  z-index: 99999;
   background: black;
   position: absolute;
   height: 100%;
@@ -150,27 +160,12 @@ body {
   text-align: center;
 }
 
-#mobile-not-available h2 {
-  color: white;
+#mobile-not-available.hidden {
+  display: none;
 }
 
-@media (min-width: 1024px) {
-  html,
-  body {
-    cursor: none;
-  }
-
-  .cursor {
-    z-index: 99999;
-    width: 20px;
-    height: 20px;
-    position: fixed;
-    pointer-events: none;
-  }
-
-  #mobile-not-available {
-    display: none;
-  }
+#mobile-not-available h2 {
+  color: white;
 }
 
 .audio {
