@@ -58,19 +58,20 @@ class Game {
     this.capFps = 120
     this.frame = 0
 
-    this.soundVolume = 0.1
-    this.audioSound()
-    this.mute()
+    this.soundVolume = 0.3
+    this.makeToggleVolume()
 
     this.startTime = Date.now()
 
     this.ambianceSound = new Sound(
       '../../assets/audios/ambiance.mp3',
-      this.soundVolume / 3
+      this.soundVolume / 3,
+      true
     )
     this.fightSound = new Sound(
       '../../assets/audios/fight.mp3',
-      this.soundVolume / 3
+      this.soundVolume / 3,
+      true
     )
     this.rockSound = new Sound('../../assets/audios/rock.mp3', this.soundVolume)
 
@@ -766,33 +767,31 @@ class Game {
     }
   }
 
-  audioSound() {
+  makeToggleVolume() {
+    let on = true
+    const bars = []
     const audio = document.createElement('div')
     audio.classList.add('audio')
     document.body.insertBefore(audio, this.canvas)
     for (let i = 0; i < 5; i++) {
       const soundBar = document.createElement('div')
       soundBar.classList.add('bar')
+      bars.push(soundBar)
       audio.appendChild(soundBar)
     }
-  }
 
-  mute() {
-    const defaultSoundVolume = this.soundVolume
-    const audio = document.querySelector('.audio')
-    const bar = document.querySelectorAll('.bar')
     audio.addEventListener('click', () => {
-      if (bar[0].classList.contains('hide')) {
-        for (let i = 0; i < bar.length; i++) {
-          bar[i].classList.remove('hide')
+      bars.forEach((bar) => {
+        if (on) {
+          bar.classList.add('hide')
+          Sound.changeVolume(0)
+        } else {
+          Sound.changeVolume(this.soundVolume)
+          bar.classList.remove('hide')
         }
-        this.soundVolume = defaultSoundVolume
-      } else {
-        for (let i = 0; i < bar.length; i++) {
-          bar[i].classList.add('hide')
-        }
-        this.soundVolume = 0
-      }
+      })
+
+      on = !on
     })
   }
 
