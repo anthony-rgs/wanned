@@ -17,84 +17,84 @@ class Monster extends Sprite {
                 image:
                   '../../assets/elements/sprites/anthony/' +
                   direction +
-                  '/1.png',
+                  '/1.png'
               },
               {
                 type: 'move',
                 image:
                   '../../assets/elements/sprites/anthony/' +
                   direction +
-                  '/2.png',
+                  '/2.png'
               },
               {
                 type: 'move',
                 image:
                   '../../assets/elements/sprites/anthony/' +
                   direction +
-                  '/3.png',
+                  '/3.png'
               },
               {
                 type: 'move',
                 image:
                   '../../assets/elements/sprites/anthony/' +
                   direction +
-                  '/4.png',
+                  '/4.png'
               },
               {
                 type: 'move',
                 image:
                   '../../assets/elements/sprites/monster/' +
                   direction +
-                  '/1.png',
+                  '/1.png'
               },
               {
                 type: 'move',
                 image:
                   '../../assets/elements/sprites/monster/' +
                   direction +
-                  '/2.png',
+                  '/2.png'
               },
               {
                 type: 'move',
                 image:
                   '../../assets/elements/sprites/monster/' +
                   direction +
-                  '/3.png',
+                  '/3.png'
               },
               {
                 type: 'move',
                 image:
                   '../../assets/elements/sprites/monster/' +
                   direction +
-                  '/4.png',
+                  '/4.png'
               },
               {
                 type: 'fight',
                 image:
                   '../../assets/elements/sprites/monster/' +
                   direction +
-                  '/f-1.png',
+                  '/f-1.png'
               },
               {
                 type: 'fight',
                 image:
                   '../../assets/elements/sprites/monster/' +
                   direction +
-                  '/f-2.png',
+                  '/f-2.png'
               },
               {
                 type: 'fight',
                 image:
                   '../../assets/elements/sprites/monster/' +
                   direction +
-                  '/f-3.png',
+                  '/f-3.png'
               },
               {
                 type: 'fight',
                 image:
                   '../../assets/elements/sprites/monster/' +
                   direction +
-                  '/f-4.png',
+                  '/f-4.png'
               },
               ...Array(16)
                 .fill(0)
@@ -103,7 +103,7 @@ class Monster extends Sprite {
                     type: 'transformation',
                     image: `../../assets/elements/sprites/monster/transformation/${
                       index + 1
-                    }.png`,
+                    }.png`
                   }
                 }),
               ...Array(7)
@@ -113,10 +113,10 @@ class Monster extends Sprite {
                     type: 'death',
                     image: `../../assets/elements/sprites/monster/death/${
                       index + 1
-                    }.png`,
+                    }.png`
                   }
-                }),
-            ],
+                })
+            ]
           ]
         })
       ),
@@ -207,22 +207,34 @@ class Monster extends Sprite {
     if (this.currentVariant) {
       ctx.drawImage(
         this.currentVariant.image,
-        x ?? this.x,
-        this.isTransforming && this.currentVariantIndex === 6
-          ? (y ?? this.y) + (this.height / 5) * 4
-          : (y ?? this.y) - (isAnthony ? this.height / 2 : 0),
+        (x ?? this.x) +
+        (this.isTransforming && this.currentVariantIndex >= 3
+          ? this.width * 0.3
+          : 0),
+        (y ?? this.y) -
+        (this.isTransforming
+          ? this.currentVariantIndex < 3
+            ? this.height / 2
+            : (this.height / 1.6) * 0.4
+          : isAnthony
+            ? this.height / 2
+            : 0),
         this.hitting
           ? this.width * 1.5
           : this.isTransforming
-          ? this.width * 1.8
+            ? this.currentVariantIndex < 3
+              ? this.height * 2
+              : this.height * 1.6
+            : isAnthony
+              ? this.width * 2
+              : this.width,
+        this.isTransforming
+          ? this.currentVariantIndex < 3
+            ? this.height * 2
+            : this.height * 1.6
           : isAnthony
-          ? this.width * 2
-          : this.width,
-        this.isTransforming && this.currentVariantIndex === 6
-          ? this.height / 5
-          : isAnthony
-          ? this.height * 2
-          : this.height
+            ? this.height * 2
+            : this.height
       )
     }
   }
@@ -278,7 +290,7 @@ class Monster extends Sprite {
           direction,
           variants.filter((variant) => {
             return !variant.image.src.includes('anthony')
-          }),
+          })
         ]
       })
     )

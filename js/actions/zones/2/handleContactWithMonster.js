@@ -36,7 +36,7 @@ export default (game) =>
       }, 1000)
 
       if (game.monster.lives >= 0 && !game.monster.isDead) {
-        if (game.mainCharacter.lives <= 0) {
+        if (game.monster.lives <= 0) {
           game.fightSound.pause()
           game.ambianceSound.play()
           game.monster.die()
