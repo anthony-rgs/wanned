@@ -8,7 +8,10 @@ export default (game) =>
     game.disableMovements()
 
     // Easter egg
-    const voice = new Sound('../../../../assets/audios/as-soon-as-we-get.mp3', game.soundVolume)
+    const voice = new Sound(
+      '../../../../assets/audios/as-soon-as-we-get.mp3',
+      game.soundVolume
+    )
 
     window.addEventListener('keydown', (e) => {
       e.key === 'p' && voice.play()
@@ -17,13 +20,13 @@ export default (game) =>
     if (
       game.mainCharacter.inventory.find((object) => object.name === 'key01') ===
       undefined
-      ) {
+    ) {
       game.dialogBox.messages = [
         {
-          text:'Arthur: Salut mec, j’ai trouvé pourquoi la wifi ne fonctionne pas, il y a quelqu’un dans le deuxième sous-sol qui prend toute la bande passante pour télécharger une quantité énorme de data. Si on ne fait rien l’école va déposer le bilan!'
+          text: 'Arthur: Salut mec, j’ai trouve pourquoi la wifi ne fonctionne pas, il y a quelqu’un dans le deuxieme sous-sol qui prend toute la bande passante pour telecharger une quantite enorme de data. Si on ne fait rien l’ecole va deposer le bilan!',
         },
         {
-          text: "Arthur: Mais la porte est fermée à clé et je ne sais pas comment l’ouvrir...",
+          text: 'Arthur: Mais la porte est fermee à cle et je ne sais pas comment l’ouvrir...',
         },
       ]
 
@@ -39,11 +42,11 @@ export default (game) =>
     } else {
       game.dialogBox.messages = [
         {
-          text:'Arthur: Salut mec, j’ai trouvé pourquoi la wifi ne fonctionne pas, il y a quelqu’un dans le deuxième sous-sol qui prend toute la bande passante pour télécharger une quantité énorme de data. Si on ne fait rien l’école va déposer le bilan!',
-          choices: []
+          text: 'Arthur: Salut mec, j’ai trouve pourquoi la wifi ne fonctionne pas, il y a quelqu’un dans le deuxieme sous-sol qui prend toute la bande passante pour telecharger une quantite enorme de data. Si on ne fait rien l’ecole va deposer le bilan!',
+          choices: [],
         },
         {
-          text: "Arthur: Juste derrière cette porte se trouve l’échelle pour y accéder, bonne chance!",
+          text: 'Arthur: Juste derriere cette porte se trouve l’echelle pour y acceder, bonne chance!',
           choices: [
             {
               text: "Let's go !",
@@ -63,10 +66,9 @@ export default (game) =>
         {
           text: 'Arthur: Bonne chance camarade !',
         },
-      
       ]
       game.dialogBox.show()
-      await wait (3000)
+      await wait(3000)
       game.dialogBox.next()
     }
   }, false)

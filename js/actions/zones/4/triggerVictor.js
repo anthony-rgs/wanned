@@ -7,7 +7,7 @@ export default (game) =>
 
     game.dialogBox.messages = [
       {
-        text: 'Victor: Salut mec, j’ai acheté des pack de 16 aux Franprix, t’en veut une?',
+        text: 'Victor: Salut mec, j’ai achete des packs de 16 aux Franprix, t’en veux une?',
         choices: [
           {
             text: 'Ben ouais!',
@@ -25,7 +25,7 @@ export default (game) =>
             },
           },
           {
-            text: 'Non c\'est bon merci!',
+            text: "Non c'est bon merci!",
             callback: () => {
               game.dialogBox.hide()
               game.enableMovements()
@@ -34,7 +34,7 @@ export default (game) =>
         ],
       },
       {
-        text: 'Victor: Régale-toi!',
+        text: 'Victor: Regale-toi!',
       },
     ]
 

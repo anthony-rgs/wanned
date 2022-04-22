@@ -105,6 +105,8 @@ class Game {
       new Arthur(this),
       new Boss(this),
     ]
+
+    this.displayKeys()
   }
 
   get initialized() {
@@ -325,8 +327,6 @@ class Game {
   }
 
   init() {
-    this.displayKeys()
-
     window.addEventListener('keydown', (e) => {
       const key = document.querySelector(`[data-key="${e.key}"]`)
 

@@ -15,7 +15,7 @@ export default (game) =>
 
     game.dialogBox.messages = [
       {
-        text: 'Thierry: Je crois avoir trouvé la raison pour laquelle Anthony est devenu monstrueux!',
+        text: 'Thierry: Je crois avoir trouve la raison pour laquelle Anthony est devenu monstrueux!',
         choices: [
           {
             text: 'Vas-y, dit-moi',
@@ -26,7 +26,7 @@ export default (game) =>
         ],
       },
       {
-        text: "Thierry: En investissant tout son argent bêtement dans un cryptoWallet il est devenu complètement wanned!",
+        text: 'Thierry: En investissant tout son argent betement dans un crypto wallet il est devenu completement wanned!',
         choices: [
           {
             text: 'Oh le gros wanned',
@@ -37,7 +37,7 @@ export default (game) =>
         ],
       },
       {
-        text: 'Thierry: Si on arrive à éclater les bulles spéculatives avant qu’elles submergent les sous-sol, on pourra sortir d’ici vivant et peut-être fixer la wifi.',
+        text: 'Thierry: Si on arrive a eclater les bulles speculatives avant qu’elles submergent les sous-sol, on pourra sortir d’ici vivant et peut-etre fixer la wifi.',
         choices: [
           {
             text: "Ok let's go !",

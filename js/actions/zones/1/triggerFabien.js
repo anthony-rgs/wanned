@@ -8,13 +8,13 @@ export default (game) =>
 
     game.dialogBox.messages = [
       {
-        text: 'Fabien: Tu es là Baptiste! J’essaye d’ouvrir cette porte mais elle refuse de fonctionner sans la connexion, J\’ai besoin de me souvenir, elle est en FTTB ou en FTTH?',
+        text: 'Fabien: Tu es la Baptiste! J’essaye d’ouvrir cette porte mais elle refuse de fonctionner sans la connexion, J’ai besoin de me souvenir, elle est en FTTB ou en FTTH?',
         choices: [
           {
             text: 'FTTB',
             callback: async () => {
               game.dialogBox.messages.push({
-                text: "Fabien: Merci ! Je vais pouvoir l’ouvrir maintenant.",
+                text: 'Fabien: Merci ! Je vais pouvoir l’ouvrir maintenant.',
               })
               game.dialogBox.next()
               await wait(1000)

@@ -9,7 +9,7 @@
   position: absolute;
   opacity: 1;
   transition: opacity 500ms;
-  z-index: 102;
+  z-index: 9999;
 }
 
 #story.hidden {
