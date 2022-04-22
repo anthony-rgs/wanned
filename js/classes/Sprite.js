@@ -183,7 +183,6 @@ class Sprite extends Element {
 
   preload() {
     Object.entries(this.variants).forEach(([direction, variants]) => {
-      // console.log(direction)
       if (typeof variants === 'string') {
         const image = new Image()
         image.src = variants

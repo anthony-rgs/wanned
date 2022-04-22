@@ -1,10 +1,14 @@
 import Action from '../../../classes/Action.js'
 import wait from '../../../utils/wait.js'
+import Sound from '../../../classes/Sound.js'
 
 export default (game) =>
   new Action(async () => {
     if (game.monster.hitting && !game.mainCharacter.safe) {
-      new Audio('../../../../assets/audios/contact.mp3').play()
+      new Sound(
+        '../../../../assets/audios/contact.mp3',
+        game.soundVolume
+      ).play()
 
       game.mainCharacter.safe = true
 
@@ -12,17 +16,18 @@ export default (game) =>
         game.mainCharacter.safe = false
       }, 1000)
 
-      if (game.mainCharacter.lives > 0 && !game.mainCharacter.isDead) {
-        game.mainCharacter.lives -= 0.5
-
+      if (game.mainCharacter.lives >= 0 && !game.mainCharacter.isDead) {
         if (game.mainCharacter.lives <= 0) {
           game.mainCharacter.die()
+        } else {
+          game.mainCharacter.lives -= 0.5
         }
-      } else {
-        game.mainCharacter.die()
       }
     } else if (game.mainCharacter.hitting && !game.monster.safe) {
-      new Audio('../../../../assets/audios/contact.mp3').play()
+      new Sound(
+        '../../../../assets/audios/contact.mp3',
+        game.soundVolume
+      ).play()
 
       game.monster.safe = true
 
@@ -30,14 +35,16 @@ export default (game) =>
         game.monster.safe = false
       }, 1000)
 
-      if (game.monster.lives > 0 && !game.monster.isDead) {
-        game.monster.lives -= 1
-      } else {
-        game.fightSound.pause()
-        game.ambianceSound.play()
-        game.monster.die()
-        await wait(1000)
-        game.door2.open()
+      if (game.monster.lives >= 0 && !game.monster.isDead) {
+        if (game.mainCharacter.lives <= 0) {
+          game.fightSound.pause()
+          game.ambianceSound.play()
+          game.monster.die()
+          await wait(1000)
+          game.door2.open()
+        } else {
+          game.monster.lives -= 1
+        }
       }
     }
   }, false)

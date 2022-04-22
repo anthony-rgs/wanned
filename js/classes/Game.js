@@ -48,7 +48,7 @@ class Game {
 
     this.endScreen = null
 
-    this._currentMapIndex = 1
+    this._currentMapIndex = 0
     this.mapZoom = 3
     this.mapSpeed = 5
 

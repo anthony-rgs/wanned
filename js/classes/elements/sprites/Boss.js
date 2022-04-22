@@ -80,7 +80,7 @@ class Boss extends Sprite {
       0.7
     )
 
-    this.lives = 5
+    this.lives = 1
     this.stop = true
     this.safe = false
     this.interval = null
