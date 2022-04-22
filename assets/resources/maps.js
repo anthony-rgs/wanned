@@ -15,7 +15,7 @@ export default [
     name: 'Map 2',
     src: '../../assets/images/map-2.png',
     tiles: map2Tiles,
-    elements: ['baptiste', 'brontis'],
+    elements: ['baptiste', 'boss'],
     size: { width: 184, height: 142 }
   }
 ]

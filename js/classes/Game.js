@@ -16,6 +16,7 @@ import Arthur from './elements/sprites/Arthur.js'
 import Door from './elements/Door.js'
 import MovableRock from './elements/MovableRock.js'
 import Monster from './elements/sprites/Monster.js'
+import Boss from './elements/sprites/Boss.js'
 import Spikes from './elements/Spikes.js'
 import Key from './elements/Key.js'
 
@@ -28,7 +29,8 @@ import handleContact from '../actions/zones/2/handleContact.js'
 import triggerThierry from '../actions/zones/3/triggerThierry.js'
 import triggerVictor from '../actions/zones/4/triggerVictor.js'
 import triggerArthur from '../actions/zones/4/triggerArthur.js'
-import triggerMap2 from '../actions/zones/6/triggerMap2.js'
+import triggerMap2 from '../actions/zones/5/triggerMap2.js'
+import triggerBoss from '../actions/zones/6/triggerBoss.js'
 
 import keyboardKeys from '../../assets/resources/keyboardKeys.js'
 import maps from '../../assets/resources/maps.js'
@@ -45,7 +47,7 @@ class Game {
 
     this.endScreen = null
 
-    this._currentMapIndex = 0
+    this._currentMapIndex = 1
     this.mapZoom = 3
     this.mapSpeed = 5
 
@@ -55,7 +57,7 @@ class Game {
     this.capFps = 120
     this.frame = 0
 
-    this.soundVolume = 0.3
+    this.soundVolume = 0
 
     this.startTime = Date.now()
 
@@ -100,6 +102,7 @@ class Game {
       new Thierry(this),
       new Victor(this),
       new Arthur(this),
+      new Boss(this),
     ]
   }
 
@@ -224,6 +227,10 @@ class Game {
 
   get monster() {
     return this.findSprite('monster')
+  }
+
+  get boss() {
+    return this.findSprite('boss')
   }
 
   get zoneTriggerings() {
@@ -437,6 +444,10 @@ class Game {
       {
         zones: zones.filter((zone) => zone.id === '06'),
         action: triggerMap2(this),
+      },
+      {
+        zones: zones.filter((zone) => zone.id === '07'),
+        action: triggerBoss(this),
       },
     ]
   }
