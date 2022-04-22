@@ -59,6 +59,8 @@ class Game {
     this.frame = 0
 
     this.soundVolume = 0.1
+    this.audioSound()
+    this.mute()
 
     this.startTime = Date.now()
 
@@ -755,6 +757,36 @@ class Game {
           )
         })
     }
+  }
+
+  audioSound() {
+    const audio = document.createElement('div')
+    audio.classList.add('audio')
+    document.body.insertBefore(audio, this.canvas)
+    for (let i = 0; i < 5; i++) {
+      const soundBar = document.createElement('div')
+      soundBar.classList.add('bar')
+      audio.appendChild(soundBar)
+    }
+  }
+
+  mute() {
+    const defaultSoundVolume = this.soundVolume
+    const audio = document.querySelector('.audio')
+    const bar = document.querySelectorAll('.bar')
+    audio.addEventListener('click', () => {
+      if (bar[0].classList.contains('hide')) {
+        for (let i = 0; i < bar.length; i++) {
+          bar[i].classList.remove('hide')
+        }
+        this.soundVolume = defaultSoundVolume
+      } else {
+        for (let i = 0; i < bar.length; i++) {
+          bar[i].classList.add('hide')
+        }
+        this.soundVolume = 0
+      }
+    })
   }
 
   render() {
