@@ -1,6 +1,7 @@
 import Game from './classes/Game.js'
 import Story from './classes/Story.js'
 import Menu from './classes/Menu.js'
+import checkDesktop from './utils/checkDesktop.js'
 
 document.body.style.cursor = '../cursor.png'
 
@@ -37,6 +38,16 @@ const storySection = document.querySelector('#story')
 const fog = document.querySelector('#fog')
 const light = document.querySelector('#light')
 const cursor = document.querySelector('.cursor')
+
+const checkMobileNotAvailable = () => {
+  if (checkDesktop()) {
+    document.querySelector('#mobile-not-available').classList.add('hidden')
+  } else {
+    document.querySelector('#mobile-not-available').classList.remove('hidden')
+  }
+}
+
+checkMobileNotAvailable()
 
 window.addEventListener('load', () => {
   document.querySelector('#load').style.display = 'none'
@@ -93,6 +104,8 @@ story.onEnd(() => {
 })
 
 window.addEventListener('resize', () => {
+  checkMobileNotAvailable()
+
   if (wanned.map) {
     wanned.updateCanvas()
   }
