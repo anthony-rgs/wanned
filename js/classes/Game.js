@@ -510,7 +510,6 @@ class Game {
   }
 
   retry() {
-    console.log(this.baptiste)
     this.bubblesGame = null
     this.bubblesTriggered = false
     this.endScreen = null
