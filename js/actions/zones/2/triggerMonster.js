@@ -12,7 +12,7 @@ export default (game) =>
         text: 'Anthony: Baptiste, tu tombes bien! Je viens d’investir tout mon argent dans mon wallet MetaMask! Qu...',
       },
       {
-        text: "Anthony: Qu’est-ce qu'il m’arrive! J'ai limpression de mourir!",
+        text: "Anthony: Qu’est-ce qu'il m’arrive! J'ai l'impression de mourir!",
       },
       {
         text: '???: EUUUUUUUUAAAAARRRRLGH!',

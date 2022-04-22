@@ -68,7 +68,7 @@ export default (game) =>
         },
       ]
       game.dialogBox.show()
-      await wait(3000)
+      await wait(5000)
       game.dialogBox.next()
     }
   }, false)

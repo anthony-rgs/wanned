@@ -72,11 +72,11 @@ class BubbleMaker {
 
     this.bubble.addEventListener('click', (e) => {
       this.counter += 1
-      new Audio('../../assets/audios/bubble.mp3', this.game.soundVolume).play()
+      new Sound('../../assets/audios/bubble.mp3', this.game.soundVolume).play()
       this.counterDisplay.textContent = this.counter
       e.target.remove()
       console.log(this.counter)
-      if (this.counter >= 2) {
+      if (this.counter >= 20) {
         this.isWin = true
         this.removeContainer()
       }

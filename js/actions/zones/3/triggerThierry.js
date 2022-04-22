@@ -18,7 +18,7 @@ export default (game) =>
         text: 'Thierry: Je crois avoir trouve la raison pour laquelle Anthony est devenu monstrueux!',
         choices: [
           {
-            text: 'Vas-y, dit-moi',
+            text: 'Vas-y, dis-moi',
             callback: () => {
               game.dialogBox.next()
             },

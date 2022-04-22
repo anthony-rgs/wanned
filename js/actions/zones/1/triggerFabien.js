@@ -1,10 +1,21 @@
 import Action from '../../../classes/Action.js'
 import wait from '../../../utils/wait.js'
+import Sound from '../../../classes/Sound.js'
 
 export default (game) =>
   new Action((trigger) => {
     game.disableMovements()
     game.fabien.stopWalk()
+
+    // Easter egg
+    const voice = new Sound(
+      '../../../../assets/audios/fab.mp3',
+      game.soundVolume
+    )
+
+    window.addEventListener('keydown', (e) => {
+      e.key === 'p' && voice.play()
+    })
 
     game.dialogBox.messages = [
       {

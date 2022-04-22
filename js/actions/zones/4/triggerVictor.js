@@ -1,9 +1,22 @@
 import Action from '../../../classes/Action.js'
 import wait from '../../../utils/wait.js'
+import Sound from '../../../classes/Sound.js'
 
 export default (game) =>
   new Action((trigger) => {
     game.disableMovements()
+    game.ambianceSound.pause()
+    new Sound('../../../../assets/audios/vico.mp3', game.soundVolume).play()
+
+    // Easter egg
+    const voice = new Sound(
+      '../../../../assets/audios/monique.mp3',
+      game.soundVolume
+    )
+
+    window.addEventListener('keydown', (e) => {
+      e.key === 'p' && voice.play()
+    })
 
     game.dialogBox.messages = [
       {
@@ -29,6 +42,7 @@ export default (game) =>
             callback: () => {
               game.dialogBox.hide()
               game.enableMovements()
+              game.ambianceSound.play()
             },
           },
         ],

@@ -1,11 +1,16 @@
 import Action from '../../../classes/Action.js'
 import wait from '../../../utils/wait.js'
+import Sound from '../../../classes/Sound.js'
 
 export default (game) =>
   new Action(async (trigger) => {
     game.mainCharacter.stop = true
     game.mainCharacter.isWalking = false
     game.ambianceSound.pause()
+    game.fightSound = new Sound(
+      '../../../../assets/audios/fight.mp3',
+      game.soundVolume
+    )
 
     game.dialogBox.messages = [
       {

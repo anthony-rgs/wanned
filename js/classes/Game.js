@@ -69,7 +69,7 @@ class Game {
       true
     )
     this.fightSound = new Sound(
-      '../../assets/audios/fight.mp3',
+      '../../assets/audios/nerd.mp3',
       this.soundVolume / 3,
       true
     )
