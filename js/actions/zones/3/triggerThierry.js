@@ -15,10 +15,10 @@ export default (game) =>
 
     game.dialogBox.messages = [
       {
-        text: 'Bonjour jeune homme, que faites-vous là ?',
+        text: 'Thierry: Je crois avoir trouvé la raison pour laquelle Anthony est devenu monstrueux!',
         choices: [
           {
-            text: 'Casse pas les couilles laisse passer stp',
+            text: 'Vas-y, dit-moi',
             callback: () => {
               game.dialogBox.next()
             },
@@ -26,10 +26,10 @@ export default (game) =>
         ],
       },
       {
-        text: "Hop hop hop ! Pas de ça ici, bonjour d'abord. Pour passer tu vas devoir jouer à un petit jeu.",
+        text: "Thierry: En investissant tout son argent bêtement dans un cryptoWallet il est devenu complètement wanned!",
         choices: [
           {
-            text: 'Ok, dis-moi',
+            text: 'Oh le gros wanned',
             callback: () => {
               game.dialogBox.next()
             },
@@ -37,10 +37,10 @@ export default (game) =>
         ],
       },
       {
-        text: 'Parfait, le but est simple : tu dois éclater 20 bulles pour passer. Compris ?',
+        text: 'Thierry: Si on arrive à éclater les bulles spéculatives avant qu’elles submergent les sous-sol, on pourra sortir d’ici vivant et peut-être fixer la wifi.',
         choices: [
           {
-            text: "Let's go !",
+            text: "Ok let's go !",
             callback: () => {
               game.mainCharacter.stop = false
               game.dialogBox.hide()

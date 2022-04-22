@@ -500,6 +500,7 @@ class Game {
   }
 
   retry() {
+    console.log(this.baptiste)
     this.bubblesGame = null
     this.bubblesTriggered = false
     this.endScreen = null
@@ -518,6 +519,8 @@ class Game {
     this.baptiste.lives = 3
     this.baptiste.position = { x: 640, y: 992 }
     this.baptiste.currentDirection = 'up'
+    this.enableMovements()
+    console.log(this.baptiste)
   }
 
   updateCanvas() {
