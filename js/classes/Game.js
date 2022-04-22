@@ -25,12 +25,13 @@ import TextDialog from './TextDialog.js'
 
 import triggerFabien from '../actions/zones/1/triggerFabien.js'
 import triggerMonster from '../actions/zones/2/triggerMonster.js'
-import handleContact from '../actions/zones/2/handleContact.js'
+import handleContactWithMonster from '../actions/zones/2/handleContactWithMonster.js'
 import triggerThierry from '../actions/zones/3/triggerThierry.js'
 import triggerVictor from '../actions/zones/4/triggerVictor.js'
 import triggerArthur from '../actions/zones/4/triggerArthur.js'
 import triggerMap2 from '../actions/zones/5/triggerMap2.js'
 import triggerBoss from '../actions/zones/6/triggerBoss.js'
+import handleContactWithBoss from '../actions/zones/6/handleContactWithBoss.js'
 
 import keyboardKeys from '../../assets/resources/keyboardKeys.js'
 import maps from '../../assets/resources/maps.js'
@@ -57,7 +58,7 @@ class Game {
     this.capFps = 120
     this.frame = 0
 
-    this.soundVolume = 0
+    this.soundVolume = 0.1
 
     this.startTime = Date.now()
 
@@ -289,7 +290,13 @@ class Game {
       this.monster
         ? {
             zones: [this.monster.zone],
-            action: handleContact(this),
+            action: handleContactWithMonster(this),
+          }
+        : {},
+      this.boss
+        ? {
+            zones: [this.boss.zone],
+            action: handleContactWithBoss(this),
           }
         : {},
       ...this.mapKeys
