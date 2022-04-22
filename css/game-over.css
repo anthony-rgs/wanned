@@ -13,17 +13,3 @@
 
   animation: game-over-appearing 0.5s ease-out;
 }
-
-.screen-choices h1.title-red {
-  color: red;
-}
-
-.screen-choices h1.title-green {
-  color: green;
-}
-
-.button-container .quit:hover {
-  color: red;
-  border: 4px solid red;
-}
-
