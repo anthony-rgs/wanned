@@ -668,6 +668,15 @@ class Game {
     })
   }
 
+  distanceFrom(element, otherElement) {
+    const { x, y } = element.position
+    const { x: otherX, y: otherY } = otherElement.position
+
+    return Math.sqrt(
+      Math.pow(otherX - x, 2) + Math.pow(otherY - y, 2)
+    )
+  }
+
   draw() {
     if (
       !this.mainCharacter.hitting &&
