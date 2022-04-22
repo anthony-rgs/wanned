@@ -1,7 +1,8 @@
-import TilesUtils from "../../utils/TilesUtils.js";
-import Element from "./../Element.js";
-import Zone from "../Zone.js";
-import Action from "../Action.js";
+import TilesUtils from '../../utils/TilesUtils.js'
+import Element from './../Element.js'
+import Zone from '../Zone.js'
+import Action from '../Action.js'
+import Sound from '../Sound.js'
 
 class Spikes extends Element {
   constructor(game, startX, startY, width, height, initialState, id = 'spike', intervalDuration = 2000) {
@@ -20,7 +21,7 @@ class Spikes extends Element {
       ],
       width,
       height,
-      {x: startX, y: startY}
+      { x: startX, y: startY }
     )
 
     this.state = initialState
@@ -49,9 +50,17 @@ class Spikes extends Element {
       this.close()
     }
 
+    this.sound = null
+
     setInterval(() => {
       this.toggle()
       this.lastIntervalTriggered = 0
+
+      if (!this.sound) {
+        this.sound = new Sound('../../assets/audios/spikes.mp3', game.soundVolume / (Math.log2(game.distanceFrom(game.mainCharacter, this) / 30) ** 2), false)
+      }
+
+      this.sound.play()
     }, this.intervalDuration)
 
     setInterval(() => {

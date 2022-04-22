@@ -243,6 +243,7 @@ class Monster extends Sprite {
     this.stop = true
     this.isTransforming = true
     this.currentVariantIndex = 0
+    this.safe = true
 
     const intervalCallback = () => {
       if (this.currentVariantIndex < 15) {
@@ -283,6 +284,7 @@ class Monster extends Sprite {
     this.handleAttack()
     this.isTransforming = false
     this.currentVariantIndex = 0
+    this.safe = false
 
     this.variants = Object.fromEntries(
       Object.entries(this.variants).map(([direction, variants]) => {

@@ -13,9 +13,11 @@ export default (game) =>
       game.soundVolume
     )
 
-    window.addEventListener('keydown', (e) => {
+    const playSound = (e) => {
       e.key === 'p' && voice.play()
-    })
+    }
+
+    window.addEventListener('keydown', playSound)
 
     if (
       game.mainCharacter.inventory.find((object) => object.name === 'key01') ===
@@ -26,7 +28,7 @@ export default (game) =>
           text: 'Arthur: Salut mec, j’ai trouve pourquoi la wifi ne fonctionne pas, il y a quelqu’un dans le deuxieme sous-sol qui prend toute la bande passante pour telecharger une quantite enorme de data. Si on ne fait rien l’ecole va deposer le bilan!',
         },
         {
-          text: 'Arthur: Mais la porte est fermee à cle et je ne sais pas comment l’ouvrir...',
+          text: 'Arthur: Mais la porte est fermee a cle et je ne sais pas comment l’ouvrir...',
         },
       ]
 
@@ -36,6 +38,7 @@ export default (game) =>
       game.arthur.walking = true
       game.enableMovements()
       await wait(3000)
+      window.removeEventListener('keydown', playSound)
       game.dialogBox.next()
       game.arthur.startWalk()
       game.dialogBox.hide()
@@ -56,6 +59,7 @@ export default (game) =>
                 await game.arthur.pullOver()
                 await wait(3000)
                 game.door4.open()
+                window.removeEventListener('keydown', playSound)
                 trigger()
                 game.dialogBox.hide()
                 game.enableMovements()

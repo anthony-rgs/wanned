@@ -14,9 +14,11 @@ export default (game) =>
       game.soundVolume
     )
 
-    window.addEventListener('keydown', (e) => {
+    const playSound = (e) => {
       e.key === 'p' && voice.play()
-    })
+    }
+
+    window.addEventListener('keydown', playSound)
 
     game.dialogBox.messages = [
       {
@@ -32,6 +34,8 @@ export default (game) =>
 
               await wait(2000)
 
+              window.removeEventListener('keydown', playSound)
+
               game.dialogBox.hide()
               game.enableMovements()
               trigger()
@@ -43,6 +47,7 @@ export default (game) =>
               game.dialogBox.hide()
               game.enableMovements()
               game.ambianceSound.play()
+              window.removeEventListener('keydown', playSound)
             },
           },
         ],

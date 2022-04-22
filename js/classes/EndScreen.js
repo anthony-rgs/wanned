@@ -19,30 +19,30 @@ class EndScreen {
 
     this.gameOverScreen = document.createElement('div')
     this.buttonContainer = document.createElement('div')
-    this.retryButton = document.createElement('button')
+    // this.retryButton = document.createElement('button')
     this.quitButton = document.createElement('button')
     this.title = document.createElement('h1')
 
     this.gameOverScreen.classList.add('game-over', 'screen-choices')
     this.buttonContainer.classList.add('button-container', 'choices-buttons')
-    this.retryButton.classList.add('retry', 'choice-button')
+    // this.retryButton.classList.add('retry', 'choice-button')
     this.quitButton.classList.add('quit', 'choice-button')
 
     this.title.textContent = this.titleEndScreen
     this.title.classList.add(`title-${this.color}`)
-    this.retryButton.textContent = 'Recommencer'
-    this.quitButton.textContent = 'Quitter'
+    // this.retryButton.textContent = 'Recommencer'
+    this.quitButton.textContent = 'Retour'
 
     this.gameOverScreen.appendChild(this.title)
-    this.buttonContainer.appendChild(this.retryButton)
+    // this.buttonContainer.appendChild(this.retryButton)
     this.buttonContainer.appendChild(this.quitButton)
     this.gameOverScreen.appendChild(this.buttonContainer)
 
-    this.retryButton.addEventListener('click', () => {
-      this.isRetry = true
-      this.gameOverScreen.remove()
-      this.game.retry()
-    })
+    // this.retryButton.addEventListener('click', () => {
+    //   this.isRetry = true
+    //   this.gameOverScreen.remove()
+    //   this.game.retry()
+    // })
 
     this.quitButton.addEventListener('click', () => {
       this.isQuit = true

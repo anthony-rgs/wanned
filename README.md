@@ -82,3 +82,10 @@ Dans le cadre d'un projet Front dans notre [école](https://www.hetic.net/), nou
 <p align="center">
   <img width="70%" src="assets/images/sreenshot.png" />
 </p>
+
+<br>
+
+## Inspirations
+- Pokémon
+- Zelda
+- The Binding of Isaac

@@ -22,7 +22,13 @@ class Sound {
     const audios = document.querySelectorAll('audio')
 
     audios.forEach((audio) => {
-      audio.volume = volume
+      if (volume === 0) {
+        audio.muted = true
+      } else if (volume === 'unmute') {
+        audio.muted = false
+      } else {
+        audio.volume = volume
+      }
     })
   }
 }

@@ -13,9 +13,11 @@ export default (game) =>
       game.soundVolume
     )
 
-    window.addEventListener('keydown', (e) => {
+    const playSound = (e) => {
       e.key === 'p' && voice.play()
-    })
+    }
+
+    window.addEventListener('keydown', playSound)
 
     game.dialogBox.messages = [
       {
@@ -34,7 +36,7 @@ export default (game) =>
               game.door1.open()
               game.dialogBox.next()
               game.enableMovements()
-
+              window.removeEventListener('keydown', playSound)
               trigger()
             },
           },
@@ -46,6 +48,7 @@ export default (game) =>
               })
               game.dialogBox.next()
               await wait(3000)
+              window.removeEventListener('keydown', playSound)
               game.dialogBox.hide()
               game.fabien.startWalk()
               game.mainCharacter.lives -= 0.5

@@ -1,5 +1,6 @@
 import Action from '../../../classes/Action.js'
 import wait from '../../../utils/wait.js'
+import triggerMonster from './triggerTransformation.js'
 
 export default (game) =>
   new Action(async (trigger) => {
@@ -29,6 +30,6 @@ export default (game) =>
     game.fightSound.play()
     game.dialogBox.hide()
     game.mainCharacter.stop = false
-    await game.monster.transformAnimation()
+    triggerMonster(game).trigger()
     trigger()
   }, false)
