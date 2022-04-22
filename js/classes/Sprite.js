@@ -66,9 +66,11 @@ class Sprite extends Element {
     const moveVariants = {}
 
     Object.entries(this.variants).forEach(([direction, variants]) => {
-      moveVariants[direction] = variants.filter((variant) => {
-        return variant.type === 'move'
-      })
+      moveVariants[direction] =
+        variants.type !== 'dead' &&
+        variants.filter((variant) => {
+          return variant.type === 'move'
+        })
     })
 
     return moveVariants
@@ -78,17 +80,25 @@ class Sprite extends Element {
     const fightVariants = {}
 
     Object.entries(this.variants).forEach(([direction, variants]) => {
-      fightVariants[direction] = variants.filter((variant) => {
-        return variant.type === 'fight'
-      })
+      fightVariants[direction] =
+        variants.type !== 'dead' &&
+        variants.filter((variant) => {
+          return variant.type === 'fight'
+        })
     })
 
     return fightVariants
   }
 
+  get deadVariant() {
+    return this.variants.dead
+  }
+
   get currentVariant() {
     if (this.hitting) {
       return this.fightVariants[this.currentDirection][this.currentVariantIndex]
+    } else if (this.isDead) {
+      return this.deadVariant
     } else {
       return this.moveVariants[this.currentDirection][this.currentVariantIndex]
     }
@@ -166,12 +176,21 @@ class Sprite extends Element {
   die() {
     this.stop = true
     this.isDead = true
+
     this.disableAttack?.()
     this.deadAnimation?.().then()
   }
 
   preload() {
     Object.entries(this.variants).forEach(([direction, variants]) => {
+      // console.log(direction)
+      if (typeof variants === 'string') {
+        const image = new Image()
+        image.src = variants
+        this.variants[direction] = { type: direction, image }
+        return
+      }
+
       variants.forEach((variant, i) => {
         const image = new Image()
         image.src = variant.image

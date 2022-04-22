@@ -8,7 +8,7 @@ class Monster extends Sprite {
       'monster',
       game,
       Object.fromEntries(
-        ['up', 'down', 'left', 'right'].map((direction) => {
+        [('up', 'down', 'left', 'right')].map((direction) => {
           return [
             direction,
             [

@@ -6,63 +6,74 @@ class Boss extends Sprite {
     super(
       'boss',
       game,
-      Object.fromEntries(
-        ['up', 'down', 'left', 'right'].map((direction) => {
-          return [
-            direction,
-            [
-              {
-                type: 'move',
-                image:
-                  '../../assets/elements/sprites/boss/' + direction + '/1.png',
-              },
-              {
-                type: 'move',
-                image:
-                  '../../assets/elements/sprites/boss/' + direction + '/2.png',
-              },
-              {
-                type: 'move',
-                image:
-                  '../../assets/elements/sprites/boss/' + direction + '/3.png',
-              },
-              {
-                type: 'move',
-                image:
-                  '../../assets/elements/sprites/boss/' + direction + '/4.png',
-              },
-              {
-                type: 'fight',
-                image:
-                  '../../assets/elements/sprites/boss/' +
-                  direction +
-                  '/f-1.png',
-              },
-              {
-                type: 'fight',
-                image:
-                  '../../assets/elements/sprites/boss/' +
-                  direction +
-                  '/f-2.png',
-              },
-              {
-                type: 'fight',
-                image:
-                  '../../assets/elements/sprites/boss/' +
-                  direction +
-                  '/f-3.png',
-              },
-              {
-                type: 'fight',
-                image:
-                  '../../assets/elements/sprites/boss/' +
-                  direction +
-                  '/f-4.png',
-              },
-            ],
-          ]
-        })
-      ),
+      {
+        dead: '../../assets/elements/sprites/boss/dead.png',
+        ...Object.fromEntries(
+          ['up', 'down', 'left', 'right'].map((direction) => {
+            return [
+              direction,
+              [
+                {
+                  type: 'move',
+                  image:
+                    '../../assets/elements/sprites/boss/' +
+                    direction +
+                    '/1.png',
+                },
+                {
+                  type: 'move',
+                  image:
+                    '../../assets/elements/sprites/boss/' +
+                    direction +
+                    '/2.png',
+                },
+                {
+                  type: 'move',
+                  image:
+                    '../../assets/elements/sprites/boss/' +
+                    direction +
+                    '/3.png',
+                },
+                {
+                  type: 'move',
+                  image:
+                    '../../assets/elements/sprites/boss/' +
+                    direction +
+                    '/4.png',
+                },
+                {
+                  type: 'fight',
+                  image:
+                    '../../assets/elements/sprites/boss/' +
+                    direction +
+                    '/f-1.png',
+                },
+                {
+                  type: 'fight',
+                  image:
+                    '../../assets/elements/sprites/boss/' +
+                    direction +
+                    '/f-2.png',
+                },
+                {
+                  type: 'fight',
+                  image:
+                    '../../assets/elements/sprites/boss/' +
+                    direction +
+                    '/f-3.png',
+                },
+                {
+                  type: 'fight',
+                  image:
+                    '../../assets/elements/sprites/boss/' +
+                    direction +
+                    '/f-4.png',
+                },
+              ],
+            ]
+          })
+        ),
+      },
       60,
       60,
       { x: 235, y: 50 },
