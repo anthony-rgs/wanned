@@ -1,10 +1,10 @@
 import Sprite from '../../Sprite.js'
 import Zone from '../../Zone.js'
 
-class Monster extends Sprite {
+class Boss extends Sprite {
   constructor(game) {
     super(
-      'monster',
+      'boss',
       game,
       Object.fromEntries(
         ['up', 'down', 'left', 'right'].map((direction) => {
@@ -14,56 +14,48 @@ class Monster extends Sprite {
               {
                 type: 'move',
                 image:
-                  '../../assets/elements/sprites/baptiste/' +
-                  direction +
-                  '/1.png',
+                  '../../assets/elements/sprites/boss/' + direction + '/1.png',
               },
               {
                 type: 'move',
                 image:
-                  '../../assets/elements/sprites/baptiste/' +
-                  direction +
-                  '/2.png',
+                  '../../assets/elements/sprites/boss/' + direction + '/2.png',
               },
               {
                 type: 'move',
                 image:
-                  '../../assets/elements/sprites/baptiste/' +
-                  direction +
-                  '/3.png',
+                  '../../assets/elements/sprites/boss/' + direction + '/3.png',
               },
               {
                 type: 'move',
                 image:
-                  '../../assets/elements/sprites/baptiste/' +
-                  direction +
-                  '/4.png',
+                  '../../assets/elements/sprites/boss/' + direction + '/4.png',
               },
               {
                 type: 'fight',
                 image:
-                  '../../assets/elements/sprites/baptiste/' +
+                  '../../assets/elements/sprites/boss/' +
                   direction +
                   '/f-1.png',
               },
               {
                 type: 'fight',
                 image:
-                  '../../assets/elements/sprites/baptiste/' +
+                  '../../assets/elements/sprites/boss/' +
                   direction +
                   '/f-2.png',
               },
               {
                 type: 'fight',
                 image:
-                  '../../assets/elements/sprites/baptiste/' +
+                  '../../assets/elements/sprites/boss/' +
                   direction +
                   '/f-3.png',
               },
               {
                 type: 'fight',
                 image:
-                  '../../assets/elements/sprites/baptiste/' +
+                  '../../assets/elements/sprites/boss/' +
                   direction +
                   '/f-4.png',
               },
@@ -71,24 +63,25 @@ class Monster extends Sprite {
           ]
         })
       ),
-      30,
-      30,
-      { x: 1200, y: 300 },
-      0.4
+      60,
+      60,
+      { x: 235, y: 50 },
+      0.7
     )
 
     this.lives = 3
     this.stop = true
     this.safe = false
     this.interval = null
+    this.currentDirection = 'down'
 
     setInterval(() => {
       this.lead()
-    }, (1000 / this.game.capFps) * 1.3)
+    }, (1000 / this.game.capFps) * 2)
   }
 
   get zone() {
-    return new Zone(this.x, this.y, this.width, this.height, 'monster')
+    return new Zone(this.x, this.y, this.width, this.height, 'boss')
   }
 
   disableAttack() {
@@ -123,4 +116,4 @@ class Monster extends Sprite {
   }
 }
 
-export default Monster
+export default Boss

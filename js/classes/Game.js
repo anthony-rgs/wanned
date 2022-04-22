@@ -16,6 +16,7 @@ import Arthur from './elements/sprites/Arthur.js'
 import Door from './elements/Door.js'
 import MovableRock from './elements/MovableRock.js'
 import Monster from './elements/sprites/Monster.js'
+import Boss from './elements/sprites/Boss.js'
 import Spikes from './elements/Spikes.js'
 import Key from './elements/Key.js'
 
@@ -28,7 +29,8 @@ import handleContact from '../actions/zones/2/handleContact.js'
 import triggerThierry from '../actions/zones/3/triggerThierry.js'
 import triggerVictor from '../actions/zones/4/triggerVictor.js'
 import triggerArthur from '../actions/zones/4/triggerArthur.js'
-import triggerMap2 from '../actions/zones/6/triggerMap2.js'
+import triggerMap2 from '../actions/zones/5/triggerMap2.js'
+import triggerBoss from '../actions/zones/6/triggerBoss.js'
 
 import keyboardKeys from '../../assets/resources/keyboardKeys.js'
 import maps from '../../assets/resources/maps.js'
@@ -45,7 +47,7 @@ class Game {
 
     this.endScreen = null
 
-    this._currentMapIndex = 0
+    this._currentMapIndex = 1
     this.mapZoom = 3
     this.mapSpeed = 5
 
@@ -55,7 +57,7 @@ class Game {
     this.capFps = 120
     this.frame = 0
 
-    this.soundVolume = 0.3
+    this.soundVolume = 0
 
     this.startTime = Date.now()
 
@@ -85,7 +87,7 @@ class Game {
     document.addEventListener('map-changed', (e) => {
       if (e.detail.mapIndex === 0) {
       } else if (e.detail.mapIndex === 1) {
-        this.mainCharacter.position = {x: 256, y: 352}
+        this.mainCharacter.position = { x: 256, y: 352 }
       }
 
       this.showMap()
@@ -100,6 +102,7 @@ class Game {
       new Thierry(this),
       new Victor(this),
       new Arthur(this),
+      new Boss(this),
     ]
   }
 
@@ -119,7 +122,11 @@ class Game {
 
   set currentMapIndex(index) {
     this._currentMapIndex = index
-    document.dispatchEvent(new CustomEvent('map-changed', { detail: { map: this.currentMap, mapIndex: this.currentMapIndex } }))
+    document.dispatchEvent(
+      new CustomEvent('map-changed', {
+        detail: { map: this.currentMap, mapIndex: this.currentMapIndex },
+      })
+    )
   }
 
   get currentMap() {
@@ -135,15 +142,19 @@ class Game {
   }
 
   get elements() {
-    return this.initialized ? [
-      ...this.mapDoors,
-      ...this.movableRocks,
-      ...this.spikes,
-      ...this.mapKeys,
-      ...this._elements
-        .filter((element) => this.currentMap.elements.includes(element.name))
-        .sort((a, b) => a.y - b.y),
-    ] : []
+    return this.initialized
+      ? [
+          ...this.mapDoors,
+          ...this.movableRocks,
+          ...this.spikes,
+          ...this.mapKeys,
+          ...this._elements
+            .filter((element) =>
+              this.currentMap.elements.includes(element.name)
+            )
+            .sort((a, b) => a.y - b.y),
+        ]
+      : []
   }
 
   get baptiste() {
@@ -218,6 +229,10 @@ class Game {
     return this.findSprite('monster')
   }
 
+  get boss() {
+    return this.findSprite('boss')
+  }
+
   get zoneTriggerings() {
     let activeMovableRocksZones = []
     let activeSpikesZones = []
@@ -236,19 +251,19 @@ class Game {
                 (this.leftKey.pressed && zonePosition === 'right')
               )
             })
-            .map((zone) => ({zone, rock}))
+            .map((zone) => ({ zone, rock }))
         )
         .flat()
 
       activeSpikesZones = this.spikes
         .filter((spike) => spike.state === 'open')
-        .map((spikes) => ({zone: spikes.spikesZones, spikes}))
+        .map((spikes) => ({ zone: spikes.spikesZones, spikes }))
     }
 
     return [
       ...this._zoneTriggerings,
       ...activeMovableRocksZones
-        .map(({zone, rock}) => ({
+        .map(({ zone, rock }) => ({
           zones: [zone],
           action: new Action(() => {
             const zonePosition = zone.id.split('-')[1]
@@ -256,25 +271,27 @@ class Game {
             this.rockSound.play()
 
             if (zonePosition === 'bottom' && this.upKey.pressed) {
-              this.move(rock, {y: -speed}, speed)
+              this.move(rock, { y: -speed }, speed)
             } else if (zonePosition === 'top' && this.downKey.pressed) {
-              this.move(rock, {y: speed}, speed)
+              this.move(rock, { y: speed }, speed)
             } else if (zonePosition === 'left' && this.rightKey.pressed) {
-              this.move(rock, {x: speed}, speed)
+              this.move(rock, { x: speed }, speed)
             } else if (zonePosition === 'right' && this.leftKey.pressed) {
-              this.move(rock, {x: -speed}, speed)
+              this.move(rock, { x: -speed }, speed)
             }
           }),
         }))
         .flat(),
-      ...activeSpikesZones.map(({spikes, zone}) => ({
+      ...activeSpikesZones.map(({ spikes, zone }) => ({
         zones: zone,
         action: spikes.action,
       })),
-      this.monster ?{
-        zones: [this.monster.zone],
-        action: handleContact(this),
-      } : {},
+      this.monster
+        ? {
+            zones: [this.monster.zone],
+            action: handleContact(this),
+          }
+        : {},
       ...this.mapKeys
         .map((key) => ({
           zones: key.zone,
@@ -427,7 +444,11 @@ class Game {
       {
         zones: zones.filter((zone) => zone.id === '06'),
         action: triggerMap2(this),
-      }
+      },
+      {
+        zones: zones.filter((zone) => zone.id === '07'),
+        action: triggerBoss(this),
+      },
     ]
   }
 
@@ -565,7 +586,7 @@ class Game {
 
   move(element, movement, speed = element.speed) {
     if (element !== this.mainCharacter || this.movementsEnabled) {
-      const {x, y} = element.position
+      const { x, y } = element.position
 
       if (movement.x) {
         if (movement.x < 0) {
@@ -636,16 +657,16 @@ class Game {
     ) {
       if (this.upKey.pressed) {
         this.mainCharacter.isWalking = true
-        this.move(this.mainCharacter, {y: -this.mapSpeed})
+        this.move(this.mainCharacter, { y: -this.mapSpeed })
       } else if (this.leftKey.pressed) {
         this.mainCharacter.isWalking = true
-        this.move(this.mainCharacter, {x: -this.mapSpeed})
+        this.move(this.mainCharacter, { x: -this.mapSpeed })
       } else if (this.downKey.pressed) {
         this.mainCharacter.isWalking = true
-        this.move(this.mainCharacter, {y: this.mapSpeed})
+        this.move(this.mainCharacter, { y: this.mapSpeed })
       } else if (this.rightKey.pressed) {
         this.mainCharacter.isWalking = true
-        this.move(this.mainCharacter, {x: this.mapSpeed})
+        this.move(this.mainCharacter, { x: this.mapSpeed })
       } else if (
         !this.upKey.pressed &&
         !this.downKey.pressed &&

@@ -74,8 +74,8 @@ class Baptiste extends Sprite {
       30,
       30,
       { x: 640, y: 992 },
-      1.25
-      // 5
+      // 1.25
+      5
     )
     this.safe = false
     this.isWalking = false

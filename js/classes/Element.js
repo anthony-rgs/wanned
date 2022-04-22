@@ -11,7 +11,7 @@ class Element {
     initialPosition = {
       x: 0,
       y: 0,
-    },
+    }
   ) {
     this.name = name
     this.id = generateElementId()
@@ -34,7 +34,7 @@ class Element {
     const moveVariants = {}
 
     Object.entries(this.variants).forEach(([direction, variants]) => {
-      moveVariants[direction] = variants.filter(variant => {
+      moveVariants[direction] = variants.filter((variant) => {
         return variant.type === 'move'
       })
     })
@@ -46,7 +46,7 @@ class Element {
     const moveVariants = {}
 
     Object.entries(this.variants).forEach(([direction, variants]) => {
-      moveVariants[direction] = variants.filter(variant => {
+      moveVariants[direction] = variants.filter((variant) => {
         return variant.type === 'fight'
       })
     })
@@ -84,15 +84,15 @@ class Element {
 
   get collisions() {
     return (this.currentVariant?.collisions ?? []).map(
-      collision =>
+      (collision) =>
         new Collision(
           this.x + collision.startX,
           this.y + collision.startY,
           this.x + collision.endX,
           this.y + collision.endY,
           this,
-          collision.box,
-        ),
+          collision.box
+        )
     )
   }
 
@@ -103,7 +103,7 @@ class Element {
         x ?? this.x,
         y ?? this.y,
         this.hitting ? this.width * 1.5 : this.width,
-        this.height,
+        this.height
       )
     }
   }
