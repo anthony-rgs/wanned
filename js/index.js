@@ -42,7 +42,7 @@ window.addEventListener('load', () => {
   document.querySelector('#load').style.display = 'none'
 })
 
-if (innerWidth <= 1024) {
+if (innerWidth > 1024) {
   window.addEventListener('mousemove', (e) => {
     const mouseY = e.clientY
     const mouseX = e.clientX
