@@ -9,13 +9,16 @@ export default (game) =>
 
     game.dialogBox.messages = [
       {
-        text: 'Anthony: Baptiste, tu tombes bien! Je viens d’investir tout mon argent dans mon wallet MetaMask! Qu...',
+        text: 'Brontis: Salut gamin, alors comme ca tu as decouvert la raison de la panne....',
       },
       {
-        text: "Anthony: Qu’est-ce qu'il m’arrive! Jai limpression de mourir!",
+        text: 'Soyons bien clair, tu ne m’empecheras pas de telecharger l’integral d’Evangelion en 8k.',
       },
       {
-        text: '???: EUUUUUUUUAAAAARRRRLGH!',
+        text: 'Tu crois vraiment pouvoir me stopper?',
+      },
+      {
+        text: 'Tres bien, mets toi en garde pepin-trois-pomme.',
       },
     ]
 
@@ -26,10 +29,11 @@ export default (game) =>
     game.dialogBox.next()
     await wait(3000)
     game.dialogBox.next()
-    game.fightSound.play()
+    await wait(3000)
     game.dialogBox.hide()
     game.mainCharacter.stop = false
-    game.monster.handleAttack()
-    game.monster.stop = false
+    game.fightSound.play()
+    game.boss.stop = false
+    game.boss.handleAttack()
     trigger()
   }, false)

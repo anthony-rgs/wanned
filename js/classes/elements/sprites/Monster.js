@@ -17,91 +17,93 @@ class Monster extends Sprite {
                 image:
                   '../../assets/elements/sprites/anthony/' +
                   direction +
-                  '/1.png'
+                  '/1.png',
               },
               {
                 type: 'move',
                 image:
                   '../../assets/elements/sprites/anthony/' +
                   direction +
-                  '/2.png'
+                  '/2.png',
               },
               {
                 type: 'move',
                 image:
                   '../../assets/elements/sprites/anthony/' +
                   direction +
-                  '/3.png'
+                  '/3.png',
               },
               {
                 type: 'move',
                 image:
                   '../../assets/elements/sprites/anthony/' +
                   direction +
-                  '/4.png'
+                  '/4.png',
               },
               {
                 type: 'move',
                 image:
                   '../../assets/elements/sprites/monster/' +
                   direction +
-                  '/1.png'
+                  '/1.png',
               },
               {
                 type: 'move',
                 image:
                   '../../assets/elements/sprites/monster/' +
                   direction +
-                  '/2.png'
+                  '/2.png',
               },
               {
                 type: 'move',
                 image:
                   '../../assets/elements/sprites/monster/' +
                   direction +
-                  '/3.png'
+                  '/3.png',
               },
               {
                 type: 'move',
                 image:
                   '../../assets/elements/sprites/monster/' +
                   direction +
-                  '/4.png'
+                  '/4.png',
               },
               {
                 type: 'fight',
                 image:
                   '../../assets/elements/sprites/monster/' +
                   direction +
-                  '/f-1.png'
+                  '/f-1.png',
               },
               {
                 type: 'fight',
                 image:
                   '../../assets/elements/sprites/monster/' +
                   direction +
-                  '/f-2.png'
+                  '/f-2.png',
               },
               {
                 type: 'fight',
                 image:
                   '../../assets/elements/sprites/monster/' +
                   direction +
-                  '/f-3.png'
+                  '/f-3.png',
               },
               {
                 type: 'fight',
                 image:
                   '../../assets/elements/sprites/monster/' +
                   direction +
-                  '/f-4.png'
+                  '/f-4.png',
               },
               ...Array(16)
                 .fill(0)
                 .map((_, index) => {
                   return {
                     type: 'transformation',
-                    image: `../../assets/elements/sprites/monster/transformation/${index + 1}.png`
+                    image: `../../assets/elements/sprites/monster/transformation/${
+                      index + 1
+                    }.png`,
                   }
                 }),
               ...Array(7)
@@ -109,10 +111,12 @@ class Monster extends Sprite {
                 .map((_, index) => {
                   return {
                     type: 'death',
-                    image: `../../assets/elements/sprites/monster/death/${index + 1}.png`
+                    image: `../../assets/elements/sprites/monster/death/${
+                      index + 1
+                    }.png`,
                   }
                 }),
-            ]
+            ],
           ]
         })
       ),
@@ -131,7 +135,7 @@ class Monster extends Sprite {
 
     setInterval(() => {
       this.lead()
-    }, 1000 / this.game.fps)
+    }, (1000 / this.game.capFps) * 1.3)
   }
 
   get y() {
@@ -146,9 +150,11 @@ class Monster extends Sprite {
     const transformationVariants = []
 
     Object.entries(this.variants).forEach(([_, variants]) => {
-      transformationVariants.push(variants.filter((variant) => {
-        return variant.type === 'transformation'
-      }))
+      transformationVariants.push(
+        variants.filter((variant) => {
+          return variant.type === 'transformation'
+        })
+      )
     })
 
     return transformationVariants
@@ -158,9 +164,11 @@ class Monster extends Sprite {
     const deathVariants = []
 
     Object.entries(this.variants).forEach(([_, variants]) => {
-      deathVariants.push(variants.filter((variant) => {
-        return variant.type === 'death'
-      }))
+      deathVariants.push(
+        variants.filter((variant) => {
+          return variant.type === 'death'
+        })
+      )
     })
 
     return deathVariants
@@ -191,15 +199,30 @@ class Monster extends Sprite {
   }
 
   draw(ctx, x, y) {
-    const isAnthony = this.name === 'monster' && this.currentDirection === 'up' && this.currentVariant.image.src.includes('anthony')
+    const isAnthony =
+      this.name === 'monster' &&
+      this.currentDirection === 'up' &&
+      this.currentVariant.image.src.includes('anthony')
 
     if (this.currentVariant) {
       ctx.drawImage(
         this.currentVariant.image,
         x ?? this.x,
-        this.isTransforming && this.currentVariantIndex === 6 ? (y ?? this.y) + (this.height / 5) * 4 : (y ?? this.y) - (isAnthony ? this.height / 2 : 0),
-        (this.hitting ? this.width * 1.5 : this.isTransforming ? this.width * 1.8 : isAnthony ? this.width * 2 : this.width),
-        this.isTransforming && this.currentVariantIndex === 6 ? this.height / 5 : (isAnthony ? this.height * 2 : this.height)
+        this.isTransforming && this.currentVariantIndex === 6
+          ? (y ?? this.y) + (this.height / 5) * 4
+          : (y ?? this.y) - (isAnthony ? this.height / 2 : 0),
+        this.hitting
+          ? this.width * 1.5
+          : this.isTransforming
+          ? this.width * 1.8
+          : isAnthony
+          ? this.width * 2
+          : this.width,
+        this.isTransforming && this.currentVariantIndex === 6
+          ? this.height / 5
+          : isAnthony
+          ? this.height * 2
+          : this.height
       )
     }
   }
@@ -249,14 +272,16 @@ class Monster extends Sprite {
     this.isTransforming = false
     this.currentVariantIndex = 0
 
-    this.variants = Object.fromEntries(Object.entries(this.variants).map(([direction, variants]) => {
-      return [
-        direction,
-        variants.filter((variant) => {
-          return !variant.image.src.includes('anthony')
-        })
-      ]
-    }))
+    this.variants = Object.fromEntries(
+      Object.entries(this.variants).map(([direction, variants]) => {
+        return [
+          direction,
+          variants.filter((variant) => {
+            return !variant.image.src.includes('anthony')
+          }),
+        ]
+      })
+    )
   }
 
   async deadAnimation() {
@@ -291,10 +316,20 @@ class Monster extends Sprite {
 
   lead() {
     if (!this.stop) {
-      this.game.move(this, {
-        x: this.game.mainCharacter.x - this.x,
-        y: this.game.mainCharacter.y - this.y
-      })
+      const x = this.game.mainCharacter?.x - this.x
+      const y = this.game.mainCharacter?.y - this.y
+
+      let movement = {}
+
+      if (Math.abs(x) > 20) {
+        movement.x = x
+      }
+
+      if (Math.abs(y) > 20) {
+        movement.y = y
+      }
+
+      this.game.move(this, movement)
     }
   }
 }
