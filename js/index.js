@@ -12,24 +12,24 @@ const story = new Story(
   [
     {
       text: 'A l’ecole du web, Hetic, a Montreuil, La Wifi ne fonctionne pas depuis maintenant 3 jours.',
-      duration: 4000,
+      duration: 4000
     },
     {
       text: 'Impossible pour les eleves d’ouvrir "vs code"?',
-      duration: 3000,
+      duration: 3000
     },
     {
       text: 'La direction ne sait pas ce qui se passe et meme la compta ne reçoit plus les mails, il faut faire quelque-chose.',
-      duration: 7000,
+      duration: 7000
     },
     {
       text: 'Nous allons suivre l’aventure d’un valeureux guerrier nomme Baptiste, arme de son fidele framework et de ses 5 compagnons: Fabien, Victor, Arthur, Thierry et Anthony.',
-      duration: 10000,
+      duration: 10000
     },
     {
       text: 'Il va se frayer un chemin a travers les sous-sols de l’ecole pour decouvrir la raison de cette panne...',
-      duration: 7000,
-    },
+      duration: 7000
+    }
   ],
   3000
 )
@@ -53,13 +53,11 @@ window.addEventListener('load', () => {
   document.querySelector('#load').style.display = 'none'
 })
 
-if (innerWidth > 1024) {
-  window.addEventListener('mousemove', (e) => {
-    const mouseY = e.clientY
-    const mouseX = e.clientX
-    cursor.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`
-  })
-}
+window.addEventListener('mousemove', (e) => {
+  const mouseY = e.clientY
+  const mouseX = e.clientX
+  cursor.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0)`
+})
 
 story.disabled = localStorage.getItem('story-finish') !== null
 
