@@ -16,6 +16,9 @@ export default (game) => {
     game.dialogBox.show()
     await wait(3000)
     game.dialogBox.hide()
+
+    game.triggerWin()
+
     trigger()
   }, false)
 }

@@ -105,7 +105,7 @@ class Game {
       new Thierry(this),
       new Victor(this),
       new Arthur(this),
-      new Boss(this),
+      new Boss(this)
     ]
 
     this.displayKeys()
@@ -129,7 +129,7 @@ class Game {
     this._currentMapIndex = index
     document.dispatchEvent(
       new CustomEvent('map-changed', {
-        detail: { map: this.currentMap, mapIndex: this.currentMapIndex },
+        detail: { map: this.currentMap, mapIndex: this.currentMapIndex }
       })
     )
   }
@@ -149,16 +149,16 @@ class Game {
   get elements() {
     return this.initialized
       ? [
-          ...this.mapDoors,
-          ...this.movableRocks,
-          ...this.spikes,
-          ...this.mapKeys,
-          ...this._elements
-            .filter((element) =>
-              this.currentMap.elements.includes(element.name)
-            )
-            .sort((a, b) => a.y - b.y),
-        ]
+        ...this.mapDoors,
+        ...this.movableRocks,
+        ...this.spikes,
+        ...this.mapKeys,
+        ...this._elements
+          .filter((element) =>
+            this.currentMap.elements.includes(element.name)
+          )
+          .sort((a, b) => a.y - b.y)
+      ]
       : []
   }
 
@@ -284,24 +284,24 @@ class Game {
             } else if (zonePosition === 'right' && this.leftKey.pressed) {
               this.move(rock, { x: -speed }, speed)
             }
-          }),
+          })
         }))
         .flat(),
       ...activeSpikesZones.map(({ spikes, zone }) => ({
         zones: zone,
-        action: spikes.action,
+        action: spikes.action
       })),
       this.monster
         ? {
-            zones: [this.monster.zone],
-            action: handleContactWithMonster(this),
-          }
+          zones: [this.monster.zone],
+          action: handleContactWithMonster(this)
+        }
         : {},
       this.boss
         ? {
-            zones: [this.boss.zone],
-            action: handleContactWithBoss(this),
-          }
+          zones: [this.boss.zone],
+          action: handleContactWithBoss(this)
+        }
         : {},
       ...this.mapKeys
         .map((key) => ({
@@ -311,9 +311,9 @@ class Game {
 
             this.mapKeys = this.mapKeys.filter((mapKey) => mapKey !== key)
             this.mainCharacter.inventory.push(key)
-          }),
+          })
         }))
-        .flat(),
+        .flat()
     ].filter((zoneTriggering) => zoneTriggering.zones && zoneTriggering.action)
   }
 
@@ -321,7 +321,7 @@ class Game {
     if (this.mapCollisions) {
       return [
         ...this.mapCollisions,
-        ...this.elements.map((element) => element.collisions).flat(),
+        ...this.elements.map((element) => element.collisions).flat()
       ].filter((collision) => collision)
     } else {
       return []
@@ -432,32 +432,32 @@ class Game {
     this._zoneTriggerings = [
       {
         zones: zones.filter((zone) => zone.id === '01'),
-        action: triggerFabien(this),
+        action: triggerFabien(this)
       },
       {
         zones: zones.filter((zone) => zone.id === '02'),
-        action: triggerMonster(this),
+        action: triggerMonster(this)
       },
       {
         zones: zones.filter((zone) => zone.id === '03'),
-        action: triggerThierry(this),
+        action: triggerThierry(this)
       },
       {
         zones: zones.filter((zone) => zone.id === '04'),
-        action: triggerVictor(this),
+        action: triggerVictor(this)
       },
       {
         zones: zones.filter((zone) => zone.id === '05'),
-        action: triggerArthur(this),
+        action: triggerArthur(this)
       },
       {
         zones: zones.filter((zone) => zone.id === '06'),
-        action: triggerMap2(this),
+        action: triggerMap2(this)
       },
       {
         zones: zones.filter((zone) => zone.id === '07'),
-        action: triggerBoss(this),
-      },
+        action: triggerBoss(this)
+      }
     ]
   }
 
@@ -544,6 +544,13 @@ class Game {
 
   findKey(key, type) {
     return keyboardKeys.find((k) => k[type] === key)
+  }
+
+  triggerWin() {
+    if (this.endScreen === null) {
+      this.endScreen = new EndScreen('Victoire !', this)
+      this.disableMovements()
+    }
   }
 
   triggerGameOver() {
@@ -651,7 +658,7 @@ class Game {
         new DisplayedKey(key).onClick(() =>
           window.dispatchEvent(
             new KeyboardEvent('keydown', {
-              key: this.fullScreenKey.key,
+              key: this.fullScreenKey.key
             })
           )
         )
