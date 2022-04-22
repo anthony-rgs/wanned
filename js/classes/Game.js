@@ -794,7 +794,7 @@ class Game {
           bar.classList.add('hide')
           Sound.changeVolume(0)
         } else {
-          Sound.changeVolume(this.soundVolume)
+          Sound.changeVolume('unmute')
           bar.classList.remove('hide')
         }
       })

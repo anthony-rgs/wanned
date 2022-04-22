@@ -50,11 +50,17 @@ class Spikes extends Element {
       this.close()
     }
 
+    this.sound = null
+
     setInterval(() => {
       this.toggle()
       this.lastIntervalTriggered = 0
 
-      new Sound('../../assets/audios/spikes.mp3', game.soundVolume / (Math.log2(game.distanceFrom(game.mainCharacter, this) / 30) ** 2), false).play()
+      if (!this.sound) {
+        this.sound = new Sound('../../assets/audios/spikes.mp3', game.soundVolume / (Math.log2(game.distanceFrom(game.mainCharacter, this) / 30) ** 2), false)
+      }
+
+      this.sound.play()
     }, this.intervalDuration)
 
     setInterval(() => {
