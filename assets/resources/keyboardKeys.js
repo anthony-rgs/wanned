@@ -7,7 +7,7 @@ export default [
       {
         key: 'ArrowLeft',
         pressed: false,
-        action: 'Aller à gauche',
+        action: 'Aller a gauche',
       },
       {
         key: 'ArrowDown',
@@ -17,7 +17,7 @@ export default [
       {
         key: 'ArrowRight',
         pressed: false,
-        action: 'Aller à droite',
+        action: 'Aller a droite',
       },
       {
         key: 'f',
@@ -27,7 +27,7 @@ export default [
       {
         key: 'm',
         pressed: false,
-        action: 'Mode plein écran',
+        action: 'Mode plein ecran',
       },
       {
         key: 'Shift',

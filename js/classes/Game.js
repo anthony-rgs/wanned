@@ -208,11 +208,11 @@ class Game {
   }
 
   get leftKey() {
-    return this.findKey('Aller à gauche', 'action')
+    return this.findKey('Aller a gauche', 'action')
   }
 
   get rightKey() {
-    return this.findKey('Aller à droite', 'action')
+    return this.findKey('Aller a droite', 'action')
   }
 
   get hitKey() {
@@ -220,7 +220,7 @@ class Game {
   }
 
   get fullScreenKey() {
-    return this.findKey('Mode plein écran', 'action')
+    return this.findKey('Mode plein ecran', 'action')
   }
 
   get runKey() {
@@ -654,7 +654,7 @@ class Game {
         } else {
           new DisplayedKey(key)
         }
-      } else if (key.action === 'Mode plein écran') {
+      } else if (key.action === 'Mode plein ecran') {
         new DisplayedKey(key).onClick(() =>
           window.dispatchEvent(
             new KeyboardEvent('keydown', {
