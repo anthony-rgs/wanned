@@ -152,7 +152,7 @@ body {
   width: 100%;
   left: 0;
   top: 0;
-  display: flex;
+  display: none;
   justify-content: center;
   align-items: center;
   padding: 2rem;
@@ -160,8 +160,10 @@ body {
   text-align: center;
 }
 
-#mobile-not-available.hidden {
-  display: none;
+@media (max-width: 768px) {
+  #mobile-not-available {
+    display: flex;
+  }
 }
 
 #mobile-not-available h2 {
